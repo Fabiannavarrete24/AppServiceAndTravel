@@ -1,0 +1,22 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AppServiceAndTravel.Models
+{
+    public enum EstadoVehiculo { Activo, Inactivo, EnMantenimiento }
+    public class ValidacionVehiculo
+    {
+        public int Id { get; set; }
+        public int VehiculoId { get; set; }
+        public Vehiculo? Vehiculo { get; set; }
+        public int? ServicioId { get; set; }
+        public DateTime FechaValidacion { get; set; } = DateTime.Now;
+        public bool SOATVigente { get; set; }
+        public bool TecnoVigente { get; set; }
+        public bool SeguroVigente { get; set; }
+        public bool EstadoActivo { get; set; }
+        public bool LicenciaConductorVigente { get; set; }
+        public bool Resultado { get; set; }
+        [StringLength(200)] public string? Observaciones { get; set; }
+        [StringLength(200)] public string? UsuarioId { get; set; }
+    }
+}

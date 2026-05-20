@@ -1,0 +1,122 @@
+@model IEnumerable<AppServiceAndTravel.Models.ProveedorExterno>
+@using AppServiceAndTravel.Models
+@{ ViewData["Title"] = "Proveedores Externos"; }
+
+<div class="row g-3 mb-4">
+@foreach(var (lbl,val,bg,color,icon) in new[]{
+    ("Total",      (int)ViewBag.Total,      "#dbeafe","#1d4ed8","bi-building"),
+    ("Activos",    (int)ViewBag.Activos,    "#d1fae5","#065f46","bi-check-circle"),
+    ("Vehículos",  (int)ViewBag.Vehiculos,  "#fef3c7","#92400e","bi-truck"),
+    ("Conductores",(int)ViewBag.Conductores,"#ede9fe","#6d28d9","bi-person-badge"),
+    ("Ambos",      (int)ViewBag.Ambos,      "#ccfbf1","#0f766e","bi-layers"),
+})
+{
+<div class="col-sm-6 col-xl">
+  <div class="card">
+    <div class="card-body d-flex align-items-center gap-3 p-3">
+      <div class="rounded-3 d-flex align-items-center justify-content-center"
+           style="width:42px;height:42px;background:@bg;color:@color;font-size:19px;flex-shrink:0;">
+        <i class="bi @icon"></i></div>
+      <div>
+        <div class="text-muted" style="font-size:11px;">@lbl</div>
+        <div class="fw-bold fs-5" style="color:@color;">@val</div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+</div>
+
+<div class="card">
+  <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center gap-3">
+    <span class="fw-semibold flex-grow-1">Proveedores de transporte externo</span>
+    <form method="get" class="d-flex gap-2">
+      @if(ViewBag.Tipo!=null){<input type="hidden" name="tipo" value="@ViewBag.Tipo"/>}
+      <select name="tipo" class="form-select form-select-sm rounded-3" style="min-width:140px;">
+        <option value="">Todos los tipos</option>
+      </select>
+      <input type="search" name="q" value="@ViewBag.Q" class="form-control form-control-sm rounded-3"
+             placeholder="Buscar…" style="min-width:160px;"/>
+      <button class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
+    </form>
+    @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("RHManager"))
+    {
+    <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Create"
+       class="btn btn-primary btn-sm rounded-3"><i class="bi bi-plus-lg me-1"></i>Nuevo proveedor</a>
+    }
+  </div>
+
+  <div class="card-body p-0">
+  @if(!Model.Any())
+  {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-building" style="font-size:42px;opacity:.25;"></i>
+      <p class="mt-2">No hay proveedores externos registrados.</p>
+    </div>
+  }
+  else
+  {
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead><tr>
+        <th class="ps-4">Proveedor</th><th>NIT</th><th>Contacto</th>
+        <th>Tipo servicio</th><th>Tarifa base</th><th>Estado</th>
+        <th class="text-end pe-4">Acciones</th>
+      </tr></thead>
+      <tbody>
+      @foreach(var p in Model)
+      {
+        var tipoCss = p.TipoServicio switch {
+          TipoServicioExterno.Vehiculo  => "background:#fef3c7;color:#92400e;",
+          TipoServicioExterno.Conductor => "background:#ede9fe;color:#6d28d9;",
+          _                             => "background:#ccfbf1;color:#0f766e;"
+        };
+        <tr>
+          <td class="ps-4">
+            <div class="fw-semibold small">@p.RazonSocial</div>
+            @if(!string.IsNullOrEmpty(p.Contacto)){<div class="text-muted" style="font-size:11px;">@p.Contacto</div>}
+          </td>
+          <td class="small">@p.NitCedula</td>
+          <td>
+            <div class="text-muted" style="font-size:11px;"><i class="bi bi-telephone me-1"></i>@p.Telefono</div>
+          </td>
+          <td><span class="badge rounded-pill px-3 py-1" style="font-size:11px;@tipoCss">@p.TipoServicio</span></td>
+          <td class="small fw-semibold">@(p.TarifaBase.HasValue ? $"${p.TarifaBase.Value:N0}" : "—")</td>
+          <td><span class="badge rounded-pill px-3 py-1" style="@(p.Activo?"background:#d1fae5;color:#065f46;":"background:#fee2e2;color:#991b1b;")">@(p.Activo?"Activo":"Inactivo")</span></td>
+          <td class="text-end pe-4">
+            <div class="d-flex justify-content-end gap-1">
+              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Details" asp-route-id="@p.Id"
+                 class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
+              @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("RHManager"))
+              {
+              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Edit" asp-route-id="@p.Id"
+                 class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
+              <form asp-area="RH" asp-controller="ProveedorExterno" asp-action="ToggleActivo" asp-route-id="@p.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm rounded-3"
+                        style="@(p.Activo?"border:1px solid #f59e0b;color:#92400e;":"border:1px solid #16a34a;color:#065f46;")">
+                  <i class="bi @(p.Activo?"bi-pause-circle":"bi-play-circle")"></i>
+                </button>
+              </form>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+  }
+  </div>
+  @if((int)ViewBag.TotalPag>1)
+  {
+  <div class="card-footer bg-white border-0 d-flex justify-content-between py-3 px-4">
+    <small class="text-muted">@ViewBag.Total proveedores</small>
+    <nav><ul class="pagination pagination-sm mb-0">
+      @for(int pg=1;pg<=(int)ViewBag.TotalPag;pg++)
+      {<li class="page-item @(pg==(int)ViewBag.P?"active":"")">
+        <a class="page-link" href="@Url.Action("Index",new{q=ViewBag.Q,p=pg})">@pg</a></li>}
+    </ul></nav>
+  </div>
+  }
+</div>

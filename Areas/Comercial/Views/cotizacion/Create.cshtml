@@ -1,0 +1,125 @@
+@model AppServiceAndTravel.Models.Cotizacion
+@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? "Editar Cotización" : "Nueva Cotización"; }
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+          <i class="bi bi-file-earmark-plus"></i></div>
+        <div>
+          <h5 class="mb-0 fw-semibold">@ViewData["Title"]</h5>
+          <small class="text-muted">Complete todos los campos requeridos</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form asp-area="Comercial" asp-controller="Cotizacion"
+              asp-action="@(esEdit?"Edit":"Create")" method="post">
+          @Html.AntiForgeryToken()
+          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Cliente</h6>
+          <div class="mb-4">
+            <label asp-for="ClienteId" class="form-label fw-semibold small">Cliente *</label>
+            <select asp-for="ClienteId" asp-items="ViewBag.Clientes" class="form-select rounded-3" required>
+              <option value="">— Seleccione un cliente —</option>
+            </select>
+            <span asp-validation-for="ClienteId" class="text-danger small"></span>
+            <div class="mt-1">
+              <a asp-area="Comercial" asp-controller="Cliente" asp-action="Create"
+                 class="text-decoration-none small"><i class="bi bi-person-plus me-1"></i>Registrar nuevo cliente</a>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Ruta</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label asp-for="Origen" class="form-label fw-semibold small">Origen *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-muted"></i></span>
+                <input asp-for="Origen" class="form-control border-start-0 rounded-end-3"
+                       placeholder="Ciudad o dirección de origen" required />
+              </div>
+              <span asp-validation-for="Origen" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label asp-for="Destino" class="form-label fw-semibold small">Destino *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt-fill text-primary"></i></span>
+                <input asp-for="Destino" class="form-control border-start-0 rounded-end-3"
+                       placeholder="Ciudad o dirección de destino" required />
+              </div>
+              <span asp-validation-for="Destino" class="text-danger small"></span>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Detalles del servicio</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label asp-for="FechaServicioRequerido" class="form-label fw-semibold small">Fecha del servicio *</label>
+              <input asp-for="FechaServicioRequerido" type="date" class="form-control rounded-3"
+                     min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+              <span asp-validation-for="FechaServicioRequerido" class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label asp-for="NumPasajeros" class="form-label fw-semibold small">N° de pasajeros</label>
+              <input asp-for="NumPasajeros" type="number" class="form-control rounded-3" min="0" max="99" value="0" />
+            </div>
+            <div class="col-12">
+              <label asp-for="DescripcionCarga" class="form-label fw-semibold small">Descripción de la carga / servicio</label>
+              <textarea asp-for="DescripcionCarga" class="form-control rounded-3" rows="3"
+                        placeholder="Tipo de carga, condiciones, requisitos especiales…"></textarea>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Valor</h6>
+          <div class="mb-4">
+            <label asp-for="ValorCotizado" class="form-label fw-semibold small">Valor cotizado *</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light fw-semibold">$</span>
+              <input asp-for="ValorCotizado" type="number" class="form-control"
+                     step="1000" min="0" placeholder="0" required
+                     oninput="document.getElementById('valorFmt').textContent=
+                       new Intl.NumberFormat('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0}).format(this.value||0)" />
+              <span class="input-group-text rounded-end-3 bg-light">COP</span>
+            </div>
+            <div class="form-text" id="valorFmt">$0</div>
+            <span asp-validation-for="ValorCotizado" class="text-danger small"></span>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+              <i class="bi @(esEdit?"bi-save":"bi-send") me-2"></i>
+              @(esEdit ? "Guardar cambios" : "Crear cotización")
+            </button>
+            <a asp-area="Comercial" asp-controller="Cotizacion" asp-action="Index"
+               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card mb-3">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>¿Qué sucede al crear?</h6>
+        @foreach(var (n,desc,bg,color) in new[]{
+          ("1","La cotización queda en estado Pendiente.","#dbeafe","#1d4ed8"),
+          ("2","Se envía email de confirmación al cliente.","#d1fae5","#065f46"),
+          ("3","Un aprobador revisa y aprueba o rechaza.","#ede9fe","#6d28d9"),
+        })
+        {
+        <div class="d-flex gap-3 mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold flex-shrink-0"
+               style="width:28px;height:28px;background:@bg;color:@color;font-size:12px;">@n</div>
+          <div class="small text-muted mt-1">@desc</div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

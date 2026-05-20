@@ -1,0 +1,167 @@
+﻿@* @model AppServiceAndTravel.Models.Conductor
+
+@{
+    ViewData["Title"] = "Detalle Conductor";
+} *@
+<div class="row g-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center p-4">
+
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                     style="width:90px;height:90px;background:#dbeafe;color:#1d4ed8;font-size:36px;">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <h4 class="fw-semibold">@Model.NombreCompleto</h4>
+
+                <p class="text-muted mb-3">@Model.Cedula</p>
+
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactivo</span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header bg-white fw-semibold">
+                Información del conductor
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Teléfono</small>
+                        <div class="fw-semibold">@Model.Telefono</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">correo</small>
+                        <div class="fw-semibold">@Model.correo</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Licencia</small>
+                        <div class="fw-semibold">@Model.NumeroLicencia</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Vencimiento licencia</small>
+                        <div class="fw-semibold">
+                            @Model.FechaVencimientoLicencia.ToString("dd/MM/yyyy")
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Tipo proveedor</small>
+                        <div>
+                            <span class="badge bg-primary">
+                                @Model.TipoProveedor
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Fecha creación</small>
+                        <div class="fw-semibold">
+                            @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Servicios -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-header bg-white fw-semibold">
+                Historial de servicios
+            </div>
+
+            <div class="card-body p-0">
+
+                @if (Model.Servicios == null || !Model.Servicios.Any())
+                {
+                    <div class="text-center py-5 text-muted">
+                        No tiene servicios registrados.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th class="ps-4">Servicio</th>
+                                    <th>Cliente</th>
+                                    <th>Ruta</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var s in Model.Servicios)
+                                {
+                                    <tr>
+
+                                        <td class="ps-4">
+                                            #@s.Id.ToString("D6")
+                                        </td>
+
+                                        <td>
+                                            @s.Cotizacion?.Cliente?.NombreCompleto
+                                        </td>
+
+                                        <td>
+                                            @s.Cotizacion?.Origen
+                                            →
+                                            @s.Cotizacion?.Destino
+                                        </td>
+
+                                        <td>
+                                            @s.FechaServicio.ToString("dd/MM/yyyy")
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

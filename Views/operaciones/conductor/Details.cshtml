@@ -1,0 +1,229 @@
+@model AppServiceAndTravel.Models.Conductor
+@using AppServiceAndTravel.Models
+@{ ViewData["Title"] = Model.NombreCompleto; var hoy = DateTime.Today; var alerta = hoy.AddDays(30); }
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h4 class="mb-1 fw-bold">@Model.NombreCompleto</h4>
+    <div class="d-flex gap-2 flex-wrap">
+      <span class="badge rounded-pill px-3 py-2" style="@(Model.Activo?"background:#d1fae5;color:#065f46;":"background:#fee2e2;color:#991b1b;")">
+        @(Model.Activo ? "Activo" : "Inactivo")
+      </span>
+      <span class="badge rounded-pill px-3 py-2" style="@(Model.EsExterno?"background:#ede9fe;color:#6d28d9;":"background:#dbeafe;color:#1e40af;")">
+        <i class="bi @(Model.EsExterno?"bi-building":"bi-house") me-1"></i>@Model.TipoProveedor
+      </span>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <a asp-area="RH" asp-controller="Conductor" asp-action="Index" class="btn btn-outline-secondary rounded-3">
+      <i class="bi bi-arrow-left me-1"></i>Volver
+    </a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("RHManager"))
+    {
+      <a asp-area="RH" asp-controller="Conductor" asp-action="Edit" asp-route-id="@Model.Id"
+         class="btn btn-outline-primary rounded-3"><i class="bi bi-pencil me-1"></i>Editar</a>
+    }
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+
+    <!-- Datos personales -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-person me-2 text-primary"></i>Datos personales</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="row g-3 mt-1">
+          <div class="col-md-6">
+            <div class="text-muted small mb-1">Cédula</div>
+            <div class="fw-semibold">@Model.Cedula</div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small mb-1">Teléfono</div>
+            <div class="fw-semibold"><i class="bi bi-telephone me-2 text-muted"></i>@Model.Telefono</div>
+          </div>
+            <div class="col-md-6">
+                <div class="text-muted small mb-1">Email</div>
+                <div class="fw-semibold"><i class="bi bi-envelope me-2 text-muted"></i></div>
+            </div>
+          <div class="col-md-6">
+            <div class="text-muted small mb-1">Registrado</div>
+            <div class="fw-semibold">@Model.FechaCreacion.ToString("dd/MM/yyyy")</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Licencia -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-card-checklist me-2 text-primary"></i>Licencia de conducción</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <div class="text-muted small mb-1">N° de licencia</div>
+            <div class="fw-semibold">@Model.NumeroLicencia</div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small mb-1">Categoría</div>
+            <span class="badge rounded-pill px-3 py-2" style="background:#dbeafe;color:#1e40af;font-size:14px;">
+              @Model.CategoriaLicencia
+            </span>
+          </div>
+          <div class="col-md-4">
+            <div class="text-muted small mb-1">Vencimiento</div>
+            @{
+              var licCss = Model.FechaVencimientoLicencia < hoy
+                  ? "background:#fee2e2;color:#991b1b;"
+                  : Model.FechaVencimientoLicencia <= alerta
+                      ? "background:#fef3c7;color:#92400e;"
+                      : "background:#d1fae5;color:#065f46;";
+              var licLabel = Model.FechaVencimientoLicencia < hoy ? "VENCIDA"
+                  : Model.FechaVencimientoLicencia <= alerta ? "Por vencer" : "Vigente";
+            }
+            <span class="badge rounded-pill px-3 py-2" style="@licCss">
+              @Model.FechaVencimientoLicencia.ToString("dd/MM/yyyy") — @licLabel
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datos externo -->
+    @if (Model.EsExterno)
+    {
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+          <h6 class="fw-semibold"><i class="bi bi-building me-2 text-primary"></i>Datos del proveedor externo</h6>
+        </div>
+        <div class="card-body px-4 pb-4">
+          <div class="row g-3 mt-1">
+            @if (!string.IsNullOrEmpty(Model.EmpresaExterna))
+            {
+              <div class="col-md-6">
+                <div class="text-muted small mb-1">Empresa</div>
+                <div class="fw-semibold">@Model.EmpresaExterna</div>
+              </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.NitEmpresa))
+            {
+              <div class="col-md-6">
+                <div class="text-muted small mb-1">NIT</div>
+                <div class="fw-semibold">@Model.NitEmpresa</div>
+              </div>
+            }
+            @if (Model.TarifaExterna.HasValue)
+            {
+              <div class="col-md-6">
+                <div class="text-muted small mb-1">Tarifa diaria</div>
+                <div class="fw-bold text-success">$@Model.TarifaExterna.Value.ToString("N0")</div>
+              </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.ObservacionesExterno))
+            {
+              <div class="col-12">
+                <div class="text-muted small mb-1">Observaciones</div>
+                <div class="p-3 rounded-3" style="background:#f8fafc;font-size:13px;">@Model.ObservacionesExterno</div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Historial de servicios -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0 d-flex align-items-center justify-content-between">
+        <h6 class="fw-semibold mb-0"><i class="bi bi-calendar-check me-2 text-primary"></i>Servicios realizados</h6>
+        <span class="badge rounded-pill" style="background:#dbeafe;color:#1e40af;">@Model.Servicios.Count</span>
+      </div>
+      <div class="card-body px-4 pb-4">
+        @if (!Model.Servicios.Any())
+        {
+          <p class="text-muted small mb-0">Aún no tiene servicios asignados.</p>
+        }
+        else
+        {
+          <div class="table-responsive">
+            <table class="table table-sm mb-0">
+              <thead>
+                <tr>
+                  <th>N° Servicio</th>
+                  <th>Fecha</th>
+                  <th>Ruta</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+              @foreach (var s in Model.Servicios.OrderByDescending(x => x.FechaServicio).Take(10))
+              {
+                var sCss = s.Estado switch {
+                  EstadoServicio.Programado => "background:#dbeafe;color:#1e40af;",
+                  EstadoServicio.EnCurso    => "background:#fef3c7;color:#92400e;",
+                  EstadoServicio.Completado => "background:#d1fae5;color:#065f46;",
+                  _                         => "background:#f1f5f9;color:#475569;"
+                };
+                <tr>
+                  <td class="small fw-semibold text-primary">#@s.Id.ToString("D6")</td>
+                  <td class="small">@s.FechaServicio.ToString("dd/MM/yyyy")</td>
+                  <td class="small text-muted">@s.Cotizacion?.Origen → @s.Cotizacion?.Destino</td>
+                  <td><span class="badge rounded-pill px-2 py-1" style="font-size:11px;@sCss">@s.Estado</span></td>
+                </tr>
+              }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+               style="width:56px;height:56px;background:var(--cp);color:#fff;font-size:22px;flex-shrink:0;">
+            @Model.NombreCompleto.Substring(0, 1).ToUpper()
+          </div>
+          <div>
+            <div class="fw-bold">@Model.NombreCompleto</div>
+            <div class="text-muted small">@Model.Cedula</div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small text-muted">Total servicios</span>
+            <span class="fw-bold">@Model.Servicios.Count</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small text-muted">Completados</span>
+            <span class="fw-bold text-success">@Model.Servicios.Count(x => x.Estado == EstadoServicio.Completado)</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="small text-muted">Cancelados</span>
+            <span class="fw-bold text-danger">@Model.Servicios.Count(x => x.Estado == EstadoServicio.Cancelado)</span>
+          </div>
+        </div>
+
+        @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("RHManager"))
+        {
+          <form asp-area="RH" asp-controller="Conductor" asp-action="ToggleActivo" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn w-100 rounded-3"
+                    style="@(Model.Activo ? "border:1px solid #ef4444;color:#ef4444;" : "border:1px solid #16a34a;color:#16a34a;")">
+              <i class="bi @(Model.Activo ? "bi-person-dash" : "bi-person-check") me-2"></i>
+              @(Model.Activo ? "Desactivar conductor" : "Activar conductor")
+            </button>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,205 @@
+﻿@using AppServiceAndTravel.ViewModels;
+
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<meta name="viewport" content="width=device-width" />
+<title>Restablecer Contraseña</title>
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+    img {
+        width: 400px;
+    }
+h2{
+    font-size: 2rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+label{
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+body{
+    width: 100%;    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+}
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    max-height: 100px;
+    height: 80px;
+        }
+    .icon-eye {
+        float: right;
+        margin-top: -35px;
+        margin-right: 20px;
+    }
+
+    .card-container {
+        width: 40rem;
+        max-height: 650px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 50px 1px rgba(99,99,99,1);
+    }
+
+    .btnPassword {
+        cursor: pointer;
+        pointer-events: all;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        white-space: nowrap;
+        line-height: 60px;
+    }
+    #fromBtnActualizar{
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .modal {
+        background-color: #1a418a75 !important;
+    }
+</style>
+<body style="height: 100vh !important;">
+    <div class="container d-flex justify-content-center">
+        <img src="~/images/logos/logo_blue.png" />
+    </div>
+    <div class="container mt-5 p-3">
+        <h2>Restablece tu contraseña</h2>    
+        <form id="formRestablecer" method="post" class="row mt-3 g-3">
+            <input id="Token" class="form-control form-control-lg" />
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label">Nueva Contraseña</label>
+                    <input id="NuevaClave" class="form-control form-control-lg mt-3" type="password" placeholder="••••••••••••" />                    
+                    <div class="icon-eye show-password"><i id="icon-eye" class="fa-solid fa-eye-slash" style="font-size:22px;" title="Ver Contraseña"></i></div>
+                    <span class="mt-2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label">confirmadaar Contraseña</label>
+                    <input id="confirmadaarClave" class="form-control form-control-lg mt-3" type="password" placeholder="••••••••••••" />                    
+                    <div class="icon-eye show-password"><i id="icon-eye2" class="fa-solid fa-eye-slash" style="font-size:22px;" title="Ver Contraseña"></i></div>
+                    <span class="mt-2" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-sm-12  mt-sm-3" id="fromBtnActualizar">
+                <button type="submit" class="btn btn-lg btn-primary mt-4">Actualizar Contraseña</button>
+            </div>        
+        </form>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container-fluid row">
+            <div class="col-sm-12 text-center">
+                <p>&copy; 2024 - Jardines Del Apogeo - <a href="https://www.jardinesdelapogeo.com/">www.jardinesdelapogeo.com</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+<!-- Ventana de Carga -->
+<div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="padding-left:100px">
+        <div class="loader"></div>
+    </div>
+</div>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/6394a64c44.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<partial name="_ValidationScriptsPartial" />
+<script>
+    function showAlert(icono, titulo, texto) {
+        Swal.fire({
+            icon: icono,
+            title: titulo,
+            text: texto,
+            showconfirmadaButton: true
+        });
+    }
+    $(document).ready(function () {
+
+        $('.show-password').click(function () {
+            var passwordInput = $('#NuevaClave');
+            var passwordInput2 = $('#confirmadaarClave');
+            var icon = $('#icon-eye');
+            var icon2 = $('#icon-eye2');
+            if (passwordInput.attr('type') === 'password') {
+                passwordInput.attr('type', 'text');
+                passwordInput2.attr('type', 'text');
+                icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                icon2.removeClass('fa-eye-slash').addClass('fa-eye');
+            } else {
+                passwordInput.attr('type', 'password');
+                passwordInput2.attr('type', 'password');
+                icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                icon2.removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        });
+
+        const token = $('#Token').val();
+        const NuevaClave = $('#NuevaClave').val();
+        const confirmadaarClave = $('#confirmadaarClave').val();
+
+        $('#formRestablecer').on('submit', function (e) {
+            e.preventDefault();
+
+            const token = $('#Token').val();
+            const NuevaClave = $('#NuevaClave').val();
+            const confirmadaarClave = $('#confirmadaarClave').val();
+
+            if (NuevaClave !== confirmadaarClave) {
+                showAlert('warning', 'error', 'Las contraseñas no coinciden');
+                return;
+            }
+
+            $.ajax({
+                url: '@Url.Action("RestablecerContraseña", "Account")',
+                type: 'POST',
+                data: {
+                    token: token,
+                    clave: NuevaClave,
+                    confirmadaarClave: confirmadaarClave
+                },
+                beforeSend: function () {
+                    $('#staticBackdrop').modal('show');
+                },
+                success: function (data) {
+                    Swal.fire({
+                      icon: data.icono,
+                      title: data.message,
+                      showconfirmadaButton: false,
+                      timer: 1000
+                      }).then(() => {
+                        window.location.href = '@Url.Action("Login", "Account")';
+                      });
+                },
+                error: function (err) {
+                    showAlert('error', '', err.responseText);
+                },
+                complete: function () {
+                    $('#staticBackdrop').modal('hide');
+                }
+            });
+        });
+
+
+    });
+</script>

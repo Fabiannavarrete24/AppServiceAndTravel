@@ -1,0 +1,983 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Configuración inicial";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Configuración inicial — TransporteApp</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   VARIABLES Y BASE
+════════════════════════════════════════════════════════════════ */
+:root {
+    --cp:#1a6fc4; --cps:rgba(26,111,196,.12);
+    --cs:#0f1c2e; --ca:#16a34a;
+    --rad:16px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:linear-gradient(135deg,#0f1c2e 0%,#1a3a5c 60%,#0d4d8a 100%);
+     min-height:100vh;font-family:'Segoe UI',system-ui,sans-serif;color:#1e293b;}
+
+/* ── Partículas decorativas ── */
+.bg-particles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.particle{position:absolute;border-radius:50%;opacity:.08;animation:float linear infinite;}
+@@keyframes float{0%{transform:translateY(100vh) rotate(0)}100%{transform:translateY(-100px) rotate(360deg)}}
+
+/* ── Contenedor principal ── */
+#setupApp{position:relative;z-index:1;min-height:100vh;
+    display:flex;align-items:center;justify-content:center;padding:24px;}
+
+/* ── Card del wizard ── */
+.wizard-card{background:#fff;border-radius:24px;width:100%;max-width:780px;
+    box-shadow:0 32px 80px rgba(0,0,0,.35);overflow:hidden;animation:slideUp .5s ease;}
+@@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Header ── */
+.wizard-header{background:var(--cs);padding:28px 36px 0;position:relative;}
+.wizard-logo{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.wizard-logo-icon{width:44px;height:44px;border-radius:12px;background:var(--cp);
+    display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
+.wizard-logo-text{color:#fff;font-size:16px;font-weight:700;}
+.wizard-logo-sub{color:rgba(255,255,255,.45);font-size:12px;}
+
+/* ── Steps indicadores ── */
+.steps-bar{display:flex;align-items:center;gap:0;padding-bottom:0;}
+.step-item{display:flex;flex-direction:column;align-items:center;flex:1;position:relative;}
+.step-item:not(:last-child)::after{content:'';position:absolute;top:18px;left:60%;right:-40%;
+    height:2px;background:rgba(255,255,255,.15);z-index:0;}
+.step-item.completed:not(:last-child)::after{background:var(--cp);}
+.step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:13px;font-weight:700;position:relative;z-index:1;
+    transition:all .3s;border:2px solid rgba(255,255,255,.2);color:rgba(255,255,255,.4);}
+.step-item.active   .step-dot{background:var(--cp);border-color:var(--cp);color:#fff;
+    box-shadow:0 0 0 4px rgba(26,111,196,.35);}
+.step-item.completed.step-dot, .step-item.completed .step-dot{background:#16a34a;border-color:#16a34a;color:#fff;}
+.step-label{font-size:10px;color:rgba(255,255,255,.35);margin-top:6px;text-align:center;
+    white-space:nowrap;font-weight:500;}
+.step-item.active   .step-label{color:rgba(255,255,255,.9);}
+.step-item.completed .step-label{color:#6ee7b7;}
+
+/* ── Barra de progreso ── */
+.progress-track{height:4px;background:rgba(255,255,255,.1);margin:18px 0 0;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--cp),#16a34a);
+    transition:width .6s cubic-bezier(.4,0,.2,1);}
+
+/* ── Cuerpo del wizard ── */
+.wizard-body{padding:36px;}
+
+/* ── Pane animación ── */
+.wizard-pane{display:none;animation:fadeIn .3s ease;}
+.wizard-pane.active{display:block;}
+@@keyframes fadeIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+/* ── Form styles ── */
+.form-label{font-size:13px;font-weight:600;color:#475569;margin-bottom:4px;}
+.form-control,.form-select{border-radius:10px;border:1.5px solid #e2e8f0;
+    padding:10px 14px;font-size:14px;transition:border-color .2s,box-shadow .2s;}
+.form-control:focus,.form-select:focus{border-color:var(--cp);
+    box-shadow:0 0 0 3px rgba(26,111,196,.12);outline:none;}
+.input-group-text{border-radius:10px 0 0 10px;background:#f8fafc;
+    border:1.5px solid #e2e8f0;border-right:none;color:#94a3b8;}
+.input-group .form-control{border-radius:0 10px 10px 0;border-left:none;}
+
+/* ── Motor cards ── */
+.motor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.motor-card{border:2px solid #e2e8f0;border-radius:12px;padding:16px;cursor:pointer;
+    text-align:center;transition:all .2s;}
+.motor-card:hover{border-color:var(--cp);}
+.motor-card.selected{border-color:var(--cp);background:var(--cps);}
+.motor-card i{font-size:28px;margin-bottom:8px;display:block;color:#64748b;}
+.motor-card.selected i{color:var(--cp);}
+.motor-card span{font-size:13px;font-weight:600;color:#475569;}
+.motor-card .motor-desc{font-size:11px;color:#94a3b8;margin-top:2px;}
+
+/* ── Test result inline ── */
+.test-result{border-radius:10px;padding:10px 14px;font-size:13px;
+    display:none;margin-top:10px;align-items:center;gap:10px;}
+.test-result.show{display:flex;}
+.test-result.ok  {background:#d1fae5;color:#065f46;}
+.test-result.err {background:#fee2e2;color:#991b1b;}
+
+/* ── Botones ── */
+.btn-setup{background:var(--cp);border:none;color:#fff;padding:12px 28px;
+    border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;
+    transition:filter .15s,transform .1s;display:flex;align-items:center;gap:8px;}
+.btn-setup:hover{filter:brightness(1.08);color:#fff;}
+.btn-setup:active{transform:scale(.98);}
+.btn-setup:disabled{opacity:.55;cursor:not-allowed;}
+.btn-back{background:none;border:2px solid #e2e8f0;color:#64748b;padding:12px 22px;
+    border-radius:10px;font-weight:600;font-size:14px;cursor:pointer;transition:all .15s;}
+.btn-back:hover{border-color:var(--cp);color:var(--cp);}
+
+/* ── Password strength ── */
+.pwd-strength{height:4px;border-radius:4px;margin-top:6px;transition:all .3s;}
+
+/* ════════════════════════════════════════════════════════════════
+   PANTALLA DE EJECUCIÓN (Paso 5)
+════════════════════════════════════════════════════════════════ */
+#panelEjecucion{display:none;}
+.exec-step{display:flex;align-items:center;gap:14px;padding:12px 0;
+    border-bottom:1px solid #f1f5f9;opacity:.35;transition:opacity .4s;}
+.exec-step.active{opacity:1;}
+.exec-step.done  {opacity:1;}
+.exec-dot{width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:16px;}
+.exec-dot.wait{background:#f1f5f9;color:#94a3b8;}
+.exec-dot.running{background:#dbeafe;color:var(--cp);}
+.exec-dot.ok  {background:#d1fae5;color:#16a34a;}
+.exec-dot.fail{background:#fee2e2;color:#dc2626;}
+.exec-label{font-size:14px;font-weight:600;color:#1e293b;}
+.exec-sub  {font-size:12px;color:#94a3b8;}
+
+.exec-progress{height:8px;background:#e2e8f0;border-radius:8px;overflow:hidden;margin:20px 0 0;}
+.exec-progress-fill{height:100%;background:linear-gradient(90deg,var(--cp),#16a34a);
+    transition:width .6s ease;border-radius:8px;}
+
+/* ════════════════════════════════════════════════════════════════
+   SKELETON LOADER (carga final)
+════════════════════════════════════════════════════════════════ */
+#skeletonScreen{display:none;position:fixed;inset:0;background:#f0f4f8;z-index:9999;
+    flex-direction:column;}
+
+.sk-sidebar{width:260px;background:#0f1c2e;height:100vh;flex-shrink:0;padding:20px;position:fixed;}
+.sk-main{margin-left:260px;padding:24px;flex:1;}
+.sk-topbar{height:60px;background:#fff;border-radius:12px;margin-bottom:24px;
+    display:flex;align-items:center;padding:0 20px;gap:12px;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+
+.sk{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+    background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:8px;}
+@@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.sk-dark{background:linear-gradient(90deg,rgba(255,255,255,.05) 25%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 75%);
+    background-size:400% 100%;animation:shimmer 1.4s ease infinite;border-radius:8px;}
+
+.sk-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.sk-kpi{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 8px rgba(0,0,0,.06);}
+
+/* ── Spinner central ── */
+.restart-overlay{position:fixed;inset:0;background:#f0f4f8;z-index:10000;
+    display:none;flex-direction:column;align-items:center;justify-content:center;}
+.restart-spinner{width:72px;height:72px;border:5px solid #e2e8f0;
+    border-top-color:var(--cp);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:24px;}
+@@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Responsive ── */
+@@media(max-width:640px){
+    .motor-grid{grid-template-columns:1fr;}
+    .wizard-body{padding:24px;}
+    .wizard-header{padding:20px 24px 0;}
+    .sk-sidebar{display:none;}
+    .sk-main{margin-left:0;}
+    .sk-kpi-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- Partículas de fondo -->
+<div class="bg-particles" id="particles"></div>
+
+<!-- App principal -->
+<div id="setupApp">
+<div class="wizard-card">
+
+    <!-- Header con steps -->
+    <div class="wizard-header">
+        <div class="wizard-logo">
+            <div class="wizard-logo-icon"><i class="bi bi-truck"></i></div>
+            <div>
+                <div class="wizard-logo-text">TransporteApp</div>
+                <div class="wizard-logo-sub">Asistente de configuración inicial</div>
+            </div>
+        </div>
+
+        <!-- Steps -->
+        <div class="steps-bar" id="stepsBar">
+            @foreach(var (n,lbl,icon) in new[]{
+                (1,"Base de datos","bi-database"),
+                (2,"Correo SMTP",  "bi-envelope"),
+                (3,"Empresa",      "bi-building"),
+                (4,"Administrador","bi-person-gear"),
+                (5,"Finalizar",    "bi-rocket-takeoff"),
+            })
+            {
+            <div class="step-item @(n==1?"active":"")" id="stepItem@n" data-step="@n">
+                <div class="step-dot" id="stepDot@n">
+                    <i class="bi @icon" id="stepIcon@n"></i>
+                </div>
+                <span class="step-label">@lbl</span>
+            </div>
+            }
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+    </div>
+
+    <!-- Body wizard -->
+    <div class="wizard-body">
+
+        <!-- ══ PASO 1: BASE DE DATOS ══════════════════════════════ -->
+        <div class="wizard-pane active" id="pane1">
+            <h4 class="fw-bold mb-1" style="color:#1e293b;">Base de datos</h4>
+            <p class="text-muted small mb-4">Seleccione el motor y configure la conexión.</p>
+
+            <!-- Motor -->
+            <div class="motor-grid mb-4">
+                @foreach(var (motor,ico,desc,puerto) in new[]{
+                    ("MySQL",      "bi-database-fill","Recomendado — código abierto",3306),
+                    ("SqlServer",  "bi-server",        "Microsoft SQL Server",1433),
+                    ("PostgreSQL", "bi-hdd-fill",       "PostgreSQL — potente y libre",5432),
+                })
+                {
+                <div class="motor-card @(motor=="MySQL"?"selected":"")"
+                     id="motorCard@motor"
+                     onclick="selMotor('@motor',@puerto)">
+                    <i class="bi @ico"></i>
+                    <span>@motor</span>
+                    <div class="motor-desc">@desc</div>
+                </div>
+                }
+            </div>
+
+            <input type="hidden" id="motorSeleccionado" value="MySQL" />
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <label class="form-label">Servidor / Host</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-hdd-network"></i></span>
+                        <input type="text" id="dbHost" class="form-control" value="localhost"
+                               oninput="buildPreview()" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Puerto</label>
+                    <input type="number" id="dbPort" class="form-control" value="3306"
+                           oninput="buildPreview()" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre de la base de datos</label>
+                    <input type="text" id="dbName" class="form-control" value="transporte_db"
+                           oninput="buildPreview()" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Usuario</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" id="dbUser" class="form-control" value="root"
+                               oninput="buildPreview()" />
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Contraseña</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" id="dbPwd" class="form-control"
+                               placeholder="Contraseña de la BD" oninput="buildPreview()" />
+                        <button type="button" class="btn btn-outline-secondary"
+                                style="border-radius:0 10px 10px 0;"
+                                onclick="toggleViz('dbPwd','icoDbPwd')">
+                            <i class="bi bi-eye" id="icoDbPwd"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Vista previa de la cadena</label>
+                    <div id="connPreview" class="p-2 rounded-3 small"
+                         style="background:#f8fafc;font-family:monospace;font-size:11px;
+                                border:1px solid #e2e8f0;word-break:break-all;color:#475569;">
+                        Server=localhost;Port=3306;Database=transporte_db;User=root;Password=;CharSet=utf8mb4;
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-result" id="dbTestResult"></div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="button" class="btn-setup" onclick="probarConexionBD()" id="btnTestDB">
+                    <span class="spinner-border spinner-border-sm d-none" id="spnDB"></span>
+                    <i class="bi bi-plug" id="icoTestDB"></i>
+                    Probar y continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ PASO 2: SMTP ════════════════════════════════════════ -->
+        <div class="wizard-pane" id="pane2">
+            <h4 class="fw-bold mb-1" style="color:#1e293b;">Correo electrónico (SMTP)</h4>
+            <p class="text-muted small mb-4">Para enviar notificaciones automáticas del sistema.</p>
+
+            <!-- Acceso rápido Gmail -->
+            <div class="p-3 rounded-3 mb-4" style="background:#fef3c7;border:1px solid #fcd34d;">
+                <div class="fw-semibold small mb-1"><i class="bi bi-google me-1"></i>Usando Gmail</div>
+                <div class="small text-muted">
+                    Necesitas una <strong>App Password</strong>: ve a
+                    <a href="https://myaccount.google.com/apppasswords" target="_blank">
+                        myaccount.google.com/apppasswords</a>,
+                    activa verificación en 2 pasos y genera una contraseña para "Correo".
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <label class="form-label">Servidor SMTP</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-server"></i></span>
+                        <input type="text" id="smtpHost" class="form-control" value="smtp.gmail.com" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Puerto</label>
+                    <input type="number" id="smtpPort" class="form-control" value="587" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Seguridad</label>
+                    <div class="d-flex flex-column gap-2 p-2 rounded-3" style="border:1.5px solid #e2e8f0;">
+                        <div class="form-check mb-0">
+                            <input type="checkbox" id="smtpTls" class="form-check-input" checked />
+                            <label class="form-check-label small fw-semibold" for="smtpTls">STARTTLS (recomendado)</label>
+                        </div>
+                        <div class="form-check mb-0">
+                            <input type="checkbox" id="smtpSsl" class="form-check-input" />
+                            <label class="form-check-label small fw-semibold" for="smtpSsl">SSL/TLS directo</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del remitente</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+                        <input type="text" id="smtpNombre" class="form-control" value="TransporteApp" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email de envío *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" id="smtpEmail" class="form-control"
+                               placeholder="tuusuario@gmail.com" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">App Password *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-key"></i></span>
+                        <input type="password" id="smtpPwd" class="form-control"
+                               placeholder="xxxx xxxx xxxx xxxx" />
+                        <button type="button" class="btn btn-outline-secondary"
+                                style="border-radius:0 10px 10px 0;"
+                                onclick="toggleViz('smtpPwd','icoSmtpPwd')">
+                            <i class="bi bi-eye" id="icoSmtpPwd"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WhatsApp opcional -->
+            <div class="mb-4">
+                <div class="form-check form-switch mb-2">
+                    <input class="form-check-input" type="checkbox" id="chkWA"
+                           onchange="document.getElementById('secWA').style.display=this.checked?'block':'none'" />
+                    <label class="form-check-label fw-semibold small" for="chkWA">
+                        Configurar WhatsApp (CallMeBot — gratis, opcional)
+                    </label>
+                </div>
+                <div id="secWA" style="display:none;" class="p-3 rounded-3"
+                     style="background:#f0fdf4;border:1px solid #bbf7d0;">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">API Key CallMeBot</label>
+                            <input type="text" id="waKey" class="form-control" placeholder="Tu API Key" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Número (con código país)</label>
+                            <input type="tel" id="waNum" class="form-control" placeholder="573001234567" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-result" id="smtpTestResult"></div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn-back" onclick="irPaso(1)">
+                    <i class="bi bi-arrow-left me-2"></i>Anterior
+                </button>
+                <button type="button" class="btn-setup" onclick="probarSmtp()" id="btnTestSMTP">
+                    <span class="spinner-border spinner-border-sm d-none" id="spnSMTP"></span>
+                    <i class="bi bi-send" id="icoTestSMTP"></i>
+                    Probar y continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ PASO 3: EMPRESA ═════════════════════════════════════ -->
+        <div class="wizard-pane" id="pane3">
+            <h4 class="fw-bold mb-1" style="color:#1e293b;">Datos de la empresa</h4>
+            <p class="text-muted small mb-4">Esta información aparecerá en los documentos y notificaciones.</p>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <label class="form-label">Nombre de la empresa *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-building"></i></span>
+                        <input type="text" id="empNombre" class="form-control" required
+                               placeholder="Transportes Rápidos S.A.S." />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">NIT / RUC</label>
+                    <input type="text" id="empNit" class="form-control" placeholder="900.123.456-7" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Dirección</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" id="empDir" class="form-control"
+                               placeholder="Calle 123 # 45-67" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Ciudad</label>
+                    <input type="text" id="empCiudad" class="form-control" placeholder="Bogotá" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">País</label>
+                    <select id="empPais" class="form-select">
+                        @foreach(var p in new[]{"Colombia","México","Perú","Chile","Argentina","Ecuador","Venezuela","España"})
+                        { <option value="@p" @@(p=="Colombia"?"selected":"")>@p</option> }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Teléfono</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                        <input type="tel" id="empTel" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn-back" onclick="irPaso(2)">
+                    <i class="bi bi-arrow-left me-2"></i>Anterior
+                </button>
+                <button type="button" class="btn-setup" onclick="guardarEmpresa()">
+                    <i class="bi bi-arrow-right me-2"></i>Continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ PASO 4: ADMINISTRADOR ════════════════════════════════ -->
+        <div class="wizard-pane" id="pane4">
+            <h4 class="fw-bold mb-1" style="color:#1e293b;">Cuenta de administrador</h4>
+            <p class="text-muted small mb-4">Este será el usuario principal con acceso total al sistema.</p>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-7">
+                    <label class="form-label">Nombre completo *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" id="admNombre" class="form-control" required
+                               placeholder="Nombre Apellido" />
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Teléfono</label>
+                    <input type="tel" id="admTel" class="form-control" placeholder="3001234567" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Email (usuario de acceso) *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" id="admEmail" class="form-control" required
+                               placeholder="admin@empresa.com" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Contraseña *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" id="admPwd" class="form-control"
+                               placeholder="Mínimo 8 caracteres"
+                               oninput="checkPwdStrength(this.value)" />
+                        <button type="button" class="btn btn-outline-secondary"
+                                style="border-radius:0 10px 10px 0;"
+                                onclick="toggleViz('admPwd','icoAdmPwd')">
+                            <i class="bi bi-eye" id="icoAdmPwd"></i>
+                        </button>
+                    </div>
+                    <div class="pwd-strength" id="pwdBar" style="background:#e2e8f0;"></div>
+                    <div id="pwdLabel" class="text-muted mt-1" style="font-size:11px;">Ingrese una contraseña</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Confirmar contraseña *</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                        <input type="password" id="admPwd2" class="form-control"
+                               placeholder="Repita la contraseña"
+                               oninput="checkPwdMatch()" />
+                    </div>
+                    <div id="pwdMatch" class="mt-1" style="font-size:11px;"></div>
+                </div>
+            </div>
+
+            <div class="p-3 rounded-3 mb-4"
+                 style="background:#f0f9ff;border:1px solid #bae6fd;">
+                <div class="small"><i class="bi bi-shield-check me-2 text-primary"></i>
+                    <strong>Requisitos de contraseña:</strong>
+                    8+ caracteres, al menos una mayúscula, una minúscula y un número.
+                </div>
+            </div>
+
+            <div class="test-result" id="admResult"></div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn-back" onclick="irPaso(3)">
+                    <i class="bi bi-arrow-left me-2"></i>Anterior
+                </button>
+                <button type="button" class="btn-setup" onclick="validarAdmin()">
+                    <i class="bi bi-rocket-takeoff me-2"></i>Instalar sistema
+                </button>
+            </div>
+        </div>
+
+        <!-- ══ PASO 5: EJECUCIÓN ════════════════════════════════════ -->
+        <div class="wizard-pane" id="pane5">
+            <div id="panelResumen">
+                <h4 class="fw-bold mb-1" style="color:#1e293b;">Resumen de configuración</h4>
+                <p class="text-muted small mb-4">Revise los datos antes de iniciar la instalación.</p>
+                <div id="resumenContent" class="mb-4"></div>
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn-back" onclick="irPaso(4)">
+                        <i class="bi bi-arrow-left me-2"></i>Anterior
+                    </button>
+                    <button type="button" class="btn-setup" id="btnInstalar" onclick="iniciarInstalacion()">
+                        <i class="bi bi-play-fill me-2"></i>Iniciar instalación
+                    </button>
+                </div>
+            </div>
+
+            <!-- Proceso de instalación -->
+            <div id="panelEjecucion">
+                <h4 class="fw-bold mb-1" style="color:#1e293b;">Instalando…</h4>
+                <p class="text-muted small mb-4">No cierre esta ventana durante la instalación.</p>
+
+                <div class="exec-progress mb-4">
+                    <div class="exec-progress-fill" id="execFill" style="width:0%"></div>
+                </div>
+
+                @foreach(var (n,lbl,sub) in new[]{
+                    (1,"Escribiendo configuración","Actualizando appsettings.json"),
+                    (2,"Creando base de datos",   "Aplicando migraciones de Entity Framework"),
+                    (3,"Configurando roles",       "Creando roles del sistema"),
+                    (4,"Creando administrador",    "Registrando usuario administrador"),
+                    (5,"Guardando configuración",  "Empresa, SMTP y notificaciones"),
+                    (6,"Finalizando",              "Marcando setup como completado"),
+                })
+                {
+                <div class="exec-step" id="execStep@n">
+                    <div class="exec-dot wait" id="execDot@n">
+                        <i class="bi bi-circle" id="execIco@n"></i>
+                    </div>
+                    <div>
+                        <div class="exec-label">@lbl</div>
+                        <div class="exec-sub" id="execSub@n">@sub</div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+    </div><!-- /.wizard-body -->
+</div><!-- /.wizard-card -->
+</div><!-- /#setupApp -->
+
+<!-- ════════════════ SKELETON LOADER ════════════════ -->
+<div id="skeletonScreen">
+    <div class="sk-sidebar">
+        <div class="sk-dark mb-4" style="height:44px;border-radius:12px;"></div>
+        @for(int i=0;i<8;i++){
+        <div class="sk-dark mb-3" style="height:16px;width:@(new[]{80,65,75,55,70,60,80,50}[i])%;"></div>
+        }
+    </div>
+    <div class="sk-main">
+        <div class="sk-topbar">
+            <div class="sk" style="width:32px;height:32px;border-radius:8px;"></div>
+            <div class="sk" style="flex:1;height:20px;max-width:300px;"></div>
+            <div class="sk" style="width:32px;height:32px;border-radius:50%;margin-left:auto;"></div>
+        </div>
+        <div class="sk-kpi-grid">
+            @for(int i=0;i<4;i++){
+            <div class="sk-kpi">
+                <div class="sk mb-2" style="width:40px;height:40px;border-radius:10px;"></div>
+                <div class="sk mb-1" style="height:12px;width:60%;"></div>
+                <div class="sk" style="height:28px;width:40%;"></div>
+            </div>
+            }
+        </div>
+        <div class="sk-kpi" style="height:280px;margin-bottom:20px;">
+            <div class="sk" style="height:100%;border-radius:12px;"></div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-6"><div class="sk-kpi" style="height:180px;"><div class="sk" style="height:100%;border-radius:12px;"></div></div></div>
+            <div class="col-md-6"><div class="sk-kpi" style="height:180px;"><div class="sk" style="height:100%;border-radius:12px;"></div></div></div>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay reinicio -->
+<div class="restart-overlay" id="restartOverlay">
+    <div class="restart-spinner"></div>
+    <h5 class="fw-bold mb-2" style="color:#1e293b;">Reiniciando la aplicación…</h5>
+    <p class="text-muted small">Esto puede tomar unos segundos.</p>
+    <p class="text-muted" style="font-size:11px;margin-top:8px;">Será redirigido automáticamente.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════
+// ESTADO DEL WIZARD
+// ════════════════════════════════════════════════════════════════
+let pasoActual = 1;
+const TOTAL_PASOS = 5;
+const PROGRESO = {1:0, 2:25, 3:50, 4:75, 5:100};
+
+// ── Partículas decorativas ────────────────────────────────────
+(function() {
+    const c = document.getElementById('particles');
+    const colores = ['#1a6fc4','#16a34a','#0d9488','#7c3aed','#f59e0b'];
+    for(let i=0;i<18;i++){
+        const d=document.createElement('div');
+        const s=Math.random()*60+20;
+        d.className='particle';
+        d.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;
+            bottom:${-s}px;background:${colores[i%colores.length]};
+            animation-duration:${Math.random()*20+15}s;
+            animation-delay:${Math.random()*10}s;`;
+        c.appendChild(d);
+    }
+})();
+
+// ── Navegación de pasos ───────────────────────────────────────
+function irPaso(n) {
+    document.getElementById(`pane${pasoActual}`).classList.remove('active');
+    document.getElementById(`stepItem${pasoActual}`).classList.remove('active');
+
+    // Marcar el paso anterior como completado
+    if(n > pasoActual) {
+        document.getElementById(`stepItem${pasoActual}`).classList.add('completed');
+        const dot = document.getElementById(`stepDot${pasoActual}`);
+        dot.style.background='#16a34a'; dot.style.borderColor='#16a34a';
+        document.getElementById(`stepIcon${pasoActual}`).className='bi bi-check-lg';
+    } else {
+        document.getElementById(`stepItem${pasoActual}`).classList.remove('completed');
+    }
+
+    pasoActual = n;
+    document.getElementById(`pane${n}`).classList.add('active');
+    document.getElementById(`stepItem${n}`).classList.add('active');
+    document.getElementById('progressFill').style.width = PROGRESO[n] + '%';
+
+    // Scroll top
+    document.querySelector('.wizard-card').scrollIntoView({behavior:'smooth'});
+
+    // Resumen en paso 5
+    if(n===5) generarResumen();
+}
+
+// ── Selector de motor ─────────────────────────────────────────
+const puertosDefault = {MySQL:3306, SqlServer:1433, PostgreSQL:5432};
+function selMotor(motor, puerto) {
+    document.getElementById('motorSeleccionado').value = motor;
+    document.getElementById('dbPort').value = puerto;
+    document.querySelectorAll('.motor-card').forEach(c=>c.classList.remove('selected'));
+    document.getElementById('motorCard'+motor).classList.add('selected');
+    buildPreview();
+}
+
+function buildPreview() {
+    const m=document.getElementById('motorSeleccionado').value;
+    const h=document.getElementById('dbHost').value||'localhost';
+    const p=document.getElementById('dbPort').value||'3306';
+    const d=document.getElementById('dbName').value||'transporte_db';
+    const u=document.getElementById('dbUser').value||'root';
+    const pw=document.getElementById('dbPwd').value||'';
+    let str='';
+    if(m==='MySQL')     str=`Server=${h};Port=${p};Database=${d};User=${u};Password=${pw};CharSet=utf8mb4;`;
+    if(m==='SqlServer') str=`Server=${h},${p};Database=${d};User Id=${u};Password=${pw};TrustServerCertificate=True;`;
+    if(m==='PostgreSQL')str=`Host=${h};Port=${p};Database=${d};Username=${u};Password=${pw};`;
+    document.getElementById('connPreview').textContent = str;
+}
+
+// ── Test BD ───────────────────────────────────────────────────
+async function probarConexionBD() {
+    const btn=document.getElementById('btnTestDB');
+    const spn=document.getElementById('spnDB');
+    const ico=document.getElementById('icoTestDB');
+    btn.disabled=true; spn.classList.remove('d-none'); ico.classList.add('d-none');
+
+    const vm = {
+        Motor:    document.getElementById('motorSeleccionado').value,
+        Servidor: document.getElementById('dbHost').value,
+        Puerto:   parseInt(document.getElementById('dbPort').value),
+        BaseDatos:document.getElementById('dbName').value,
+        Usuario:  document.getElementById('dbUser').value,
+        Password: document.getElementById('dbPwd').value,
+    };
+
+    const r = await fetchPost('/Setup/TestDatabase', vm);
+    mostrarTestResult('dbTestResult', r.ok, r.mensaje);
+
+    btn.disabled=false; spn.classList.add('d-none'); ico.classList.remove('d-none');
+    if(r.ok) setTimeout(()=>irPaso(2), 800);
+}
+
+// ── Test SMTP ─────────────────────────────────────────────────
+async function probarSmtp() {
+    const btn=document.getElementById('btnTestSMTP');
+    const spn=document.getElementById('spnSMTP');
+    const ico=document.getElementById('icoTestSMTP');
+    btn.disabled=true; spn.classList.remove('d-none'); ico.classList.add('d-none');
+
+    const vm = {
+        Servidor:       document.getElementById('smtpHost').value,
+        Puerto:         parseInt(document.getElementById('smtpPort').value),
+        UsaStartTls:    document.getElementById('smtpTls').checked,
+        UsaSSL:         document.getElementById('smtpSsl').checked,
+        Email:          document.getElementById('smtpEmail').value,
+        Password:       document.getElementById('smtpPwd').value,
+        NombreRemitente:document.getElementById('smtpNombre').value,
+        ConfigurarWhatsApp: document.getElementById('chkWA').checked,
+        WhatsAppApiKey: document.getElementById('waKey').value,
+        WhatsAppNumero: document.getElementById('waNum').value,
+    };
+
+    const r = await fetchPost('/Setup/TestSmtp', vm);
+    mostrarTestResult('smtpTestResult', r.ok, r.mensaje);
+
+    btn.disabled=false; spn.classList.add('d-none'); ico.classList.remove('d-none');
+    if(r.ok) setTimeout(()=>irPaso(3), 800);
+}
+
+// ── Guardar empresa ───────────────────────────────────────────
+async function guardarEmpresa() {
+    const nombre = document.getElementById('empNombre').value.trim();
+    if(!nombre){ alert('El nombre de la empresa es requerido.'); return; }
+
+    const vm = {
+        NombreEmpresa: nombre,
+        NitEmpresa:    document.getElementById('empNit').value,
+        Direccion:     document.getElementById('empDir').value,
+        Ciudad:        document.getElementById('empCiudad').value,
+        Pais:          document.getElementById('empPais').value,
+        Telefono:      document.getElementById('empTel').value,
+    };
+
+    await fetchPost('/Setup/GuardarEmpresa', vm);
+    irPaso(4);
+}
+
+// ── Validar admin ─────────────────────────────────────────────
+async function validarAdmin() {
+    const pwd  = document.getElementById('admPwd').value;
+    const pwd2 = document.getElementById('admPwd2').value;
+    if(pwd !== pwd2){ mostrarTestResult('admResult',false,'Las contraseñas no coinciden.'); return; }
+
+    const vm = {
+        NombreCompleto:    document.getElementById('admNombre').value,
+        Email:             document.getElementById('admEmail').value,
+        Telefono:          document.getElementById('admTel').value,
+        Password:          pwd,
+        ConfirmarPassword: pwd2,
+    };
+
+    const r = await fetchPost('/Setup/ValidarAdmin', vm);
+    if(r.ok) { irPaso(5); }
+    else { mostrarTestResult('admResult', false, r.mensaje); }
+}
+
+// ── Resumen ───────────────────────────────────────────────────
+function generarResumen() {
+    const items = [
+        ['Base de datos', `${document.getElementById('motorSeleccionado').value} — ${document.getElementById('dbHost').value}:${document.getElementById('dbPort').value}/${document.getElementById('dbName').value}`, 'bi-database'],
+        ['SMTP',          `${document.getElementById('smtpEmail').value} via ${document.getElementById('smtpHost').value}:${document.getElementById('smtpPort').value}`, 'bi-envelope'],
+        ['Empresa',       document.getElementById('empNombre').value + (document.getElementById('empCiudad').value ? ` — ${document.getElementById('empCiudad').value}` : ''), 'bi-building'],
+        ['Administrador', `${document.getElementById('admNombre').value} (${document.getElementById('admEmail').value})`, 'bi-person-gear'],
+    ];
+
+    document.getElementById('resumenContent').innerHTML = items.map(([lbl,val,ico])=>`
+        <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-2" style="background:#f8fafc;border:1px solid #e2e8f0;">
+            <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:36px;height:36px;background:#dbeafe;color:var(--cp);font-size:17px;">
+                <i class="bi ${ico}"></i>
+            </div>
+            <div>
+                <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;">${lbl}</div>
+                <div style="font-size:13px;font-weight:600;color:#1e293b;">${val}</div>
+            </div>
+            <i class="bi bi-check-circle-fill text-success ms-auto"></i>
+        </div>`).join('');
+}
+
+// ── Iniciar instalación ────────────────────────────────────────
+function iniciarInstalacion() {
+    document.getElementById('panelResumen').style.display='none';
+    document.getElementById('panelEjecucion').style.display='block';
+
+    const source = new EventSource('/Setup/ExecuteSetup');
+
+    source.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const { paso, total, msg, estado } = data;
+
+        // Actualizar barra
+        const pct = Math.round((paso/total)*100);
+        document.getElementById('execFill').style.width = pct + '%';
+
+        // Marcar paso anterior como ok
+        if(paso > 1) {
+            const prev = document.getElementById(`execStep${paso-1}`);
+            const dot  = document.getElementById(`execDot${paso-1}`);
+            const ico  = document.getElementById(`execIco${paso-1}`);
+            prev.classList.add('done');
+            dot.className='exec-dot ok';
+            ico.className='bi bi-check-lg';
+        }
+
+        // Activar paso actual
+        if(paso <= total && estado !== 'done') {
+            const cur = document.getElementById(`execStep${paso}`);
+            const dot = document.getElementById(`execDot${paso}`);
+            const ico = document.getElementById(`execIco${paso}`);
+            const sub = document.getElementById(`execSub${paso}`);
+            cur.classList.add('active');
+            dot.className='exec-dot running';
+            ico.className='bi bi-arrow-repeat spin-ico';
+            if(sub && msg) sub.textContent = msg;
+        }
+
+        if(estado === 'done') {
+            source.close();
+            // Marcar último paso
+            const last = document.getElementById(`execStep${total}`);
+            const dot  = document.getElementById(`execDot${total}`);
+            const ico  = document.getElementById(`execIco${total}`);
+            last.classList.add('done');
+            dot.className='exec-dot ok';
+            ico.className='bi bi-check-lg';
+            document.getElementById('execFill').style.width='100%';
+
+            setTimeout(mostrarSkeleton, 800);
+        }
+
+        if(estado === 'error') {
+            source.close();
+            if(paso > 0) {
+                const dot = document.getElementById(`execDot${paso}`);
+                const ico = document.getElementById(`execIco${paso}`);
+                dot.className='exec-dot fail';
+                ico.className='bi bi-x-lg';
+                const sub = document.getElementById(`execSub${paso}`);
+                if(sub) sub.textContent = msg;
+            }
+        }
+    };
+}
+
+// ── Skeleton + reinicio ────────────────────────────────────────
+async function mostrarSkeleton() {
+    // Ocultar wizard, mostrar skeleton
+    document.getElementById('setupApp').style.display='none';
+    const sk = document.getElementById('skeletonScreen');
+    sk.style.display='flex';
+
+    await new Promise(r=>setTimeout(r, 2500));
+
+    // Mostrar overlay de reinicio
+    sk.style.display='none';
+    document.getElementById('restartOverlay').style.display='flex';
+
+    // Pedir reinicio al servidor
+    try {
+        await fetchPost('/Setup/Restart', {});
+    } catch {}
+
+    // Intentar reconectar cada 2s hasta que responda
+    let intentos = 0;
+    const interval = setInterval(async () => {
+        intentos++;
+        try {
+            const r = await fetch('/Account/Login', {method:'GET', cache:'no-store'});
+            if(r.ok || r.redirected) {
+                clearInterval(interval);
+                window.location.href = '/Account/Login';
+            }
+        } catch {}
+        if(intentos > 30) { clearInterval(interval); window.location.href='/Account/Login'; }
+    }, 2000);
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+async function fetchPost(url, data) {
+    const r = await fetch(url, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data)
+    });
+    return r.json();
+}
+
+function mostrarTestResult(id, ok, msg) {
+    const el = document.getElementById(id);
+    el.className = `test-result show ${ok?'ok':'err'}`;
+    el.innerHTML = `<i class="bi bi-${ok?'check-circle-fill':'exclamation-triangle-fill'}"></i><span>${msg}</span>`;
+    setTimeout(()=>{if(ok)el.classList.remove('show');}, 3000);
+}
+
+function toggleViz(inp, ico) {
+    const i=document.getElementById(inp);
+    const ic=document.getElementById(ico);
+    i.type=i.type==='password'?'text':'password';
+    ic.className=i.type==='password'?'bi bi-eye':'bi bi-eye-slash';
+}
+
+// ── Password strength ──────────────────────────────────────────
+function checkPwdStrength(pwd) {
+    let score=0;
+    if(pwd.length>=8) score++;
+    if(/[A-Z]/.test(pwd)) score++;
+    if(/[a-z]/.test(pwd)) score++;
+    if(/[0-9]/.test(pwd)) score++;
+    if(/[^A-Za-z0-9]/.test(pwd)) score++;
+    const bar=document.getElementById('pwdBar');
+    const lbl=document.getElementById('pwdLabel');
+    const colors=['#e2e8f0','#ef4444','#f59e0b','#eab308','#22c55e','#16a34a'];
+    const labels=['','Muy débil','Débil','Regular','Fuerte','Muy fuerte'];
+    bar.style.background=colors[score]||'#e2e8f0';
+    bar.style.width=(score/5*100)+'%';
+    lbl.textContent=labels[score]||'';
+    lbl.style.color=colors[score]||'#94a3b8';
+}
+
+function checkPwdMatch() {
+    const p1=document.getElementById('admPwd').value;
+    const p2=document.getElementById('admPwd2').value;
+    const el=document.getElementById('pwdMatch');
+    if(!p2){el.textContent='';return;}
+    if(p1===p2){el.textContent='✓ Las contraseñas coinciden';el.style.color='#16a34a';}
+    else{el.textContent='✗ Las contraseñas no coinciden';el.style.color='#ef4444';}
+}
+
+// Icono giratorio inline
+const style=document.createElement('style');
+style.textContent='.spin-ico{animation:spin .6s linear infinite;display:inline-block;}@@keyframes spin{to{transform:rotate(360deg)}}';
+document.head.appendChild(style);
+</script>
+</body>
+</html>

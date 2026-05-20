@@ -1,0 +1,152 @@
+﻿body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container-layout {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.carousel-column {
+    width: 65%;
+    height: 100%;
+    background-color: #f8f9fa;
+}
+
+.form-column {
+    width: 35%;
+    height: 100%;
+    background-color: #fff;
+    padding: 1rem;
+    align-content: center;
+}
+.icon-eye {
+    float: right;
+    margin-top: -30px;
+    margin-right: 15px;
+}
+.icon-eye > i {
+    font-size: 22px;
+}
+
+#loginForm > div > img {
+    margin: 50px 0 0 0;
+    width: 150px;
+}
+a > img {
+    width: 30px;
+}
+.btnPassword {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.modal {
+    background-color: #1a418a75 !important;
+}
+
+@media screen and (max-width: 1400px) {
+
+    #loginForm > div > img {
+        margin: 40px 0 0 0;
+        width: 150px;
+    }
+    h2 {
+        font-size: calc(1rem + .9vw);
+    }
+    label,a {
+        font-size:0.8rem;
+    }
+    .form-control-sm{
+        padding: .375rem .75rem;
+        font-size: 1rem;
+    }
+    p {
+        font-size: 14px;
+    }
+    .icon-eye > i {
+        font-size: 18px;
+    }
+    a > img {
+        width: 18px;
+    }
+}
+@media screen and (max-width: 1100px){
+    .carousel-column {
+        display: none;
+    }        
+    .form-column {
+        width: 60%;
+    }
+    .container-layout {
+    justify-content: center;
+    }
+}
+@media screen and (max-width: 756px){
+    .carousel-column {
+        display: none;
+    }        
+    .form-column {
+        width: 80%;
+    }
+    .container-layout {
+    justify-content: center;
+    }
+}
+@media screen and (max-width: 576px) {
+    .form-column {
+        width: 90%;
+    }
+
+    label,a {
+        font-size: 0.7rem;
+    }
+    img {
+        margin: 15px 0 0 0;
+        width: 130px;
+    }
+    a, button {
+        font-size: 0.7rem;
+        margin:0;
+    }
+    a > img {
+        width: 20px;
+    }
+    a > span {
+        font-size: 0.7rem;
+    }
+    .icon-eye > i {
+        font-size: 18px;
+    }
+}
+
+.loader {
+    width: fit-content;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 30px;
+    clip-path: inset(0 3ch 0 0);
+    animation: l4 1s steps(4) infinite;
+}
+
+.loader:before {
+    content: "Cargando....";
+    color: #fff;
+}
+
+@keyframes l4 {
+    to {
+        clip-path: inset(0 -1ch 0 0)
+    }
+}

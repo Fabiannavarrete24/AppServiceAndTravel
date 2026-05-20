@@ -1,0 +1,173 @@
+@model AppServiceAndTravel.Models.Conductor
+@using AppServiceAndTravel.Models
+@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? $"Editar: {Model.NombreCompleto}" : "Nuevo Conductor"; }
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;background:#ede9fe;font-size:18px;color:#6d28d9;">
+          <i class="bi bi-person-badge"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-semibold">@ViewData["Title"]</h5>
+          <small class="text-muted">Seleccione el tipo de vinculación</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form asp-area="RH" asp-controller="Conductor"
+              asp-action="@(esEdit?"Edit":"Create")" method="post">
+          @Html.AntiForgeryToken()
+          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+          <!-- Tipo -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Tipo de vinculación</h6>
+          <div class="d-flex gap-3 mb-4">
+            @foreach(var (tp,label,icon,desc) in new[]{
+              (TipoProveedor.Interno,"Empleado propio","bi-person-fill","Conductor de nómina de la empresa"),
+              (TipoProveedor.Externo,"Externo / freelance","bi-person-lines-fill","Contratista o empresa tercera"),
+            })
+            {
+            <label class="flex-grow-1 d-flex align-items-center gap-3 p-3 rounded-3"
+                   id="lblCond_@tp" onclick="setTipoCond('@tp')"
+                   style="border:1.5px solid #e2e8f0;cursor:pointer;">
+              <input type="radio" name="TipoProveedor" value="@tp"
+                     @(Model.TipoProveedor==tp?"checked":"") class="form-check-input mt-0"/>
+              <div>
+                <div class="fw-semibold small"><i class="bi @icon me-1"></i>@label</div>
+                <div class="text-muted" style="font-size:12px;">@desc</div>
+              </div>
+            </label>
+            }
+          </div>
+
+          <!-- Datos personales -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos personales</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-8">
+              <label class="form-label fw-semibold small">Nombre completo *</label>
+              <input class="form-control rounded-3" required />
+              <span  class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label  class="form-label fw-semibold small">Cédula *</label>
+              <input  class="form-control rounded-3" required />
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Teléfono *</label>
+              <input class="form-control rounded-3" required />
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email</label>
+              <input type="email" class="form-control rounded-3" />
+            </div>
+          </div>
+
+          <!-- Licencia -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Información de licencia</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-5">
+              <label class="form-label fw-semibold small">N° de licencia *</label>
+              <input class="form-control rounded-3" required />
+              <span  class="text-danger small"></span>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold small">Categoría *</label>
+              <select class="form-select rounded-3" required>
+                <option value="">—</option>
+              </select>
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label asp-for="FechaVencimientoLicencia" class="form-label fw-semibold small">Vencimiento *</label>
+              <input asp-for="FechaVencimientoLicencia" type="date" class="form-control rounded-3" required />
+              <span asp-validation-for="FechaVencimientoLicencia" class="text-danger small"></span>
+            </div>
+          </div>
+
+          <!-- Datos externo (condicional) -->
+          <div id="secCondExterno" style="display:@(Model.TipoProveedor==TipoProveedor.Externo?"block":"none");">
+            <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos del proveedor externo</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label asp-for="EmpresaExterna" class="form-label fw-semibold small">Empresa / Razón social</label>
+                <input asp-for="EmpresaExterna" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="NitEmpresa" class="form-label fw-semibold small">NIT empresa</label>
+                <input asp-for="NitEmpresa" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="TarifaExterna" class="form-label fw-semibold small">Tarifa diaria</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input asp-for="TarifaExterna" type="number" class="form-control rounded-end-3" step="1000" min="0" />
+                </div>
+              </div>
+              <div class="col-12">
+                <label asp-for="ObservacionesExterno" class="form-label fw-semibold small">Observaciones del contrato</label>
+                <textarea asp-for="ObservacionesExterno" class="form-control rounded-3" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+          @if(esEdit)
+          {
+          <div class="mb-4">
+            <div class="form-check form-switch">
+              <input asp-for="Activo" class="form-check-input" type="checkbox" />
+              <label asp-for="Activo" class="form-check-label fw-semibold small">Conductor activo</label>
+            </div>
+          </div>
+          }
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+              <i class="bi @(esEdit?"bi-save":"bi-person-plus") me-2"></i>
+              @(esEdit ? "Guardar cambios" : "Registrar conductor")
+            </button>
+            <a asp-area="RH" asp-controller="Conductor" asp-action="Index"
+               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-card-list me-2 text-primary"></i>Categorías de licencia</h6>
+        @foreach(var (cat,desc) in new[]{
+          ("A1","Motos hasta 125cc"),("A2","Motos >125cc"),
+          ("B1","Automóviles, camperos"),("B2","Camionetas, microbuses"),("B3","Buses, busetas"),
+          ("C1","Camiones simples"),("C2","Tractocamiones"),("C3","Vehículos articulados"),
+        })
+        {
+        <div class="d-flex gap-2 mb-2 small">
+          <span class="badge rounded-pill px-2" style="background:#dbeafe;color:#1e40af;min-width:32px;text-align:center;">@cat</span>
+          <span class="text-muted">@desc</span>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+function setTipoCond(tipo) {
+    document.getElementById('secCondExterno').style.display = tipo === 'Externo' ? 'block' : 'none';
+    ['Interno','Externo'].forEach(t => {
+        const lbl = document.getElementById('lblCond_' + t);
+        if(lbl) lbl.style.borderColor = t === tipo ? 'var(--cp)' : '#e2e8f0';
+    });
+}
+setTipoCond('@Model.TipoProveedor');
+</script>
+}

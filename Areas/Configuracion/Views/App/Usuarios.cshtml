@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Usuarios";
+    ViewData["Breadcrumb"] = "Administración de usuarios";
+}
+<!-- Stats -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex gap-3 align-items-center">
+
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#dbeafe;color:#1d4ed8;">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+                <div>
+                    <small class="text-muted">Usuarios</small>
+                    <div class="fw-bold fs-4">@ViewBag.TotalUsuarios</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex gap-3 align-items-center">
+
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#d1fae5;color:#065f46;">
+                    <i class="bi bi-person-check-fill"></i>
+                </div>
+
+                <div>
+                    <small class="text-muted">Activos</small>
+                    <div class="fw-bold fs-4">@ViewBag.TotalActivos</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Tabla -->
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-white py-3 d-flex flex-wrap gap-3 align-items-center">
+
+        <span class="fw-semibold flex-grow-1">
+            Usuarios del sistema
+        </span>
+
+        <form method="get" class="d-flex gap-2">
+
+            <input type="search"
+                   name="busqueda"
+                   value="@ViewBag.Busqueda"
+                   class="form-control form-control-sm"
+                   placeholder="Buscar usuario..." />
+
+            <button type="submit"
+                    class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-search"></i>
+            </button>
+
+        </form>
+
+        <a asp-action="CreateUsuario"
+           class="btn btn-primary btn-sm">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Nuevo usuario
+
+        </a>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        @if (Model == null || !Model!.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-inbox"
+                   style="font-size:40px;opacity:.3;"></i>
+
+                <p class="mt-2 mb-0">
+                    No hay usuarios registrados.
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Usuario</th>
+                            <th>correo</th>
+                            <th>Cargo</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model!)
+                        {
+                            var u = item.Usuario;
+
+                            <tr>
+
+                                <td class="ps-4">
+                                    <div class="fw-semibold">
+                                        @u.NombreCompleto
+                                    </div>
+
+                                    <small class="text-muted">
+                                        @u.PhoneNumber
+                                    </small>
+                                </td>
+
+                                <td>@u.correo</td>
+
+                                <td>@u.Cargo</td>
+
+                                <td>
+                                    @foreach (var r in item.Rols)
+                                    {
+                                        <span class="badge bg-primary">
+                                            @r
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (u.Activo)
+                                    {
+                                        <span class="badge bg-success">
+                                            Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            Inactivo
+                                        </span>
+                                    }
+                                </td>
+
+                                <td class="text-end pe-4">
+
+                                    <div class="d-flex justify-content-end gap-1">
+
+                                        <a asp-action="EditUsuario"
+                                           asp-route-id="@u.Id"
+                                           class="btn btn-sm btn-outline-primary">
+
+                                            <i class="bi bi-pencil"></i>
+
+                                        </a>
+
+                                        <form asp-action="ToggleActivo"
+                                              asp-route-id="@u.Id"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button class="btn btn-sm @(u.Activo ? "btn-outline-danger" : "btn-outline-success")">
+
+                                                <i class="bi @(u.Activo ? "bi-x-lg" : "bi-check-lg")"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Acceso Denegado</title>
+<body style="    
+    width: 100%;
+    height: 100vh !important;
+    flex-direction:column;
+    display: flex;
+    align-items: center;
+    justify-content: center;">
+    <div class="container d-flex justify-content-center">
+        <img src="~/images/logos/logo_blue.png" style="width:600px;"/>
+    </div>
+    <div class="container text-center" style="margin-top:5rem;">
+        <div id="error"></div>
+    </div>
+    <script src="~/lib/fontawesome/js/all.js" crossorigin="anonymous"></script>
+    <script src="~/lib/sweetalert2/sweetalert.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#error').html(`
+                                <div class="alert alert-danger" Rol="alert">
+                                    <h1 class="m-3">No cuentas con permisos para acceder</h1>
+                                </div>
+                                <div class="mt-4 d-flex justify-content-center align-items-center">
+                                    <button class="btn btn-lg btn-danger" onclick="redirigir()">Aceptar</button>
+                                </div>
+                            `);
+        });
+
+        function redirigir() {
+            Swal.fire({
+                icon: "warning",
+                title: "Serás redirigido al inicio.",
+                timer: 500,
+                timerProgressBar: true,
+                showconfirmadaButton: false
+            }).then(() => {
+                window.location.href = '/Acceso/login';
+            });
+        }
+    </script>
+</body>

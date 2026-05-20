@@ -1,0 +1,51 @@
+﻿@* @using System.Security.Claims
+@using System.Text.Json
+@inject IHttpContextAccessor HttpContextAccessor;
+
+@{
+    var userClaims = HttpContextAccessor!.HttpContext!.User.Claims;
+    var menuClaim = userClaims.FirstOrDefault(c => c.Type == "Menu");
+
+    List<Procesos> lista = new List<Procesos>();
+
+    if (menuClaim != null && !string.IsNullOrEmpty(menuClaim.Value))
+    {
+        lista = JsonSerializer.Deserialize<List<Procesos>>(menuClaim.Value)!;
+    }
+}
+
+<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    @if (lista.Count > 0)
+    {
+        @foreach (var menu in lista.Where(m => m.idParentproceso == 0))
+        {
+            bool tiene_submenu = menu.InverseidParentprocesoNavigation.Count > 0;
+            string claseMenu = tiene_submenu ? "nav-item dropdown" : "nav-item";
+
+            <li class="@claseMenu">
+                @if (tiene_submenu)
+                {
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" Rol="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        @menu.proceso
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        @foreach (var submenu in menu.InverseidParentprocesoNavigation)
+                        {
+                            <li><a class="dropdown-item" asp-area="@submenu.area" asp-action="@submenu.url" asp-controller="@submenu.controlador">@submenu.proceso</a></li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <a class="nav-link" href="@menu.url" aria-current="page">
+                        @menu.proceso
+                    </a>
+                }
+            </li>
+            <script>
+                console.log(@lista);
+            </script>
+        }
+    }
+</ul>
+ *@

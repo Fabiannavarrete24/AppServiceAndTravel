@@ -1,0 +1,145 @@
+@* @model IEnumerable<AppServiceAndTravel.Models.Servicio>
+@{
+    ViewData["Title"] = "Servicios";
+    ViewData["Breadcrumb"] = "Gestión de servicios";
+
+    string BadgeSrv(AppServiceAndTravel.Models.EstadoServicio e) => e switch {
+        AppServiceAndTravel.Models.EstadoServicio.Programado  => "background:#dbeafe;color:#1e40af;",
+        AppServiceAndTravel.Models.EstadoServicio.EnCurso     => "background:#fef3c7;color:#92400e;",
+        AppServiceAndTravel.Models.EstadoServicio.Completado  => "background:#d1fae5;color:#065f46;",
+        AppServiceAndTravel.Models.EstadoServicio.Cancelado   => "background:#f1f5f9;color:#475569;",
+        _ => "background:#e2e8f0;color:#475569;"
+    };
+    string IconSrv(AppServiceAndTravel.Models.EstadoServicio e) => e switch {
+        AppServiceAndTravel.Models.EstadoServicio.Programado  => "bi-calendar-check",
+        AppServiceAndTravel.Models.EstadoServicio.EnCurso     => "bi-truck",
+        AppServiceAndTravel.Models.EstadoServicio.Completado  => "bi-check-circle-fill",
+        AppServiceAndTravel.Models.EstadoServicio.Cancelado   => "bi-x-circle",
+        _ => "bi-question-circle"
+    };
+} *@
+
+<!-- Filtros y acciones -->
+<div class="card border-0 shadow-sm rounded-4">
+  <div class="card-header bg-white border-0 py-3 px-4 d-flex flex-wrap align-items-center gap-3">
+    <span class="fw-semibold flex-grow-1">Listado de servicios</span>
+
+    <div class="btn-group btn-group-sm">
+      <a  class="btn btn-dark rounded-start-3">Todos</a>
+      <a 
+         class="btn btn-primary">Programados</a>
+      <a 
+         class="btn btn-warning">En curso</a>
+      <a 
+         class="btn btn-success">Completados</a>
+      <a 
+         class="btn btn-secondary rounded-end-3">Cancelados</a>
+    </div>
+
+    <form method="get" class="d-flex gap-2">
+      @* @if (ViewBag.EstadoFiltro != null) *@
+         <input type="hidden" name="estado" /> 
+      <input type="search" name="busqueda" 
+             class="form-control form-control-sm rounded-3" placeholder="Buscar…" style="min-width:180px;" />
+      <button type="submit" class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
+    </form>
+
+@*     @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
+    {
+
+    } *@
+        <a asp-action="Create" class="btn btn-primary btn-sm rounded-3">
+            <i class="bi bi-plus-lg me-1"></i>Nuevo servicio
+        </a>
+  </div>
+
+  <div class="card-body p-0">
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-truck" style="font-size:40px;opacity:.3;"></i>
+            <p class="mt-2 mb-0">No hay servicios que mostrar.</p>
+        </div>
+@*     @if (!Model.Any())
+    {
+
+    }
+    else
+    {
+      
+    } *@
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead>
+                    <tr>
+                        <th class="ps-4">N° Serv.</th>
+                        <th>Cliente</th>
+                        <th>Ruta</th>
+                        <th>Fecha servicio</th>
+                        <th>Vehículo</th>
+                        <th>Conductor</th>
+                        <th>Estado</th>
+                        <th>Notif.</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="ps-4 fw-semibold text-muted">#</td>
+                        <td>
+                            <div class="fw-semibold small">NombreCompleto</div>
+                            <small class="text-muted">Cot. #</small>
+                        </td>
+                        <td class="small text-muted">
+                            Origen <i class="bi bi-arrow-right mx-1"></i>Destino
+                        </td>
+                        <td>
+                            <div class="small fw-semibold">FechaServicio</div>
+                            <div class="text-muted" style="font-size:11px;">FechaServicio</div>
+                        </td>
+                        <td>
+                            <div class="small fw-semibold">Placa</div>
+                            <div class="text-muted" style="font-size:11px;">Marca Modelo</div>
+                        </td>
+                        <td class="small">NombreCompleto</td>
+                        <td>
+                            <span class="badge rounded-pill px-3 py-2" style="">
+                                <i class="bi me-1"></i>Estado
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <i class="bi bi-envelope text-success" title="correo enviado"></i>
+                                <i class="bi bi-whatsapp text-success" title="WA enviado"></i>
+                            </div>
+                        </td>
+                        <td class="text-end pe-4">
+                            <a asp-action="Details" class="btn btn-sm btn-outline-secondary rounded-3">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+@*                     @foreach (var s in Model)
+                    {
+                        
+                    } *@
+                </tbody>
+            </table>
+        </div>
+  </div>
+    <div class="card-footer bg-white border-0 d-flex align-items-center justify-content-between py-3 px-4">
+        <small class="text-muted">TotalRegistros registros</small>
+        <nav>
+            <ul class="pagination pagination-sm mb-0">
+                <li class="page-item  disabled">
+                    <a class="page-link">‹</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">1</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" >›</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>

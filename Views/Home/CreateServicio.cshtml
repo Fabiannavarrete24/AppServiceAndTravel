@@ -1,0 +1,252 @@
+@model AppServiceAndTravel.Models.Servicio
+@using AppServiceAndTravel.Models
+@{ ViewData["Title"] = "Nuevo Servicio"; }
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;background:#ccfbf1;font-size:18px;color:#0f766e;">
+          <i class="bi bi-truck"></i></div>
+        <div>
+          <h5 class="mb-0 fw-semibold">Generar servicio</h5>
+          <small class="text-muted">Solo cotizaciones aprobadas sin servicio asignado</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form asp-area="Operaciones" asp-controller="Servicio" asp-action="Create" method="post" id="frmServicio">
+          @Html.AntiForgeryToken()
+          <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+          @if(ViewBag.ErroresValidacion != null)
+          {
+          <div class="alert alert-danger rounded-3 mb-4">
+            <div class="fw-semibold mb-2"><i class="bi bi-shield-exclamation me-2"></i>El vehículo no pasó la validación:</div>
+            @foreach(var err in (List<string>)ViewBag.ErroresValidacion)
+            {<div class="small d-flex align-items-center gap-2"><i class="bi bi-x-circle-fill text-danger"></i>@err</div>}
+          </div>
+          }
+
+          <!-- Cotización -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Cotización base</h6>
+          <div class="mb-4">
+            <label asp-for="CotizacionId" class="form-label fw-semibold small">Cotización aprobada *</label>
+            <select asp-for="CotizacionId" asp-items="ViewBag.Cotizaciones" class="form-select rounded-3" required>
+              <option value="">— Seleccione una cotización aprobada —</option>
+            </select>
+            <span asp-validation-for="CotizacionId" class="text-danger small"></span>
+          </div>
+
+          <!-- Fecha -->
+          <div class="mb-4">
+            <label asp-for="FechaServicio" class="form-label fw-semibold small">Fecha y hora del servicio *</label>
+            <input asp-for="FechaServicio" type="datetime-local" class="form-control rounded-3" required />
+            <span asp-validation-for="FechaServicio" class="text-danger small"></span>
+          </div>
+
+          <!-- Tipo de recurso -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Tipo de recurso</h6>
+          <div class="d-flex gap-3 mb-4">
+            <label class="flex-grow-1 d-flex align-items-center gap-3 p-3 rounded-3 cursor-pointer"
+                   id="lblInterno" onclick="setRecurso(false)"
+                   style="border:1.5px solid var(--cp);cursor:pointer;background:color-mix(in srgb,var(--cp) 5%,transparent);">
+              <input type="radio" name="UsaRecursoExterno" value="false" checked class="form-check-input mt-0"/>
+              <div>
+                <div class="fw-semibold small"><i class="bi bi-house me-1"></i>Recurso propio</div>
+                <div class="text-muted" style="font-size:12px;">Vehículo y conductor de la empresa</div>
+              </div>
+            </label>
+            <label class="flex-grow-1 d-flex align-items-center gap-3 p-3 rounded-3 cursor-pointer"
+                   id="lblExterno" onclick="setRecurso(true)"
+                   style="border:1.5px solid #e2e8f0;cursor:pointer;">
+              <input type="radio" name="UsaRecursoExterno" value="true" class="form-check-input mt-0"/>
+              <div>
+                <div class="fw-semibold small"><i class="bi bi-building me-1"></i>Recurso externo</div>
+                <div class="text-muted" style="font-size:12px;">Proveedor / contratista</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Recurso INTERNO -->
+          <div id="secInterno">
+            <h6 class="fw-semibold small text-uppercase text-muted mb-3">Vehículo y conductor</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label asp-for="VehiculoId" class="form-label fw-semibold small">Vehículo *</label>
+                <select asp-for="VehiculoId" asp-items="ViewBag.Vehiculos"
+                        class="form-select rounded-3" id="selVehiculo"
+                        onchange="validarDoc()">
+                  <option value="">— Seleccione —</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label asp-for="ConductorId" class="form-label fw-semibold small">Conductor *</label>
+                <select asp-for="ConductorId" asp-items="ViewBag.Conductores"
+                        class="form-select rounded-3" id="selConductor"
+                        onchange="validarDoc()">
+                  <option value="">— Seleccione —</option>
+                </select>
+              </div>
+            </div>
+            <!-- Panel validación inline -->
+            <div id="panelValidacion" class="d-none mb-4">
+              <div id="validacionContenido"></div>
+            </div>
+          </div>
+
+          <!-- Recurso EXTERNO -->
+          <div id="secExterno" style="display:none;">
+            <h6 class="fw-semibold small text-uppercase text-muted mb-3">Proveedor externo</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-12">
+                <label asp-for="ProveedorExternoId" class="form-label fw-semibold small">Proveedor registrado</label>
+                <select asp-for="ProveedorExternoId" asp-items="ViewBag.Proveedores"
+                        class="form-select rounded-3">
+                  <option value="">— Seleccione o complete manualmente —</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label asp-for="VehiculoExternoPlaca" class="form-label fw-semibold small">Placa vehículo ext.</label>
+                <input asp-for="VehiculoExternoPlaca" class="form-control rounded-3 text-uppercase"
+                       placeholder="ABC-123" oninput="this.value=this.value.toUpperCase()" />
+              </div>
+              <div class="col-md-8">
+                <label asp-for="VehiculoExternoDescripcion" class="form-label fw-semibold small">Descripción vehículo</label>
+                <input asp-for="VehiculoExternoDescripcion" class="form-control rounded-3"
+                       placeholder="Marca, modelo, año…" />
+              </div>
+              <div class="col-md-6">
+                <label asp-for="ConductorExternoNombre" class="form-label fw-semibold small">Nombre conductor ext.</label>
+                <input asp-for="ConductorExternoNombre" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="ConductorExternoCedula" class="form-label fw-semibold small">Cédula</label>
+                <input asp-for="ConductorExternoCedula" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="ConductorExternoTelefono" class="form-label fw-semibold small">Teléfono</label>
+                <input asp-for="ConductorExternoTelefono" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-6">
+                <label asp-for="CostoExterno" class="form-label fw-semibold small">Costo del servicio externo</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input asp-for="CostoExterno" type="number" class="form-control rounded-end-3" step="1000" min="0" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Observaciones -->
+          <div class="mb-4">
+            <label asp-for="Observaciones" class="form-label fw-semibold small">Observaciones</label>
+            <textarea asp-for="Observaciones" class="form-control rounded-3" rows="3"
+                      placeholder="Punto de encuentro, instrucciones especiales…"></textarea>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+              <i class="bi bi-truck me-2"></i>Generar servicio y notificar
+            </button>
+            <a asp-area="Operaciones" asp-controller="Servicio" asp-action="Index"
+               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <div class="card mb-3">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-send me-2 text-primary"></i>Notificaciones automáticas</h6>
+        @foreach(var (icon,lbl,desc,bg,color) in new[]{
+          ("bi-envelope","Email","Confirmación con todos los detalles del servicio.","#dbeafe","#1d4ed8"),
+          ("bi-whatsapp","WhatsApp","Mensaje via CallMeBot con vehículo y conductor.","#d1fae5","#065f46"),
+        })
+        {
+        <div class="d-flex gap-3 mb-3">
+          <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+               style="width:34px;height:34px;background:@bg;font-size:16px;color:@color;">
+            <i class="bi @icon"></i></div>
+          <div>
+            <div class="fw-semibold small">@lbl</div>
+            <div class="text-muted" style="font-size:12px;">@desc</div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-shield-check me-2 text-primary"></i>Validaciones automáticas</h6>
+        @foreach(var v in new[]{
+          "Estado del vehículo activo","SOAT vigente",
+          "Revisión técnico-mecánica","Seguro del vehículo","Licencia del conductor"
+        })
+        {<div class="d-flex align-items-center gap-2 mb-2 small">
+          <i class="bi bi-check-circle text-success"></i><span>@v</span>
+        </div>}
+        <div class="alert alert-warning rounded-3 small py-2 mb-0 mt-2">
+          <i class="bi bi-info-circle me-1"></i>
+          Si usa recurso externo no se valida documentación del sistema.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+function setRecurso(esExterno) {
+    document.getElementById('secInterno').style.display = esExterno ? 'none' : 'block';
+    document.getElementById('secExterno').style.display = esExterno ? 'block' : 'none';
+    document.getElementById('lblInterno').style.borderColor = !esExterno ? 'var(--cp)' : '#e2e8f0';
+    document.getElementById('lblExterno').style.borderColor =  esExterno ? 'var(--cp)' : '#e2e8f0';
+    document.getElementById('lblInterno').style.background = !esExterno ? 'color-mix(in srgb,var(--cp) 5%,transparent)' : '';
+    document.getElementById('lblExterno').style.background =  esExterno ? 'color-mix(in srgb,var(--cp) 5%,transparent)' : '';
+    if(esExterno) document.getElementById('panelValidacion').classList.add('d-none');
+}
+
+async function validarDoc() {
+    const vid = document.getElementById('selVehiculo').value;
+    const cid = document.getElementById('selConductor').value;
+    if (!vid || !cid) return;
+    const panel = document.getElementById('panelValidacion');
+    const cont  = document.getElementById('validacionContenido');
+    panel.classList.remove('d-none');
+    cont.innerHTML = '<div class="d-flex align-items-center gap-2 small text-muted"><span class="spinner-border spinner-border-sm"></span>Validando documentación…</div>';
+
+    const token = document.querySelector('[name="__RequestVerificationToken"]').value;
+    const resp  = await fetch('@Url.Action("ValidarVehiculo","Servicio",new{area="Operaciones"})', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','RequestVerificationToken':token},
+        body: JSON.stringify({vehiculoId:parseInt(vid), conductorId:parseInt(cid)})
+    });
+    const data = await resp.json();
+
+    if(data.exitoso) {
+        let html = '<div class="alert alert-success rounded-3 py-2 small mb-0"><i class="bi bi-shield-check me-2"></i>Documentación en regla.</div>';
+        if(data.advertencias.length>0){
+            html += '<div class="alert alert-warning rounded-3 py-2 small mb-0 mt-2">';
+            data.advertencias.forEach(a => html += '<div>'+a+'</div>');
+            html += '</div>';
+        }
+        cont.innerHTML = html;
+    } else {
+        let html = '<div class="alert alert-danger rounded-3 py-2 small mb-0"><div class="fw-semibold mb-1"><i class="bi bi-shield-exclamation me-2"></i>Validación fallida</div>';
+        data.errores.forEach(e => html += '<div class="d-flex gap-2"><i class="bi bi-x-circle-fill text-danger"></i>'+e+'</div>');
+        html += '</div>';
+        cont.innerHTML = html;
+    }
+}
+
+// Preseleccionar cotización si viene por querystring
+@if(Model.CotizacionId > 0)
+{ <text>document.querySelector('[name="CotizacionId"]').value = '@Model.CotizacionId';</text> }
+</script>
+}

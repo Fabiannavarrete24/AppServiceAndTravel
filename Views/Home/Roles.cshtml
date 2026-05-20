@@ -1,0 +1,117 @@
+@* @model List<Microsoft.AspNetCore.Identity.IdentityRole>
+@{ ViewData["Title"] = "Roles del sistema"; }
+ *@
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center justify-content-between">
+        <span class="fw-semibold"><i class="bi bi-shield-check me-2 text-primary"></i>Roles definidos</span>
+        <span class="badge rounded-pill" style="background:#dbeafe;color:#1e40af;">@Model.Count roles</span>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead>
+              <tr>
+                <th class="ps-4">Rol</th>
+                <th>Tipo</th>
+                <th class="text-end pe-4">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            @{
+              var rolesProtegidos = new[]{"Administrador","Coordinador","Aprobador","Operador","Consulta"};
+            }
+            @* @foreach(var rol in Model)
+            {
+              var esProtegido = rolesProtegidos.Contains(rol.Name);
+              var (rBg,rColor) = rol.Name switch {
+                "Administrador"        => ("#fee2e2","#991b1b"),
+                "Aprobador"            => ("#fef3c7","#92400e"),
+                "Coordinador"          => ("#dbeafe","#1e40af"),
+                "Operador"             => ("#d1fae5","#065f46"),
+                "ComercialManager"     => ("#fce7f3","#9d174d"),
+                "OperacionesManager"   => ("#ccfbf1","#0f766e"),
+                "ContabilidadManager"  => ("#fef9c3","#854d0e"),
+                "RHManager"            => ("#ede9fe","#6d28d9"),
+                _                      => ("#f1f5f9","#475569")
+              };
+              <tr>
+                <td class="ps-4">
+                  <span class="badge rounded-pill px-3 py-2" style="background:@rBg;color:@rColor;font-size:13px;">
+                    @rol.Name
+                  </span>
+                </td>
+                <td>
+                  <span class="text-muted small">
+                    @(esProtegido ? "🔒 Sistema (protegido)" : "✏️ Personalizado")
+                  </span>
+                </td>
+                <td class="text-end pe-4">
+                  @if(!esProtegido)
+                  {
+                    <form asp-area="Admin" asp-controller="Usuarios" asp-action="EliminarRol"
+                          asp-route-id="@rol.Id" method="post"
+                          onsubmit="return confirm('¿Eliminar el rol @rol.Name?');">
+                      @Html.AntiForgeryToken()
+                      <button type="submit" class="btn btn-sm btn-outline-danger rounded-3">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  }
+                  else
+                  {
+                    <span class="text-muted small"><i class="bi bi-lock"></i></span>
+                  }
+                </td>
+              </tr>
+            } *@
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4">
+        <span class="fw-semibold"><i class="bi bi-plus-circle me-2 text-primary"></i>Crear nuevo rol</span>
+      </div>
+      <div class="card-body p-4">
+        <form asp-area="Admin" asp-controller="Usuarios" asp-action="CrearRol" method="post">
+          @Html.AntiForgeryToken()
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Nombre del rol</label>
+            <input type="text" name="nombre" class="form-control rounded-3" required
+                   placeholder="Ej: GerenteRegional" />
+            <div class="form-text">Use PascalCase sin espacios. Ej: GerenteZona</div>
+          </div>
+          <button type="submit" class="btn btn-primary rounded-3 w-100">
+            <i class="bi bi-plus-lg me-2"></i>Crear rol
+          </button>
+        </form>
+
+        <hr class="my-4" />
+        <h6 class="fw-semibold small mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Roles del sistema</h6>
+        @foreach(var (r,d) in new[]{
+          ("Administrador","Acceso total sin restricciones."),
+          ("Aprobador","Aprueba o rechaza cotizaciones."),
+          ("Coordinador","Gestiona servicios y flota."),
+          ("Operador","Crea cotizaciones y clientes."),
+          ("ComercialManager","Área comercial completa."),
+          ("OperacionesManager","Área operaciones completa."),
+          ("ContabilidadManager","Reportes y finanzas."),
+          ("RHManager","Personal y proveedores."),
+          ("Consulta","Solo lectura en todo."),
+        })
+        {
+          <div class="d-flex gap-2 mb-2 small">
+            <i class="bi bi-shield text-primary mt-1" style="flex-shrink:0;"></i>
+            <span><strong>@r</strong> — @d</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

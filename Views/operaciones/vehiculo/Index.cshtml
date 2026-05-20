@@ -1,0 +1,168 @@
+@model IEnumerable<AppServiceAndTravel.Models.Vehiculo>
+@using AppServiceAndTravel.Models
+@{ ViewData["Title"] = "Vehículos"; var hoy = DateTime.Today; var alerta = hoy.AddDays(30); }
+
+<div class="row g-3 mb-4">
+@foreach(var (lbl,val,bg,color,icon) in new[]{
+    ("Activos",       (int)ViewBag.Activos,       "#d1fae5","#065f46","bi-check-circle-fill"),
+    ("Inactivos",     (int)ViewBag.Inactivos,      "#fee2e2","#991b1b","bi-x-circle"),
+    ("Mantenimiento", (int)ViewBag.Mantenimiento,  "#fef3c7","#92400e","bi-wrench"),
+    ("Alertas docs.", (int)ViewBag.ConAlerta,      "#ede9fe","#6d28d9","bi-exclamation-triangle-fill"),
+    ("Externos",      (int)ViewBag.Externos,       "#f0fdf4","#15803d","bi-building"),
+})
+{
+<div class="col-sm-6 col-xl">
+  <div class="card">
+    <div class="card-body d-flex align-items-center gap-3 p-3">
+      <div class="rounded-3 d-flex align-items-center justify-content-center"
+           style="width:42px;height:42px;background:@bg;color:@color;font-size:19px;flex-shrink:0;">
+        <i class="bi @icon"></i></div>
+      <div>
+        <div class="text-muted" style="font-size:11px;">@lbl</div>
+        <div class="fw-bold fs-5" style="color:@color;">@val</div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+</div>
+
+<div class="card">
+  <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center gap-3">
+    <span class="fw-semibold flex-grow-1">Flota de vehículos</span>
+
+    <div class="btn-group btn-group-sm">
+      <a href="@Url.Action("Index")" class="btn @(ViewBag.Estado==null&&ViewBag.Tipo==null?"btn-dark":"btn-outline-secondary") rounded-start-3">Todos</a>
+      <a href="@Url.Action("Index",new{estado=EstadoVehiculo.Activo})"
+         class="btn @(ViewBag.Estado?.ToString()=="Activo"?"btn-success":"btn-outline-secondary")">Activos</a>
+      <a href="@Url.Action("Index",new{estado=EstadoVehiculo.Inactivo})"
+         class="btn @(ViewBag.Estado?.ToString()=="Inactivo"?"btn-danger":"btn-outline-secondary")">Inactivos</a>
+      <a href="@Url.Action("Index",new{tipo=TipoProveedor.Externo})"
+         class="btn @(ViewBag.Tipo?.ToString()=="Externo"?"btn-primary":"btn-outline-secondary") rounded-end-3">Externos</a>
+    </div>
+
+    <form method="get" class="d-flex gap-2">
+      @if(ViewBag.Estado!=null){<input type="hidden" name="estado" value="@ViewBag.Estado"/>}
+      <input type="search" name="q" value="@ViewBag.Q" class="form-control form-control-sm rounded-3"
+             placeholder="Placa, marca…" style="min-width:160px;"/>
+      <button class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
+    </form>
+
+    @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("OperacionesManager"))
+    {
+    <a asp-area="Operaciones" asp-controller="Vehiculo" asp-action="Create"
+       class="btn btn-primary btn-sm rounded-3">
+      <i class="bi bi-plus-lg me-1"></i>Nuevo vehículo
+    </a>
+    }
+  </div>
+
+  <div class="card-body p-0">
+  @if(!Model.Any())
+  {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-truck" style="font-size:42px;opacity:.25;"></i>
+      <p class="mt-2">No hay vehículos.</p>
+    </div>
+  }
+  else
+  {
+    <div class="table-responsive">
+      <table class="table table-hover mb-0 align-middle">
+        <thead>
+          <tr>
+            <th class="ps-4">Placa</th>
+            <th>Vehículo</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>SOAT</th>
+            <th>Tecno</th>
+            <th>Seguro</th>
+            <th class="text-end pe-4">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        @foreach(var v in Model)
+        {
+          string DocPill(DateTime fecha) {
+            if(fecha < hoy)    return "background:#fee2e2;color:#991b1b;";
+            if(fecha <= alerta)return "background:#fef3c7;color:#92400e;";
+            return "background:#d1fae5;color:#065f46;";
+          }
+          string DocIcon(DateTime fecha) =>
+            fecha < hoy ? "bi-x-circle-fill" : fecha <= alerta ? "bi-exclamation-circle" : "bi-check-circle-fill";
+
+          var estCss = v.Estado switch {
+            EstadoVehiculo.Activo          => "background:#d1fae5;color:#065f46;",
+            EstadoVehiculo.Inactivo        => "background:#fee2e2;color:#991b1b;",
+            EstadoVehiculo.EnMantenimiento => "background:#fef3c7;color:#92400e;",
+            _ => ""
+          };
+
+          <tr>
+            <td class="ps-4">
+              <span class="fw-bold fs-6 text-primary">@v.Placa</span>
+              @if(v.EsExterno){<br/><span class="badge" style="background:#ede9fe;color:#6d28d9;font-size:10px;">Externo</span>}
+            </td>
+            <td>
+              <div class="fw-semibold small">@v.Marca @v.Modelo</div>
+              <div class="text-muted" style="font-size:12px;">@v.Anio — @v.CapacidadPasajeros pas.</div>
+            </td>
+            <td>
+              <span class="badge rounded-pill px-2 py-1" style="font-size:11px;@(v.EsExterno?"background:#ede9fe;color:#6d28d9;":"background:#dbeafe;color:#1e40af;")">
+                <i class="bi @(v.EsExterno?"bi-building":"bi-house") me-1"></i>@v.TipoProveedor
+              </span>
+            </td>
+            <td><span class="badge rounded-pill px-3 py-1" style="@estCss">@v.Estado</span></td>
+            <td>
+              <span class="badge rounded-pill px-2 py-1" style="font-size:11px;@DocPill(v.FechaVencimientoSOAT)"
+                    title="Vence: @v.FechaVencimientoSOAT.ToString("dd/MM/yyyy")">
+                <i class="bi @DocIcon(v.FechaVencimientoSOAT) me-1"></i>
+                @(v.FechaVencimientoSOAT < hoy ? "Vencido" : v.FechaVencimientoSOAT <= alerta ? "Por vencer" : "Vigente")
+              </span>
+            </td>
+            <td>
+              <span class="badge rounded-pill px-2 py-1" style="font-size:11px;@DocPill(v.FechaVencimientoTecnoMecanica)"
+                    title="Vence: @v.FechaVencimientoTecnoMecanica.ToString("dd/MM/yyyy")">
+                <i class="bi @DocIcon(v.FechaVencimientoTecnoMecanica) me-1"></i>
+                @(v.FechaVencimientoTecnoMecanica < hoy ? "Vencido" : v.FechaVencimientoTecnoMecanica <= alerta ? "Por vencer" : "Vigente")
+              </span>
+            </td>
+            <td>
+              <span class="badge rounded-pill px-2 py-1" style="font-size:11px;@DocPill(v.FechaVencimientoSeguro)"
+                    title="Vence: @v.FechaVencimientoSeguro.ToString("dd/MM/yyyy")">
+                <i class="bi @DocIcon(v.FechaVencimientoSeguro) me-1"></i>
+                @(v.FechaVencimientoSeguro < hoy ? "Vencido" : v.FechaVencimientoSeguro <= alerta ? "Por vencer" : "Vigente")
+              </span>
+            </td>
+            <td class="text-end pe-4">
+              <div class="d-flex justify-content-end gap-1">
+                <a asp-area="Operaciones" asp-controller="Vehiculo" asp-action="Details" asp-route-id="@v.Id"
+                   class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
+                @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("OperacionesManager"))
+                {
+                <a asp-area="Operaciones" asp-controller="Vehiculo" asp-action="Edit" asp-route-id="@v.Id"
+                   class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
+                }
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+  }
+  </div>
+
+  @if((int)ViewBag.TotalPag > 1)
+  {
+  <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center py-3 px-4">
+    <small class="text-muted">@ViewBag.Total vehículos</small>
+    <nav><ul class="pagination pagination-sm mb-0">
+      @for(int p=1;p<=(int)ViewBag.TotalPag;p++)
+      {<li class="page-item @(p==(int)ViewBag.P?"active":"")">
+        <a class="page-link" href="@Url.Action("Index",new{q=ViewBag.Q,p})">@p</a></li>}
+    </ul></nav>
+  </div>
+  }
+</div>

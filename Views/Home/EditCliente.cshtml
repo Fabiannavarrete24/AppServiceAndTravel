@@ -1,0 +1,3 @@
+@model AppServiceAndTravel.Models.Cliente
+@{ ViewData["Title"] = $"Editar: {Model.NombreCompleto}"; }
+@await Html.PartialAsync("Create", Model)

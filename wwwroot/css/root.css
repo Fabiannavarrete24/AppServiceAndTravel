@@ -1,0 +1,192 @@
+
+/*default theme*/
+:root {
+    /*default*/
+    --default-body-bg: oklch(0.985 0 0);
+    --default-body-color: oklch(70.4% 0.04 256.788);
+    --default-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --default-font-weight: 400;
+    --default-line-height: 1.5;
+    --default-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+    --default-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    --default-width: 100%;
+    --default-height: 100%;
+    --default-padding-x: 0.8rem;
+    --default-padding-y: 0.3rem;
+    --default-marging-x: 0.8rem;
+    --default-marging-y: 0.3rem;
+    --default-opacity-10: 0.1;
+    --default-opacity-20: 0.2;
+    --default-opacity-40: 0.4;
+    --default-opacity-60: 0.6;
+    --default-opacity-80: 0.8;
+    --default-opacity-100: 1;
+    --default-text: #fff;
+    --default-border: 0.8px;
+    --default-border-color: oklch(70.4% 0.04 256.788);
+    --default-border-radius: 0.5rem;
+    --color-black: #000000;
+    --color-white: #ffffff;
+}
+
+[data-theme="light"] {
+    /*default*/
+    --default-body-bg: oklch(0.985 0 0);
+    --default-body-color: oklch(70.4% 0.04 256.788);
+    --default-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --default-font-weight: 400;
+    --default-line-height: 1.5;
+    --default-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+    --default-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    --default-width: 100%;
+    --default-height: 100%;
+    --default-padding-x: 0.8rem;
+    --default-padding-y: 0.3rem;
+    --default-marging-x: 0.8rem;
+    --default-marging-y: 0.3rem;
+    --default-opacity-10: 0.1;
+    --default-opacity-20: 0.2;
+    --default-opacity-40: 0.4;
+    --default-opacity-60: 0.6;
+    --default-opacity-80: 0.8;
+    --default-opacity-100: 1;
+    --default-text: #fff;
+    --default-border-color: oklch(70.4% 0.04 256.788);
+    --color-black: #000000;
+    --color-white: #ffffff;
+    /* Backgrounds */
+    --bg-body: oklch(98% 0.01 270);
+    --bg-card: oklch(100% 0 0);
+    --bg-muted: oklch(95% 0.01 270);
+    /*Colors*/
+    --color-red-disabled: oklch(70% 0.237 25.331);
+    --color-red: oklch(63.7% 0.237 25.331);
+    --color-red-active: oklch(55% 0.237 25.331);
+    --color-orange-disabled: oklch(78% 0.213 47.604);
+    --color-orange: oklch(70.5% 0.213 47.604);
+    --color-orange-active: oklch(62% 0.213 47.604);
+    --color-amber-disabled: oklch(84% 0.188 70.08);
+    --color-amber: oklch(76.9% 0.188 70.08);
+    --color-amber-active: oklch(68% 0.188 70.08);
+    --color-yellow-disabled: oklch(87% 0.184 86.047);
+    --color-yellow: oklch(79.5% 0.184 86.047);
+    --color-yellow-active: oklch(71% 0.184 86.047);
+    --color-lime-disabled: oklch(84% 0.233 130.85);
+    --color-lime: oklch(76.8% 0.233 130.85);
+    --color-lime-active: oklch(69% 0.233 130.85);
+    --color-green-disabled: oklch(80% 0.219 149.579);
+    --color-green: oklch(72.3% 0.219 149.579);
+    --color-green-active: oklch(64% 0.219 149.579);
+    --color-emerald-disabled: oklch(77% 0.17 162.48);
+    --color-emerald: oklch(69.6% 0.17 162.48);
+    --color-emerald-active: oklch(61% 0.17 162.48);
+    --color-teal-disabled: oklch(79% 0.14 182.503);
+    --color-teal: oklch(70.4% 0.14 182.503);
+    --color-teal-active: oklch(62% 0.14 182.503);
+    --color-cyan-disabled: oklch(80% 0.143 215.221);
+    --color-cyan: oklch(71.5% 0.143 215.221);
+    --color-cyan-active: oklch(63% 0.143 215.221);
+    --color-sky-disabled: oklch(76% 0.169 237.323);
+    --color-sky: oklch(68.5% 0.169 237.323);
+    --color-sky-active: oklch(60% 0.169 237.323);
+    --color-blue-disabled: oklch(71% 0.214 259.815);
+    --color-blue: oklch(62.3% 0.214 259.815);
+    --color-blue-active: oklch(54% 0.214 259.815);
+    --color-indigo-disabled: oklch(66% 0.233 277.117);
+    --color-indigo: oklch(58.5% 0.233 277.117);
+    --color-indigo-active: oklch(50% 0.233 277.117);
+    --color-violet-disabled: oklch(69% 0.25 292.717);
+    --color-violet: oklch(60.6% 0.25 292.717);
+    --color-violet-active: oklch(52% 0.25 292.717);
+    --color-purple-disabled: oklch(70% 0.265 303.9);
+    --color-purple: oklch(62.7% 0.265 303.9);
+    --color-purple-active: oklch(54% 0.265 303.9);
+    --color-fuchsia-disabled: oklch(74% 0.295 322.15);
+    --color-fuchsia: oklch(66.7% 0.295 322.15);
+    --color-fuchsia-active: oklch(58% 0.295 322.15);
+    --color-pink-disabled: oklch(73% 0.241 354.308);
+    --color-pink: oklch(65.6% 0.241 354.308);
+    --color-pink-active: oklch(57% 0.241 354.308);
+    --color-rose-disabled: oklch(72% 0.246 16.439);
+    --color-rose: oklch(64.5% 0.246 16.439);
+    --color-rose-active: oklch(56% 0.246 16.439);
+    --color-slate-disabled: oklch(62% 0.046 257.417);
+    --color-slate: oklch(55.4% 0.046 257.417);
+    --color-slate-active: oklch(48% 0.046 257.417);
+    --color-gray-disabled: oklch(62% 0.027 264.364);
+    --color-gray: oklch(55.1% 0.027 264.364);
+    --color-gray-active: oklch(48% 0.027 264.364);
+    --color-zinc-disabled: oklch(62% 0.016 285.938);
+    --color-zinc: oklch(55.2% 0.016 285.938);
+    --color-zinc-active: oklch(48% 0.016 285.938);
+    --color-neutral-disabled: oklch(64% 0 0);
+    --color-neutral: oklch(55.6% 0 0);
+    --color-neutral-active: oklch(48% 0 0);
+    --color-stone-disabled: oklch(62% 0.013 58.071);
+    --color-stone: oklch(55.3% 0.013 58.071);
+    --color-stone-active: oklch(48% 0.013 58.071);
+    --color-primary-disabled: oklch(87% 0.065 274.039);
+    --color-primary: oklch(51.1% 0.262 276.966);
+    --color-primary-active: oklch(39.8% 0.195 277.366);
+    --color-secondary-disabled: oklch(92% 0.004 286.32);
+    --color-secondary: oklch(44.2% 0.017 285.786);
+    --color-secondary-active: oklch(36% 0.017 285.786);
+    --color-tertiary-disabled: oklch(92.9% 0.013 255.508);
+    --color-tertiary: oklch(44.6% 0.043 257.281);
+    --color-tertiary-active: oklch(36% 0.043 257.281);
+    /* Text */
+    --text-main: oklch(25% 0.02 270);
+    --text-muted: oklch(45% 0.02 270);
+    /* Borders */
+    --border-color: oklch(85% 0.02 270);
+    /* Inputs */
+    --input-bg: var(--bg-card);
+    --input-text: var(--text-main);
+    --input-border: var(--border-color);
+    --input-focus: var(--color-primary);
+    /* States */
+    --hover-bg: oklch(92% 0.01 270);
+}
+
+[data-theme="dark"] {
+    /*default*/
+    --default-body-bg: oklch(0.985 0 0);
+    --default-body-color: oklch(70.4% 0.04 256.788);
+    --default-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --default-font-weight: 400;
+    --default-line-height: 1.5;
+    --default-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+    --default-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    --default-width: 100%;
+    --default-height: 100%;
+    --default-padding-x: 0.8rem;
+    --default-padding-y: 0.3rem;
+    --default-marging-x: 0.8rem;
+    --default-marging-y: 0.3rem;
+    --default-opacity-10: 0.1;
+    --default-opacity-20: 0.2;
+    --default-opacity-40: 0.4;
+    --default-opacity-60: 0.6;
+    --default-opacity-80: 0.8;
+    --default-opacity-100: 1;
+    --default-text: #fff;
+    --default-border-color: oklch(70.4% 0.04 256.788);
+    --color-black: #000000;
+    --color-white: #ffffff;
+    /* Backgrounds */
+    --bg-body: oklch(18% 0.02 270);
+    --bg-card: oklch(22% 0.02 270);
+    --bg-muted: oklch(28% 0.02 270);
+    /* Text */
+    --text-main: oklch(92% 0.02 270);
+    --text-muted: oklch(70% 0.02 270);
+    /* Borders */
+    --border-color: oklch(35% 0.02 270);
+    /* Inputs */
+    --input-bg: oklch(24% 0.02 270);
+    --input-text: var(--text-main);
+    --input-border: var(--border-color);
+    --input-focus: var(--color-primary);
+    /* States */
+    --hover-bg: oklch(30% 0.02 270);
+}

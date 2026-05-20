@@ -1,0 +1,261 @@
+@* @model AppServiceAndTravel.Models.Servicio
+
+    ViewData["Title"] = $"Servicio #{Model.Id:D6}";
+    ViewData["Breadcrumb"] = "Servicios / Detalle";
+
+    var badgeCss = Model.Estado switch {
+        AppServiceAndTravel.Models.EstadoServicio.Programado  => "background:#dbeafe;color:#1e40af;",
+        AppServiceAndTravel.Models.EstadoServicio.EnCurso     => "background:#fef3c7;color:#92400e;",
+        AppServiceAndTravel.Models.EstadoServicio.Completado  => "background:#d1fae5;color:#065f46;",
+        AppServiceAndTravel.Models.EstadoServicio.Cancelado   => "background:#f1f5f9;color:#475569;",
+        _ => ""
+    };
+} *@
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h4 class="mb-1 fw-bold">Servicio <span class="text-primary">#</span></h4>
+    <span class="badge rounded-pill px-3 py-2 fs-6" style="">o</span>
+  </div>
+  <div class="d-flex gap-2">
+    <a asp-action="Index" class="btn btn-outline-secondary rounded-3"><i class="bi bi-arrow-left me-1"></i>Volver</a>
+@*     @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
+    {
+
+    } *@
+        <button class="btn btn-outline-primary rounded-3" data-bs-toggle="modal" data-bs-target="#modalEstado">
+            <i class="bi bi-arrow-repeat me-1"></i>Cambiar estado
+        </button>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+
+    <!-- Ruta y fechas -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-map me-2 text-primary"></i>Información del servicio</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-4" style="background:#f8fafc;">
+          <div class="text-center flex-grow-1">
+            <div class="text-muted small mb-1">Origen</div>
+            <div class="fw-semibold">Origen</div>
+          </div>
+          <div class="text-muted fs-4"><i class="bi bi-arrow-right"></i></div>
+          <div class="text-center flex-grow-1">
+            <div class="text-muted small mb-1">Destino</div>
+            <div class="fw-semibold text-primary">Destino</div>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="text-muted small mb-1">Fecha y hora del servicio</div>
+            <div class="fw-semibold"><i class="bi bi-calendar3 me-2 text-muted"></i></div>
+          </div>
+          <div class="col-md-6">
+            <div class="text-muted small mb-1">Cotización base</div>
+            <div>
+              <a 
+                 class="text-decoration-none fw-semibold">
+                <i class="bi bi-file-earmark-text me-1"></i>#
+              </a>
+            </div>
+          </div>
+@*           @if (!string.IsNullOrEmpty(Model.Observaciones))
+          {
+
+          } *@
+                    <div class="col-12">
+                        <div class="text-muted small mb-1">Observaciones</div>
+                        <div class="p-3 rounded-3" style="background:#f8fafc;font-size:14px;">@Model.Observaciones</div>
+                    </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehículo -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-truck me-2 text-primary"></i>Vehículo asignado</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="row g-3 mt-1">
+          <div class="col-md-4">
+            <div class="text-center p-3 rounded-3" style="background:#f0f4ff;">
+              <div style="font-size:32px;">🚌</div>
+              <div class="fw-bold fs-5 text-primary mt-1"></div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="text-muted small">Marca</div>
+                <div class="fw-semibold"></div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Modelo</div>
+                <div class="fw-semibold"></div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Año</div>
+                <div class="fw-semibold"></div>
+              </div>
+              <div class="col-6">
+                <div class="text-muted small">Estado</div>
+                <span class="badge rounded-pill" style="background:#d1fae5;color:#065f46;"></span>
+              </div>
+            </div>
+            <!-- Docs -->
+            <div class="mt-3 d-flex flex-wrap gap-2">
+              @{
+                bool soat = Model.Vehiculo?.FechaVencimientoSOAT >= DateTime.Today;
+                bool tecno = Model.Vehiculo?.FechaVencimientoTecnoMecanica >= DateTime.Today;
+                bool seg = Model.Vehiculo?.FechaVencimientoSeguro >= DateTime.Today;
+              }
+              <span class="badge rounded-pill px-3 py-2" style="background:#d1fae5;color:#065f46;">
+                <i class="bi bi-file-earmark-check me-1"></i>✓
+              </span>
+              <span class="badge rounded-pill px-3 py-2" style="background:#d1fae5;color:#065f46;">
+                <i class="bi bi-wrench me-1"></i>Tecno ✓
+              </span>
+              <span class="badge rounded-pill px-3 py-2" style="background:#d1fae5;color:#065f46;">
+                <i class="bi bi-shield-check me-1"></i>Seguro ✓)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conductor -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-person-badge me-2 text-primary"></i>Conductor asignado</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="d-flex align-items-center gap-4 mt-2">
+          <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+               style="width:56px;height:56px;background:#dbeafe;color:#1d4ed8;font-size:20px;flex-shrink:0;">
+            @* @(Model.Conductor?.NombreCompleto.Substring(0,1).ToUpper() ?? "?") *@
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-semibold fs-5"></div>
+            <div class="text-muted small">Cédula:</div>
+            <div class="d-flex gap-3 mt-2">
+              <span class="text-muted small"><i class="bi bi-telephone me-1"></i>@Model.Conductor?.Telefono</span>
+              <span class="badge rounded-pill px-3" style="background:#d1fae5;color:#065f46;">
+                @* Lic. @Model.Conductor?.CategoriaLicencia ✓) *@
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class="col-lg-4">
+    <!-- Cliente -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-person me-2 text-primary"></i>Cliente</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="fw-semibold mb-1">NombreCompleto</div>
+        <div class="text-muted small mb-1"><i class="bi bi-envelope me-1"></i>correo</div>
+        <div class="text-muted small"><i class="bi bi-telephone me-1"></i>Telefono</div>
+      </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-bell me-2 text-primary"></i>Notificaciones</h6>
+      </div>
+      <div class="card-body px-4 pb-4">
+        <div class="d-flex align-items-center justify-content-between mb-2 small">
+          <span><i class="bi bi-envelope me-2"></i>correo</span>
+          <span class="badge rounded-pill bg-success">
+            Enviado
+          </span>
+        </div>
+        <div class="d-flex align-items-center justify-content-between small">
+          <span><i class="bi bi-whatsapp me-2"></i>WhatsApp</span>
+          <span class="badge rounded-pill bg-success">
+            "Enviado"
+          </span>
+        </div>
+@*         @if (Model.FechaNotificacion.HasValue)
+        {
+
+        } *@
+                <div class="text-muted mt-2" style="font-size:12px;">
+                    <i class="bi bi-clock me-1"></i>FechaNotificacion
+                </div>
+      </div>
+    </div>
+
+    <!-- Auditoría -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-header bg-white border-0 px-4 pt-4 pb-0">
+        <h6 class="fw-semibold"><i class="bi bi-clock-history me-2 text-primary"></i>Auditoría</h6>
+      </div>
+      <div class="card-body px-4 pb-4 small">
+        <div class="mb-2">
+          <div class="text-muted">Creado por</div>
+          <div class="fw-semibold">nombreCompleto</div>
+        </div>
+        <div>
+          <div class="text-muted">Fecha de creación</div>
+          <div class="fw-semibold">FechaCreacion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal cambiar estado -->
+<div class="modal fade" id="modalEstado" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <form asp-action="CambiarEstado" method="post">
+        @* @Html.AntiForgeryToken() *@
+        <input type="hidden" name="id" />
+        <div class="modal-header border-0 px-4 pt-4 pb-0">
+          <h5 class="modal-title fw-semibold"><i class="bi bi-arrow-repeat me-2 text-primary"></i>Cambiar estado</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body px-4">
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Nuevo estado</label>
+            <select name="nuevoEstado" class="form-select rounded-3" required>
+              @* @foreach (AppServiceAndTravel.Models.EstadoServicio est in Enum.GetValues(typeof(AppServiceAndTravel.Models.EstadoServicio)))
+              {
+                @if (est == Model.Estado)
+                {
+                    <option value="@est" selected>@est</option>
+                }
+                else
+                {
+                    <option value="@est">@est</option>
+                }
+              } *@
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Observaciones</label>
+            <textarea name="observaciones" class="form-control rounded-3" rows="3"
+                      placeholder="Motivo del cambio de estado…"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0 px-4 pb-4 pt-0">
+          <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary rounded-3 px-4">Guardar cambio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

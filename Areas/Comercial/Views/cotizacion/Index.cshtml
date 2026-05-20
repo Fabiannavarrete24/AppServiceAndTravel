@@ -1,0 +1,237 @@
+@model IEnumerable<AppServiceAndTravel.Models.Cotizacion>
+@using AppServiceAndTravel.Models
+@{
+    ViewData["Title"] = "Cotizaciones";
+    string BadgeCss(EstadoCotizacion e) => e switch {
+        EstadoCotizacion.Pendiente  => "background:#fef3c7;color:#92400e;",
+        EstadoCotizacion.Aprobada   => "background:#d1fae5;color:#065f46;",
+        EstadoCotizacion.Rechazada  => "background:#fee2e2;color:#991b1b;",
+        _ => ""
+    };
+    string BadgeIcon(EstadoCotizacion e) => e switch {
+        EstadoCotizacion.Pendiente  => "bi-clock",
+        EstadoCotizacion.Aprobada   => "bi-check-circle-fill",
+        EstadoCotizacion.Rechazada  => "bi-x-circle-fill",
+        _ => "bi-question-circle"
+    };
+}
+
+<div class="row g-3 mb-4">
+@foreach(var (lbl,val,bg,color,icon) in new[]{
+    ("Total",       (int)ViewBag.Total,       "#dbeafe","#1d4ed8","bi-file-earmark-text"),
+    ("Pendientes",  (int)ViewBag.Pendientes,  "#fef3c7","#92400e","bi-clock"),
+    ("Aprobadas",   (int)ViewBag.Aprobadas,   "#d1fae5","#065f46","bi-check-circle-fill"),
+    ("Rechazadas",  (int)ViewBag.Rechazadas,  "#fee2e2","#991b1b","bi-x-circle-fill"),
+})
+{
+<div class="col-sm-6 col-xl-3">
+  <div class="card @(lbl=="Pendientes"&&(int)val>0?"border-warning":"")">
+    <div class="card-body d-flex align-items-center gap-3 p-3">
+      <div class="rounded-3 d-flex align-items-center justify-content-center"
+           style="width:44px;height:44px;background:@bg;color:@color;font-size:20px;flex-shrink:0;">
+        <i class="bi @icon"></i></div>
+      <div>
+        <div class="text-muted" style="font-size:12px;">@lbl</div>
+        <div class="fw-bold fs-4" style="color:@color;">@val</div>
+      </div>
+    </div>
+  </div>
+</div>
+}
+</div>
+
+<div class="card">
+  <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center gap-3">
+    <span class="fw-semibold flex-grow-1">Historial de cotizaciones</span>
+
+    <div class="btn-group btn-group-sm">
+      <a href="@Url.Action("Index")" class="btn @(ViewBag.Estado==null?"btn-dark":"btn-outline-secondary") rounded-start-3">Todas</a>
+      <a href="@Url.Action("Index",new{estado=EstadoCotizacion.Pendiente})"
+         class="btn @(ViewBag.Estado?.ToString()=="Pendiente"?"btn-warning":"btn-outline-secondary")">Pendientes</a>
+      <a href="@Url.Action("Index",new{estado=EstadoCotizacion.Aprobada})"
+         class="btn @(ViewBag.Estado?.ToString()=="Aprobada"?"btn-success":"btn-outline-secondary")">Aprobadas</a>
+      <a href="@Url.Action("Index",new{estado=EstadoCotizacion.Rechazada})"
+         class="btn @(ViewBag.Estado?.ToString()=="Rechazada"?"btn-danger":"btn-outline-secondary") rounded-end-3">Rechazadas</a>
+    </div>
+
+    <form method="get" class="d-flex gap-2">
+      @if(ViewBag.Estado!=null){<input type="hidden" name="estado" value="@ViewBag.Estado"/>}
+      <input type="search" name="q" value="@ViewBag.Q" class="form-control form-control-sm rounded-3"
+             placeholder="Cliente, ruta…" style="min-width:180px;"/>
+      <button class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
+    </form>
+
+    @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("Operador")||User.IsInRole("ComercialManager"))
+    {
+    <a asp-area="Comercial" asp-controller="Cotizacion" asp-action="Create"
+       class="btn btn-primary btn-sm rounded-3"><i class="bi bi-plus-lg me-1"></i>Nueva</a>
+    }
+  </div>
+
+  <div class="card-body p-0">
+  @if(!Model.Any())
+  {
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-file-earmark-text" style="font-size:42px;opacity:.25;"></i>
+      <p class="mt-2">No hay cotizaciones.</p>
+    </div>
+  }
+  else
+  {
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead><tr>
+        <th class="ps-4">N°</th><th>Cliente</th><th>Ruta</th>
+        <th>Fecha serv.</th><th>Valor</th><th>Estado</th><th>Creada</th>
+        <th class="text-end pe-4">Acciones</th>
+      </tr></thead>
+      <tbody>
+      @foreach(var c in Model)
+      {
+        <tr>
+          <td class="ps-4 fw-semibold text-muted">#@c.Id.ToString("D6")</td>
+          <td>
+            <div class="fw-semibold small">@c.Cliente?.NombreCompleto</div>
+            <div class="text-muted" style="font-size:11px;"></div>
+          </td>
+          <td class="small text-muted">
+            @c.Origen <i class="bi bi-arrow-right mx-1"></i>@c.Destino
+          </td>
+          <td class="small">@c.FechaServicioRequerido.ToString("dd/MM/yyyy")</td>
+          <td class="fw-semibold small">$@((c.ValorAprobado??c.ValorCotizado).ToString("N0"))</td>
+          <td>
+            <span class="badge rounded-pill px-3 py-2" style="@BadgeCss(c.Estado)">
+              <i class="bi @BadgeIcon(c.Estado) me-1"></i>@c.Estado
+            </span>
+          </td>
+          <td class="small text-muted">@c.FechaCreacion.ToString("dd/MM/yy")</td>
+          <td class="text-end pe-4">
+            <div class="d-flex justify-content-end gap-1">
+              <a asp-area="Comercial" asp-controller="Cotizacion" asp-action="Details" asp-route-id="@c.Id"
+                 class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
+
+              @if((User.IsInRole("Administrador")||User.IsInRole("Coordinador"))&&c.Estado==EstadoCotizacion.Pendiente)
+              {
+              <a asp-area="Comercial" asp-controller="Cotizacion" asp-action="Edit" asp-route-id="@c.Id"
+                 class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
+              }
+
+              @if((User.IsInRole("Administrador")||User.IsInRole("Aprobador"))&&c.Estado==EstadoCotizacion.Pendiente)
+              {
+              <button class="btn btn-sm btn-outline-success rounded-3" title="Aprobar"
+                      data-bs-toggle="modal" data-bs-target="#modalAprobar"
+                      data-id="@c.Id" data-valor="@c.ValorCotizado">
+                <i class="bi bi-check-lg"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger rounded-3" title="Rechazar"
+                      data-bs-toggle="modal" data-bs-target="#modalRechazar"
+                      data-id="@c.Id">
+                <i class="bi bi-x-lg"></i>
+              </button>
+              }
+
+              @if(c.Estado==EstadoCotizacion.Aprobada&&c.Servicio==null&&
+                 (User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("OperacionesManager")))
+              {
+              <a asp-area="Operaciones" asp-controller="Servicio" asp-action="Create"
+                 asp-route-cotizacionId="@c.Id"
+                 class="btn btn-sm btn-primary rounded-3"><i class="bi bi-truck me-1"></i>Servicio</a>
+              }
+            </div>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+  </div>
+  }
+  </div>
+
+  @if((int)ViewBag.TotalPag>1)
+  {
+  <div class="card-footer bg-white border-0 d-flex justify-content-between py-3 px-4">
+    <small class="text-muted">@ViewBag.Total cotizaciones</small>
+    <nav><ul class="pagination pagination-sm mb-0">
+      @for(int pg=1;pg<=(int)ViewBag.TotalPag;pg++)
+      {<li class="page-item @(pg==(int)ViewBag.P?"active":"")">
+        <a class="page-link" href="@Url.Action("Index",new{q=ViewBag.Q,estado=ViewBag.Estado,p=pg})">@pg</a></li>}
+    </ul></nav>
+  </div>
+  }
+</div>
+
+<!-- Modal Aprobar -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <form asp-area="Comercial" asp-controller="Cotizacion" asp-action="Aprobar" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="aprobId" name="id"/>
+        <div class="modal-header border-0 px-4 pt-4 pb-0">
+          <h5 class="modal-title fw-semibold"><i class="bi bi-check-circle text-success me-2"></i>Aprobar cotización</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body px-4">
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Valor aprobado</label>
+            <div class="input-group">
+              <span class="input-group-text">$</span>
+              <input type="number" id="aprobValor" name="valorAprobado" class="form-control" step="1000" min="0"/>
+            </div>
+            <div class="form-text">Deje el valor original o modifíquelo.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Observaciones</label>
+            <textarea name="observaciones" class="form-control rounded-3" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0 px-4 pb-4 pt-0">
+          <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success rounded-3 px-4"><i class="bi bi-check-lg me-1"></i>Aprobar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Rechazar -->
+<div class="modal fade" id="modalRechazar" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow rounded-4">
+      <form asp-area="Comercial" asp-controller="Cotizacion" asp-action="Rechazar" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="recId" name="id"/>
+        <div class="modal-header border-0 px-4 pt-4 pb-0">
+          <h5 class="modal-title fw-semibold"><i class="bi bi-x-circle text-danger me-2"></i>Rechazar cotización</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body px-4">
+          <div class="alert alert-warning rounded-3 small py-2">
+            <i class="bi bi-exclamation-triangle me-1"></i>Se notificará al cliente por email y WhatsApp.
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Motivo del rechazo *</label>
+            <textarea name="motivo" class="form-control rounded-3" rows="4" required
+                      placeholder="Explique el motivo…"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer border-0 px-4 pb-4 pt-0">
+          <button type="button" class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger rounded-3 px-4"><i class="bi bi-x-lg me-1"></i>Rechazar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+document.getElementById('modalAprobar').addEventListener('show.bs.modal', e => {
+    document.getElementById('aprobId').value   = e.relatedTarget.dataset.id;
+    document.getElementById('aprobValor').value = e.relatedTarget.dataset.valor;
+});
+document.getElementById('modalRechazar').addEventListener('show.bs.modal', e => {
+    document.getElementById('recId').value = e.relatedTarget.dataset.id;
+});
+</script>
+}

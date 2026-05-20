@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AppServiceAndTravel</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --sidebar-bg: #0f1c2e;
+            --sidebar-accent: #1a6fc4;
+            --sidebar-hover: rgba(255,255,255,.07);
+            --topbar-h: 60px;
+        }
+
+        body { background: #f0f4f8; font-family: 'Segoe UI', sans-serif; }
+
+        /* ── Sidebar ─────────────────────────────────────────────── */
+        #sidebar {
+            position: fixed; top: 0; left: 0; bottom: 0;
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            z-index: 1040;
+            overflow-y: auto;
+            transition: transform .25s ease;
+        }
+        .sidebar-brand {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            color: #fff;
+        }
+        .sidebar-brand .brand-icon {
+            width: 40px; height: 40px;
+            background: var(--sidebar-accent);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin-right: 10px;
+        }
+        .sidebar-brand .brand-name { font-size: 15px; font-weight: 600; letter-spacing: .3px; }
+        .sidebar-brand .brand-sub  { font-size: 11px; color: rgba(255,255,255,.45); }
+
+        .sidebar-section-title {
+            font-size: 10px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1.2px;
+            color: rgba(255,255,255,.35);
+            padding: 20px 20px 6px;
+        }
+
+        .sidebar-link {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 20px;
+            color: rgba(255,255,255,.72);
+            text-decoration: none;
+            border-radius: 0;
+            font-size: 14px;
+            transition: all .15s;
+            position: relative;
+        }
+        .sidebar-link:hover { background: var(--sidebar-hover); color: #fff; }
+        .sidebar-link.activo {
+            background: var(--sidebar-accent);
+            color: #fff;
+        }
+        .sidebar-link i { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+        .sidebar-link .badge { margin-left: auto; font-size: 10px; }
+
+        /* ── Main Content ─────────────────────────────────────────── */
+        #main-wrapper { margin-left: var(--sidebar-width); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* ── Topbar ───────────────────────────────────────────────── */
+        #topbar {
+            height: var(--topbar-h);
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky; top: 0; z-index: 1030;
+            display: flex; align-items: center; padding: 0 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+        }
+        .topbar-title { font-size: 17px; font-weight: 600; color: #1e293b; }
+        .topbar-breadcrumb { font-size: 12px; color: #94a3b8; }
+
+        /* ── Page Content ─────────────────────────────────────────── */
+        #page-content { padding: 24px; flex: 1; }
+
+        /* ── Cards ────────────────────────────────────────────────── */
+        .card { border: none; border-radius: 12px; box-shadow: 0 1px 8px rgba(0,0,0,.06); }
+        .card-header { border-radius: 12px 12px 0 0 !important; border-bottom: 1px solid rgba(0,0,0,.06); }
+
+        /* ── Status badges ────────────────────────────────────────── */
+        .badge-pendiente  { background: #fef3c7; color: #92400e; }
+        .badge-aprobada   { background: #d1fae5; color: #065f46; }
+        .badge-rechazada  { background: #fee2e2; color: #991b1b; }
+        .badge-programado { background: #dbeafe; color: #1e40af; }
+        .badge-en-curso   { background: #fef9c3; color: #854d0e; }
+        .badge-completado { background: #dcfce7; color: #14532d; }
+        .badge-cancelado  { background: #f1f5f9; color: #475569; }
+
+        /* ── Alerts ───────────────────────────────────────────────── */
+        .alert { border: none; border-radius: 10px; }
+
+        /* ── Tables ───────────────────────────────────────────────── */
+        .table-hover tbody tr:hover { background: #f8fafc; }
+        .table th { font-size: 12px; font-weight: 600; text-transform: uppercase;
+                    letter-spacing: .5px; color: #64748b; border-bottom: 2px solid #e2e8f0; }
+
+        /* ── Responsive sidebar ───────────────────────────────────── */
+        @@media (max-width: 991px) {
+            #sidebar { transform: translateX(-100%); }
+            #sidebar.open { transform: translateX(0); }
+            #main-wrapper { margin-left: 0; }
+        }
+
+        /* ── User avatar ──────────────────────────────────────────── */
+        .user-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: var(--sidebar-accent);
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 14px;
+        }
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+    <nav id="sidebar">
+        <!-- Brand -->
+        <div class="sidebar-brand d-flex align-items-center">
+            <div class="brand-icon"><i class="bi bi-truck"></i></div>
+            <div>
+                <div class="brand-name">AppServiceAndTravel</div>
+                <div class="brand-sub">Gestión de Transporte</div>
+            </div>
+        </div>
+
+        <!-- Principal -->
+        <div class="sidebar-section-title">Principal</div>
+        <a href="@Url.Action("Index","Home")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "activo" : "")">
+            <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+
+        <!-- Cotizaciones -->
+        <div class="sidebar-section-title">Cotizaciones</div>
+        <a href="@Url.Action("Index","Cotizacion")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotizacion" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "activo" : "")">
+            <i class="bi bi-file-earmark-text"></i> Historial
+            @if (ViewBag.TotalPendientes > 0)
+            {
+                <span class="badge bg-warning text-dark">@ViewBag.TotalPendientes</span>
+            }
+        </a>
+        @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador") || User.IsInRole("Operador"))
+        {
+            <a href="@Url.Action("Create","Cotizacion")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cotizacion" && ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "activo" : "")">
+                <i class="bi bi-plus-circle"></i> Nueva Cotización
+            </a>
+        }
+
+        <!-- Servicios -->
+        <div class="sidebar-section-title">Servicios</div>
+        <a href="@Url.Action("Index","Servicio")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Servicio" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "activo" : "")">
+            <i class="bi bi-calendar-check"></i> Servicios
+        </a>
+        @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
+        {
+            <a href="@Url.Action("Create","Servicio")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Servicio" && ViewContext.RouteData.Values["action"]?.ToString() == "Create" ? "activo" : "")">
+                <i class="bi bi-plus-circle"></i> Nuevo Servicio
+            </a>
+        }
+
+        <!-- Flota -->
+        <div class="sidebar-section-title">Flota</div>
+        <a href="@Url.Action("Index","Vehiculo")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vehiculo" ? "activo" : "")">
+            <i class="bi bi-truck"></i> Vehículos
+        </a>
+        <a href="@Url.Action("Index","Conductor")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Conductor" ? "activo" : "")">
+            <i class="bi bi-person-badge"></i> Conductores
+        </a>
+        <a href="@Url.Action("Index","Cliente")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Cliente" ? "activo" : "")">
+            <i class="bi bi-people"></i> Clientes
+        </a>
+
+        <!-- Admin -->
+        @if (User.IsInRole("Administrador"))
+        {
+            <div class="sidebar-section-title">Administración</div>
+            <a href="@Url.Action("Index","Admin")" class="sidebar-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "activo" : "")">
+                <i class="bi bi-gear"></i> Usuarios & Rols
+            </a>
+        }
+
+        <!-- Logout -->
+        <div class="mt-auto" style="padding:16px 12px;">
+            <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="sidebar-link border-0 bg-transparent w-100 text-start" style="color:rgba(255,255,255,.5);">
+                    <i class="bi bi-box-arrow-left"></i> Cerrar sesión
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════ MAIN ═══════════════════ -->
+    <div id="main-wrapper">
+
+        <!-- Topbar -->
+        <div id="topbar">
+            <button class="btn btn-sm me-3 d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+            <div class="flex-grow-1">
+                <div class="topbar-title">@(ViewData["Title"] ?? "Dashboard")</div>
+                @if (ViewData["Breadcrumb"] != null)
+                {
+                    <div class="topbar-breadcrumb">@ViewData["Breadcrumb"]</div>
+                }
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="topbar-breadcrumb d-none d-md-block">@User.Identity?.Name</span>
+                <div class="user-avatar">@(User.Identity?.Name?.Substring(0,1).ToUpper() ?? "U")</div>
+            </div>
+        </div>
+
+        <!-- Alertas globales -->
+        <div id="page-content">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
+                    <i class="bi bi-check-circle-fill"></i>
+                    @TempData["Success"]
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    @TempData["Error"]
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (TempData["Warning"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                    @TempData["Warning"]
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </div>
+}
+else
+{
+    <!-- Sin autenticación: layout simple -->
+    <div class="min-vh-100 d-flex flex-column">
+        @RenderBody()
+    </div>
+}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

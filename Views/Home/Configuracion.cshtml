@@ -1,0 +1,833 @@
+@model AppServiceAndTravel.Models.ConfiguracionEmpresa
+@{ ViewData["Title"] = "Configuración del sistema"; }
+
+<style>
+/* ── Tabs ── */
+    .cfg-nav {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        border-bottom: 2px solid #e2e8f0;
+        gap: 2px;
+        margin-bottom: 0;
+    }
+.cfg-nav-btn {
+    border:none; background:none; padding:12px 20px; font-size:13.5px; font-weight:500;
+    color:#64748b; border-bottom:2px solid transparent; cursor:pointer; white-space:nowrap;
+    transition:all .15s; margin-bottom:-2px; border-radius:8px 8px 0 0;
+    display:flex; align-items:center; gap:8px;
+}
+.cfg-nav-btn:hover { color:var(--cp); background:#f8fafc; }
+.cfg-nav-btn.active { color:var(--cp); border-bottom-color:var(--cp); font-weight:600; }
+.cfg-pane { display:none; } .cfg-pane.active { display:block; }
+
+/* ── Color swatch ── */
+.swatch-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; }
+.color-row { display:flex; align-items:center; gap:12px; padding:10px 14px;
+    border:1.5px solid #e2e8f0; border-radius:10px; transition:border-color .2s; }
+.color-row:hover { border-color:var(--cp); }
+.color-swatch { width:38px; height:38px; border-radius:9px; border:2px solid rgba(0,0,0,.1);
+    cursor:pointer; flex-shrink:0; padding:2px; }
+
+/* ── Fuentes ── */
+.font-card { border:2px solid #e2e8f0; border-radius:12px; padding:14px 16px; cursor:pointer;
+    transition:all .2s; }
+.font-card.selected { border-color:var(--cp); background:color-mix(in srgb,var(--cp) 6%,transparent); }
+.font-card:hover { border-color:var(--cp); }
+
+/* ── Temas ── */
+.theme-card { border:2px solid #e2e8f0; border-radius:12px; overflow:hidden; cursor:pointer;
+    transition:border-color .2s; }
+.theme-card.selected { border-color:var(--cp); }
+.theme-preview { height:60px; display:flex; gap:3px; padding:6px; }
+.theme-preview-sb  { width:40px; border-radius:6px; }
+.theme-preview-body{ flex:1; border-radius:6px; display:flex; flex-direction:column; gap:3px; padding:4px; }
+.theme-preview-bar { height:10px; border-radius:4px; }
+
+/* ── Status badges ── */
+.badge-ok  { background:#d1fae5;color:#065f46; }
+.badge-err { background:#fee2e2;color:#991b1b; }
+.badge-warn{ background:#fef3c7;color:#92400e; }
+</style>
+
+<!-- Tabs -->
+<div class="card mb-0" style="border-radius:14px 14px 0 0;border-bottom:none;">
+    <div class="card-body p-0">
+        <div class="cfg-nav px-3 pt-2">
+            @foreach(var (id,label,icon) in new[]{
+                ("empresa","Empresa","bi-building"),
+                ("apariencia","Apariencia","bi-palette"),
+                ("regional","Regional","bi-globe"),
+                ("correo","Correo SMTP","bi-envelope"),
+                ("whatsapp","WhatsApp","bi-whatsapp"),
+                ("bd","Base de datos","bi-database"),
+                ("api","API / JWT","bi-key"),
+            })
+            {
+            <button type="button" class="cfg-nav-btn @(id=="empresa"?"active":"")"
+                    onclick="showPane('@id',this)">
+                <i class="bi @icon"></i>@label
+            </button>
+            }
+        </div>
+    </div>
+</div>
+
+<form asp-area="Admin" asp-controller="Configuracion" asp-action="Index"
+      method="post" enctype="multipart/form-data" id="frmCfg">
+@Html.AntiForgeryToken()
+
+<!-- ══ EMPRESA ══════════════════════════════════════════════════════════════ -->
+<div class="cfg-pane active card rounded-0 border-top-0" id="pane-empresa">
+  <div class="card-body p-4">
+    <div class="row g-4">
+      <!-- Datos -->
+      <div class="col-lg-7">
+        <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Datos generales</h6>
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label fw-semibold small">Nombre de la empresa *</label>
+            <input asp-for="NombreEmpresa" class="form-control rounded-3" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">NIT / RUC</label>
+            <input asp-for="NitEmpresa" class="form-control rounded-3" />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Eslogan</label>
+            <input asp-for="Eslogan" class="form-control rounded-3" placeholder="Transportando su confianza…" />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Dirección</label>
+            <input asp-for="Direccion" class="form-control rounded-3" />
+          </div>
+          <div class="col-md-5">
+            <label class="form-label fw-semibold small">Ciudad</label>
+            <input asp-for="Ciudad" class="form-control rounded-3" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Departamento</label>
+            <input class="form-control rounded-3" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold small">País</label>
+            <input asp-for="Pais" class="form-control rounded-3" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Teléfono 1</label>
+            <input asp-for="Telefono" class="form-control rounded-3" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Teléfono 2</label>
+            <input asp-for="Telefono2" class="form-control rounded-3" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Email corporativo</label>
+            <input type="email" class="form-control rounded-3" />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Sitio web</label>
+            <input asp-for="SitioWeb" class="form-control rounded-3" placeholder="https://…" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Logo y Favicon -->
+      <div class="col-lg-5">
+        <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Identidad visual</h6>
+
+        <!-- Logo actual -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold small">Logo de la empresa</label>
+@*           @if (!string.IsNullOrEmpty(Model.RutaLogo))
+          {
+
+          } *@
+                        <div class="mb-2 p-3 rounded-3 text-center" style="background:#f8fafc;border:1px dashed #cbd5e1;">
+                            <img alt="Logo actual" style="max-height:70px;max-width:100%;" />
+                            <div class="text-muted mt-1" style="font-size:11px;">Logo actual</div>
+                        </div>
+          <div class="dropzone rounded-3 text-center p-4" style="border:2px dashed #cbd5e1;cursor:pointer;"
+               onclick="document.getElementById('inputLogo').click()"
+               ondragover="event.preventDefault();this.style.borderColor='var(--cp)'"
+               ondragleave="this.style.borderColor='#cbd5e1'"
+               ondrop="handleDrop(event,'inputLogo','previewLogo')">
+            <i class="bi bi-cloud-upload" style="font-size:28px;color:#94a3b8;"></i>
+            <div class="small text-muted mt-1">Arrastra o haz clic para subir</div>
+            <div style="font-size:11px;color:#94a3b8;">PNG, SVG, JPG · Máx. 2MB · Recomendado: 200×60px</div>
+          </div>
+          <input type="file" id="inputLogo" name="logo" accept=".png,.jpg,.jpeg,.svg,.webp"
+                 class="d-none" onchange="previewFile(this,'previewLogo')" />
+          <img id="previewLogo" class="d-none mt-2 rounded-3 w-100"
+               style="max-height:70px;object-fit:contain;border:1px solid #e2e8f0;" />
+        </div>
+
+        <!-- Favicon -->
+        <div>
+          <label class="form-label fw-semibold small">Favicon</label>
+          <div class="d-flex align-items-center gap-3">
+@*             @if (!string.IsNullOrEmpty(Model.RutaFavicon))
+            {<img src="@Model.RutaFavicon" style="width:32px;height:32px;border-radius:6px;" />} *@
+            <div class="dropzone rounded-3 text-center flex-grow-1 p-3" style="border:2px dashed #cbd5e1;cursor:pointer;"
+                 onclick="document.getElementById('inputFavicon').click()">
+              <i class="bi bi-image text-muted"></i>
+              <span class="small text-muted ms-2">.ico o .png (32×32)</span>
+            </div>
+          </div>
+          <input type="file" id="inputFavicon" name="favicon" accept=".ico,.png" class="d-none" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APARIENCIA ════════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-apariencia">
+  <div class="card-body p-4">
+
+    <!-- Temas predefinidos -->
+    <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Temas predefinidos</h6>
+    <div class="row g-3 mb-4">
+      @{
+        var temas = new[]{
+          ("Azul corporativo","#1a6fc4","#0f1c2e","#16a34a"),
+          ("Verde natura",    "#16a34a","#1a2e1a","#0d9488"),
+          ("Rojo ejecutivo",  "#dc2626","#1c1c1c","#f59e0b"),
+          ("Violeta moderno", "#7c3aed","#1e1a2e","#06b6d4"),
+          ("Naranja dinámico","#ea580c","#1c1a14","#3b82f6"),
+          ("Oscuro premium",  "#6366f1","#0f0f13","#10b981"),
+        };
+      }
+      @foreach(var (nombre,cp,cs,ca) in temas)
+      {
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="theme-card selected"
+             onclick="aplicarTema('@cp','@cs','@ca','@nombre')">
+          <div class="theme-preview">
+            <div class="theme-preview-sb" style="background:@cs;"></div>
+            <div class="theme-preview-body" style="background:#f0f4f8;">
+              <div class="theme-preview-bar" style="background:@cp;"></div>
+              <div class="theme-preview-bar" style="background:@ca;width:60%;"></div>
+            </div>
+          </div>
+          <div class="px-3 py-2 d-flex align-items-center justify-content-between">
+            <span style="font-size:12px;font-weight:600;">@nombre</span>
+            <i class="bi bi-check-circle-fill text-success"></i>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    <input type="hidden"  id="inputTema" />
+
+    <hr class="my-4" />
+
+    <!-- Paleta personalizada -->
+    <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Paleta personalizada</h6>
+    <div class="swatch-grid mb-4">
+      @foreach(var (field,label,desc) in new[]{
+        ("ColorPrimario",   "Color primario",    "Botones, links, activos"),
+        ("ColorSecundario", "Sidebar / Menú",    "Fondo del menú lateral"),
+        ("ColorAcento",     "Color acento",      "Éxito, badges positivos"),
+        ("ColorTexto",      "Color de texto",    "Texto general"),
+        ("ColorFondo",      "Fondo general",     "Fondo de la aplicación"),
+        ("ColorPeligro",    "Color peligro",     "Errores, alertas críticas"),
+        ("ColorAdvertencia","Color advertencia", "Avisos y advertencias"),
+      })
+      {
+        var valor = "#000000";
+        <div class="color-row" id="row_@field">
+          <input type="color" name="@field" value="@valor" id="color_@field" class="color-swatch"
+                 onchange="syncColor('@field',this.value)" />
+          <div class="flex-grow-1">
+            <div class="fw-semibold small">@label</div>
+            <div class="text-muted" style="font-size:11px;">@desc</div>
+          </div>
+          <input type="text" id="hex_@field" value="@valor"
+                 class="form-control form-control-sm rounded-3"
+                 style="width:90px;font-family:monospace;font-size:12px;"
+                 oninput="syncHex('@field',this.value)" />
+        </div>
+      }
+    </div>
+
+    <!-- Tipografía -->
+    <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Tipografía</h6>
+    <div class="row g-3 mb-4">
+      @{
+        var fuentes = new[]{
+          ("Segoe UI","Sistema Windows — elegante"),
+          ("Inter","Moderna y legible — web"),
+          ("Roboto","Estilo Material Design"),
+          ("Poppins","Geométrica y amigable"),
+          ("Lato","Humanista y profesional"),
+          ("Open Sans","Neutral y versátil"),
+        };
+      }
+      @foreach(var (fuente,desc) in fuentes)
+      {
+      <div class="col-sm-6 col-md-4">
+        <div class="font-card"
+             onclick="seleccionarFuente('@fuente',this)"
+             style="font-family:'@fuente',sans-serif;">
+          <div class="fw-semibold" style="font-size:14px;">@fuente</div>
+          <div class="text-muted" style="font-size:12px;">@desc</div>
+          <div style="font-size:16px;margin-top:4px;">Aa Bb Cc 123</div>
+        </div>
+      </div>
+      }
+      <input type="hidden"id="inputFuente" />
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label fw-semibold small">Tamaño base de fuente</label>
+        <select class="form-select rounded-3">
+@*           @foreach(var t in new[]{"12px","13px","14px","15px","16px"})
+          { <option value="@t" @(Model.TamanoFuente==t?"selected":"")>@t</option> } *@
+        </select>
+      </div>
+    </div>
+
+    <!-- Preview live -->
+    <div class="mt-4 p-4 rounded-3" id="livePreview"
+         style="background:var(--cbg);border:1px solid #e2e8f0;">
+      <div class="d-flex gap-3">
+        <div class="rounded-3 p-3 flex-shrink-0" style="background:var(--cs);width:130px;">
+          <div class="rounded-2 mb-2 d-flex align-items-center gap-2 px-2 py-1"
+               style="background:var(--cp);">
+            <i class="bi bi-truck text-white" style="font-size:13px;"></i>
+            <span style="color:#fff;font-size:12px;font-weight:600;">App</span>
+          </div>
+          <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Dashboard</div>
+          <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Cotizaciones</div>
+          <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Servicios</div>
+        </div>
+        <div class="flex-grow-1">
+          <div class="mb-2 d-flex gap-2">
+            <button type="button" class="btn btn-sm rounded-3 text-white" style="background:var(--cp);">Botón primario</button>
+            <button type="button" class="btn btn-sm rounded-3 text-white" style="background:var(--ca);">Acento</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-3">Secundario</button>
+          </div>
+          <div class="p-2 rounded-3" style="background:#fff;">
+            <div class="fw-semibold mb-1" style="font-size:14px;color:var(--ct);">Ejemplo de texto</div>
+            <div class="text-muted" style="font-size:12px;">Este es el aspecto que tendrá la aplicación con la configuración actual.</div>
+            <span class="badge rounded-pill px-3 mt-1" style="background:var(--cp);color:#fff;">Activo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REGIONAL ══════════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-regional">
+  <div class="card-body p-4">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label fw-semibold small">Moneda</label>
+        <select asp-for="Moneda" class="form-select rounded-3">
+@*           @foreach(var (cod,nom) in new[]{
+            ("COP","COP — Peso colombiano"),("USD","USD — Dólar americano"),
+            ("EUR","EUR — Euro"),("MXN","MXN — Peso mexicano"),
+            ("PEN","PEN — Sol peruano"),("CLP","CLP — Peso chileno"),
+            ("ARS","ARS — Peso argentino"),("BRL","BRL — Real brasileño"),
+            ("GBP","GBP — Libra esterlina"),
+          })
+          { <option value="@cod" @(Model.Moneda==cod?"selected":"")>@nom</option> } *@
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label class="form-label fw-semibold small">Símbolo</label>
+        <input asp-for="SimboloMoneda" class="form-control rounded-3" maxlength="5" placeholder="$" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Idioma</label>
+        <select asp-for="Idioma" class="form-select rounded-3">
+@*           @foreach(var (cod,nom) in new[]{
+            ("es-CO","Español (Colombia)"),("es-MX","Español (México)"),
+            ("es-ES","Español (España)"),("es-PE","Español (Perú)"),
+            ("es-CL","Español (Chile)"),("en-US","English (US)"),
+            ("pt-BR","Português (Brasil)"),
+          })
+          { <option value="@cod" @(Model.Idioma==cod?"selected":"")>@nom</option> } *@
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Zona horaria</label>
+        <select asp-for="ZonaHoraria" class="form-select rounded-3">
+@*           @foreach(var (tz,nom) in new[]{
+            ("America/Bogota","Bogotá (UTC-5)"),("America/Mexico_City","Ciudad de México (UTC-6)"),
+            ("America/Lima","Lima (UTC-5)"),("America/Santiago","Santiago (UTC-3/-4)"),
+            ("America/Buenos_Aires","Buenos Aires (UTC-3)"),("America/New_York","Nueva York (UTC-5/-4)"),
+            ("Europe/Madrid","Madrid (UTC+1/+2)"),("UTC","UTC"),
+          })
+          { <option value="@tz" @(Model.ZonaHoraria==tz?"selected":"")>@nom</option> } *@
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Formato de fecha</label>
+        <select asp-for="FormatoFecha" class="form-select rounded-3">
+          @* @foreach(var f in new[]{"dd/MM/yyyy","MM/dd/yyyy","yyyy-MM-dd","dd-MM-yyyy","dd.MM.yyyy"}) *@
+           <option></option> 
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-semibold small">Separador decimal</label>
+        <select asp-for="SeparadorDecimal" class="form-select rounded-3">
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-semibold small">Separador miles</label>
+        <select asp-for="SeparadorMiles" class="form-select rounded-3">
+          <option value=" "> (espacio)</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <div class="p-3 rounded-3" style="background:#f0f9ff;border:1px solid #bae6fd;">
+          <div class="small fw-semibold mb-1 text-primary">Vista previa del formato</div>
+          <div class="small">Fecha: <strong id="prevFecha">15/05/2025</strong> &nbsp;|&nbsp;
+               Valor: <strong id="prevValor">$1.250.000,00</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CORREO SMTP ═══════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-correo">
+  <div class="card-body p-4">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Servidor SMTP</label>
+        <input class="form-control rounded-3" placeholder="smtp.gmail.com" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-semibold small">Puerto</label>
+        <input type="number" class="form-control rounded-3" />
+      </div>
+      <div class="col-md-3">
+        <label class="form-label fw-semibold small">Seguridad</label>
+        <div class="p-2 rounded-3" style="border:1px solid #e2e8f0;">
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" />
+            <label class="form-check-label small" >SSL</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" />
+            <label class="form-check-label small">STARTTLS</label>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Usuario / Email SMTP</label>
+        <input type="email" class="form-control rounded-3"
+               placeholder="usuario@empresa.com" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Contraseña / App Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control rounded-start-3"
+                 id="smtpPwd" placeholder="Contraseña o App Password de Gmail" />
+          <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                  onclick="toggleViz('smtpPwd','icoSmtp')">
+            <i class="bi bi-eye" id="icoSmtp"></i>
+          </button>
+        </div>
+        <div class="form-text">Para Gmail usa una <strong>App Password</strong>, no tu contraseña normal.</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Email remitente</label>
+        <input type="email" class="form-control rounded-3"
+               placeholder="notificaciones@empresa.com" />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label fw-semibold small">Nombre remitente</label>
+        <input asp-for="NombreRemitente" class="form-control rounded-3"
+               placeholder="Sistema TransporteApp" />
+      </div>
+
+      <!-- Test email -->
+      <div class="col-12">
+        <div class="p-4 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+          <h6 class="fw-semibold mb-3"><i class="bi bi-send me-2 text-primary"></i>Probar configuración</h6>
+          <div class="row g-2">
+            <div class="col-md-5">
+              <input type="email" id="testEmail" class="form-control rounded-3"
+                     placeholder="Email destino de la prueba" />
+            </div>
+            <div class="col-md-auto">
+              <button type="button" class="btn btn-outline-primary rounded-3"
+                      onclick="testEmail()">
+                <i class="bi bi-send me-2"></i>Enviar email de prueba
+              </button>
+            </div>
+            <div class="col-12">
+              <div id="testEmailResult" class="d-none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WHATSAPP ══════════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-whatsapp">
+  <div class="card-body p-4">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Proveedor de WhatsApp</label>
+            <div class="row g-2">
+              @foreach(var (prov,desc,url) in new[]{
+                ("CallMeBot","Gratuito — ideal para notificaciones personales","https://www.callmebot.com"),
+                ("Twilio","Profesional — requiere cuenta de pago","https://www.twilio.com"),
+                ("MetaCloudAPI","Oficial Meta — requiere app aprobada","https://developers.facebook.com"),
+              })
+              {
+              <div class="col-12">
+                <label class="d-flex align-items-start gap-3 p-3 rounded-3"
+                       style="border:1.5px solid #e2e8f0";cursor:pointer;">
+                                            <input type="radio" name="ProveedorWhatsApp" value="@prov" />
+                         @* @(Model.ProveedorWhatsApp==prov?"checked":"") class="form-check-input mt-1"  *@
+                  <div>
+                    <div class="fw-semibold small">@prov</div>
+                    <div class="text-muted" style="font-size:12px;">@desc</div>
+                    <a href="@url" target="_blank" class="text-decoration-none"
+                       style="font-size:11px;">@url <i class="bi bi-box-arrow-up-right"></i></a>
+                  </div>
+                </label>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="col-md-8">
+            <label class="form-label fw-semibold small">API URL</label>
+            <input class="form-control rounded-3"
+                   placeholder="https://api.callmebot.com/whatsapp.php" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">API Key</label>
+            <div class="input-group">
+              <input type="password" class="form-control rounded-start-3"
+                     id="waKey" />
+              <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                      onclick="toggleViz('waKey','icoWa')">
+                <i class="bi bi-eye" id="icoWa"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Número empresa (con código país)</label>
+            <div class="input-group">
+              <span class="input-group-text">+</span>
+              <input class="form-control rounded-end-3"
+                     placeholder="573001234567" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <!-- Estado de validación -->
+        <div class="p-4 rounded-3 mb-3" style="background:#fef3c7;border:1px solid #fcd34d;">
+          <div class="d-flex align-items-center gap-3 mb-2">
+            <i class="bi bi-check-circle-fill text-success"
+               style="font-size:24px;"></i>
+            <div>
+              <div class="fw-semibold small">
+                @* @(Model.WhatsAppValidado ? "WhatsApp validado" : "WhatsApp no validado") *@
+              </div>
+              @* @if (Model.WhatsAppFechaValidacion.HasValue) *@
+              <div class="text-muted" style="font-size:11px;">Validado: </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guía CallMeBot -->
+        <div class="p-3 rounded-3" style="background:#f0f9ff;border:1px solid #bae6fd;">
+          <div class="fw-semibold small mb-2 text-primary"><i class="bi bi-info-circle me-1"></i>Activar CallMeBot (gratis)</div>
+          @foreach(var (n,paso) in new[]{
+            ("1","Guarda el contacto: <strong>+34 644 60 75 31</strong>"),
+            ("2","Envía desde WhatsApp: <code>I allow callmebot to send me messages</code>"),
+            ("3","Recibirás tu API Key por WhatsApp (en segundos)"),
+            ("4","Pega la API Key en el campo de arriba"),
+          })
+          {
+          <div class="d-flex gap-2 mb-2 small">
+            <span class="badge rounded-circle fw-bold" style="background:var(--cp);color:#fff;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">@n</span>
+            <span>@Html.Raw(paso)</span>
+          </div>
+          }
+        </div>
+
+        <!-- Test WhatsApp -->
+        <div class="mt-3">
+          <label class="form-label fw-semibold small">Probar envío</label>
+          <div class="d-flex gap-2">
+            <input type="tel" id="testWaNumero" class="form-control rounded-3"
+                   placeholder="573001234567" />
+            <button type="button" class="btn btn-outline-success rounded-3 flex-shrink-0"
+                    onclick="testWA()">
+              <i class="bi bi-whatsapp"></i>
+            </button>
+          </div>
+          <div id="testWaResult" class="d-none mt-2 small rounded-3 p-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BASE DE DATOS ══════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-bd">
+  <div class="card-body p-4">
+    <div class="alert alert-warning rounded-3 mb-4">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      <strong>Importante:</strong> cambiar la cadena de conexión requiere reiniciar la aplicación. Guarde una copia de la configuración actual antes de modificarla.
+    </div>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label fw-semibold small">Motor de base de datos</label>
+        <select class="form-select rounded-3">
+          <option value="MySQL">MySQL / MariaDB</option>
+          <option value="SqlServer">SQL Server</option>
+          <option value="PostgreSQL">PostgreSQL</option>
+          <option value="SQLite">SQLite (desarrollo)</option>
+        </select>
+      </div>
+
+      <!-- Constructor visual -->
+      <div class="col-12">
+        <h6 class="fw-semibold small text-uppercase text-muted mb-3">Constructor de cadena de conexión</h6>
+        <div class="row g-2 mb-3">
+          <div class="col-md-4">
+            <label class="form-label small fw-semibold">Servidor</label>
+            <input type="text" id="bdHost" class="form-control rounded-3" placeholder="localhost" oninput="buildConnStr()" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small fw-semibold">Puerto</label>
+            <input type="number" id="bdPort" class="form-control rounded-3" value="3306" oninput="buildConnStr()" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-semibold">Base de datos</label>
+            <input type="text" id="bdName" class="form-control rounded-3" placeholder="transporte_db" oninput="buildConnStr()" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label small fw-semibold">Usuario</label>
+            <input type="text" id="bdUser" class="form-control rounded-3" placeholder="root" oninput="buildConnStr()" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label small fw-semibold">Contraseña</label>
+            <div class="input-group">
+              <input type="password" id="bdPwd" class="form-control rounded-start-3"
+                     placeholder="Contraseña" oninput="buildConnStr()" />
+              <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                      onclick="toggleViz('bdPwd','icoBd')">
+                <i class="bi bi-eye" id="icoBd"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold small">Cadena de conexión resultante</label>
+        <div class="position-relative">
+          <textarea id="txtConnStr" class="form-control rounded-3"
+                    rows="3" placeholder="Server=localhost;Port=3306;Database=…"
+                    style="font-family:monospace;font-size:12px;padding-right:120px;"></textarea>
+          <div class="position-absolute top-0 end-0 p-2 d-flex flex-column gap-1">
+            <button type="button" class="btn btn-sm btn-outline-secondary rounded-3"
+                    onclick="navigator.clipboard.writeText(document.getElementById('txtConnStr').value)">
+              <i class="bi bi-copy me-1"></i>Copiar
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-primary rounded-3"
+                    onclick="probarConexion()">
+              <i class="bi bi-plug me-1"></i>Probar
+            </button>
+          </div>
+        </div>
+        <div id="bdTestResult" class="d-none mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ API / JWT ══════════════════════════════════════════════════════════════ -->
+<div class="cfg-pane card rounded-0 border-top-0" id="pane-api">
+  <div class="card-body p-4">
+    <div class="alert alert-info rounded-3 mb-4 small">
+      <i class="bi bi-info-circle me-2"></i>
+      Estos valores configuran la autenticación JWT de la API REST. Los cambios requieren reiniciar la aplicación.
+    </div>
+    <div class="row g-3">
+      <div class="col-12">
+        <label class="form-label fw-semibold small">JWT Secret Key (mín. 32 caracteres) *</label>
+        <div class="input-group">
+          <input asp-for="JwtSecret" type="password" class="form-control rounded-start-3"
+                 id="jwtSec" placeholder="Mínimo 32 caracteres alfanuméricos…" />
+          <button type="button" class="btn btn-outline-secondary"
+                  onclick="toggleViz('jwtSec','icoJwt')">
+            <i class="bi bi-eye" id="icoJwt"></i>
+          </button>
+          <button type="button" class="btn btn-outline-primary rounded-end-3"
+                  onclick="generarSecret()">
+            <i class="bi bi-arrow-clockwise me-1"></i>Generar
+          </button>
+        </div>
+        <div id="jwtStrength" class="mt-1"></div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold small">Expiración del token</label>
+        <div class="input-group">
+          <input asp-for="JwtExpiracionMinutos" type="number" class="form-control rounded-start-3" min="15" max="1440" />
+          <span class="input-group-text rounded-end-3">minutos</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold small">Issuer</label>
+        <inputclass="form-control rounded-3" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label fw-semibold small">Audience</label>
+        <inputclass="form-control rounded-3" />
+      </div>
+      <div class="col-12">
+        <div class="p-3 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+          <div class="fw-semibold small mb-2">Endpoints disponibles de la API:</div>
+@*           @foreach(var ep in new[]{
+            ("POST","api/auth/login","Autenticar usuario, devuelve accessToken + refreshToken"),
+            ("POST","api/auth/refresh","Renovar token usando refreshToken"),
+            ("POST","api/auth/logout","Invalidar sesión"),
+            ("GET", "api/auth/me","Obtener perfil del usuario autenticado"),
+          })
+          {<div class="d-flex align-items-center gap-2 mb-1 small">
+            <span class="badge rounded-2" style="background:#dbeafe;color:#1e40af;width:46px;text-align:center;">@ep.Item1</span>
+            <code>/@ep.Item2</code>
+            <span class="text-muted">— @ep.Item3</span>
+          </div>} *@
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Barra de guardado -->
+<div class="card rounded-0" style="border-top:1px solid #e2e8f0;border-radius:0 0 14px 14px!important;">
+  <div class="card-body py-3 px-4 d-flex align-items-center justify-content-between">
+    <div class="text-muted small">
+      <i class="bi bi-clock me-1"></i>
+      Última modificación: UltimaModificacion
+    </div>
+    <div class="d-flex gap-3">
+      <a asp-area="Admin" asp-controller="Configuracion" asp-action="Index"
+         class="btn btn-outline-secondary rounded-3">Descartar</a>
+      <button type="submit" class="btn btn-primary rounded-3 px-4">
+        <i class="bi bi-save me-2"></i>Guardar configuración
+      </button>
+    </div>
+  </div>
+</div>
+</form>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+// ── Tab navigation ─────────────────────────────────────────────────────────
+function showPane(id, btn) {
+    document.querySelectorAll('.cfg-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.cfg-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('pane-' + id).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ── File preview ───────────────────────────────────────────────────────────
+function previewFile(input, previewId) {
+    if (!input.files?.[0]) return;
+    const r = new FileReader();
+    r.onload = e => {
+        const img = document.getElementById(previewId);
+        img.src = e.target.result; img.classList.remove('d-none');
+    };
+    r.readAsDataURL(input.files[0]);
+}
+
+function handleDrop(e, inputId, previewId) {
+    e.preventDefault();
+    e.currentTarget.style.borderColor='#cbd5e1';
+    const file = e.dataTransfer.files[0];
+    if (!file) return;
+    const input = document.getElementById(inputId);
+    const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files;
+    previewFile(input, previewId);
+}
+
+// ── Temas predefinidos ────────────────────────────────────────────────────
+function aplicarTema(cp, cs, ca, nombre) {
+    const mapa = {ColorPrimario:cp,ColorSecundario:cs,ColorAcento:ca};
+    Object.entries(mapa).forEach(([f,v]) => syncColor(f,v));
+    document.getElementById('inputTema').value = nombre;
+    document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+}
+
+// ── Color sync ───────────────────────────────────────────────────────────
+function syncColor(field, value) {
+    const el = document.getElementById('color_'+field);
+    const hex = document.getElementById('hex_'+field);
+    if(el) el.value = value;
+    if(hex) hex.value = value;
+    const cssVar = { ColorPrimario:'--cp', ColorSecundario:'--cs', ColorAcento:'--ca',
+                     ColorTexto:'--ct', ColorFondo:'--cbg', ColorPeligro:'--danger',
+                     ColorAdvertencia:'--warning' }[field];
+    if(cssVar) document.documentElement.style.setProperty(cssVar, value);
+}
+
+function syncHex(field, value) {
+    if(/^#[0-9A-Fa-f]{6}$/.test(value)) syncColor(field, value);
+}
+
+// ── Fuente ────────────────────────────────────────────────────────────────
+function seleccionarFuente(fuente, card) {
+    document.querySelectorAll('.font-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    document.getElementById('inputFuente').value = fuente;
+    document.body.style.fontFamily = `'${fuente}', sans-serif`;
+}
+
+// ── Toggle password visibility ────────────────────────────────────────────
+function toggleViz(inputId, iconId) {
+    const i = document.getElementById(inputId);
+    const ic = document.getElementById(iconId);
+    i.type = i.type === 'password' ? 'text' : 'password';
+    ic.className = i.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+}
+
+// ── Constructor cadena conexión ───────────────────────────────────────────
+function buildConnStr() {
+    const h=document.getElementById('bdHost').value||'localhost';
+    const p=document.getElementById('bdPort').value||'3306';
+    const d=document.getElementById('bdName').value||'transporte_db';
+    const u=document.getElementById('bdUser').value||'root';
+    const pw=document.getElementById('bdPwd').value||'';
+    document.getElementById('txtConnStr').value =
+        `Server=${h};Port=${p};Database=${d};User=${u};Password=${pw};CharSet=utf8mb4;`;
+}
+
+async function probarConexion() {
+    const r = document.getElementById('bdTestResult');
+    r.className='mt-2 p-2 rounded-3 small';
+    r.innerHTML='<span class="spinner-border spinner-border-sm me-2"></span>Probando conexión…';
+    r.classList.remove('d-none');
+    // Aquí iría un fetch a un endpoint real
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    r.style.background='#d1fae5'; r.style.color='#065f46';
+    r.innerHTML='<i class="bi bi-check-circle-fill me-2"></i>Conexión exitosa.';
+}
+
+</script>
+}

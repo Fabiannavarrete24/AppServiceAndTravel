@@ -1,0 +1,203 @@
+@model AppServiceAndTravel.Models.Vehiculo
+@using AppServiceAndTravel.Models
+@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? $"Editar {Model.Placa}" : "Nuevo Vehículo"; }
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+          <i class="bi bi-truck"></i></div>
+        <div>
+          <h5 class="mb-0 fw-semibold">@ViewData["Title"]</h5>
+          <small class="text-muted">Seleccione el tipo de proveedor para ver los campos adicionales</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form asp-area="Operaciones" asp-controller="Vehiculo"
+              asp-action="@(esEdit?"Edit":"Create")" method="post" enctype="multipart/form-data">
+          @Html.AntiForgeryToken()
+          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+          <!-- Tipo de proveedor -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Tipo de vehículo</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-12">
+              <div class="d-flex gap-3">
+                @foreach(var (tp,label,icon,desc) in new[]{
+                  (TipoProveedor.Interno,"Propio (interno)","bi-house","Vehículo de la empresa"),
+                  (TipoProveedor.Externo,"Externo / tercero","bi-building","Arrendado o de contratista"),
+                })
+                {
+                <label class="flex-grow-1 d-flex align-items-center gap-3 p-3 rounded-3"
+                       style="border:1.5px solid #e2e8f0;cursor:pointer;"
+                       id="lbl_@tp" onclick="setTipo('@tp')">
+                  <input type="radio" name="TipoProveedor" value="@tp"
+                         @(Model.TipoProveedor==tp?"checked":"") class="form-check-input mt-0" />
+                  <div>
+                    <div class="fw-semibold small d-flex align-items-center gap-2">
+                      <i class="bi @icon"></i>@label
+                    </div>
+                    <div class="text-muted" style="font-size:12px;">@desc</div>
+                  </div>
+                </label>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Identificación -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Identificación del vehículo</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <label asp-for="Placa" class="form-label fw-semibold small">Placa *</label>
+              <input asp-for="Placa" class="form-control rounded-3 text-uppercase" equired oninput="this.value=this.value.toUpperCase()" />
+              <span asp-validation-for="Placa" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label asp-for="Marca" class="form-label fw-semibold small">Marca *</label>
+              <input asp-for="Marca" class="form-control rounded-3" required />
+              <span asp-validation-for="Marca" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label asp-for="Modelo" class="form-label fw-semibold small">Modelo *</label>
+              <input asp-for="Modelo" class="form-control rounded-3" required />
+              <span asp-validation-for="Modelo" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label asp-for="Anio" class="form-label fw-semibold small">Año *</label>
+              <input asp-for="Anio" type="number" class="form-control rounded-3"
+                     min="1990" max="@(DateTime.Today.Year+1)" required />
+            </div>
+            <div class="col-md-4">
+              <label asp-for="CapacidadPasajeros" class="form-label fw-semibold small">Capacidad pasajeros</label>
+              <input asp-for="CapacidadPasajeros" type="number" class="form-control rounded-3" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label asp-for="CapacidadCarga" class="form-label fw-semibold small">Cap. carga (ton)</label>
+              <input asp-for="CapacidadCarga" type="number" class="form-control rounded-3" step="0.5" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label asp-for="Estado" class="form-label fw-semibold small">Estado *</label>
+              <select asp-for="Estado" class="form-select rounded-3"
+                      asp-items="Html.GetEnumSelectList<AppServiceAndTravel.Models.EstadoVehiculo>()"></select>
+            </div>
+          </div>
+
+          <!-- Propietario externo (condicional) -->
+          <div id="seccionExterno" style="display:@(Model.TipoProveedor==TipoProveedor.Externo?"block":"none");">
+            <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos del propietario externo</h6>
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label asp-for="PropietarioNombre" class="form-label fw-semibold small">Nombre del propietario</label>
+                <input asp-for="PropietarioNombre" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="PropietarioCedula" class="form-label fw-semibold small">Cédula / NIT</label>
+                <input asp-for="PropietarioCedula" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-3">
+                <label asp-for="PropietarioTelefono" class="form-label fw-semibold small">Teléfono</label>
+                <input asp-for="PropietarioTelefono" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Email</label>
+                <input  type="email" class="form-control rounded-3" />
+              </div>
+              <div class="col-md-6">
+                <label asp-for="TarifaExterna" class="form-label fw-semibold small">Tarifa por servicio</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input asp-for="TarifaExterna" type="number" class="form-control rounded-end-3" step="1000" min="0" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documentos -->
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Fechas de vencimiento</h6>
+          <div class="row g-3 mb-4">
+            @foreach(var (field,label,icon,ruta) in new[]{
+              ("FechaVencimientoSOAT","SOAT","bi-file-earmark-check","archivoSOAT"),
+              ("FechaVencimientoTecnoMecanica","Tecno-mecánica","bi-wrench-adjustable","archivoTecno"),
+              ("FechaVencimientoSeguro","Seguro","bi-shield-shaded","archivoSeguro"),
+            })
+            {
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small"><i class="bi @icon me-1"></i>@label</label>
+              <input name="@field" type="date" class="form-control rounded-3"
+                     value="@(typeof(AppServiceAndTravel.Models.Vehiculo).GetProperty(field)?.GetValue(Model) is DateTime d ? d.ToString("yyyy-MM-dd") : "")" required />
+              <div class="mt-2">
+                <label class="form-label small text-muted">Adjuntar documento</label>
+                <input type="file" name="@ruta" class="form-control form-control-sm rounded-3"
+                       accept=".pdf,.jpg,.jpeg,.png" />
+              </div>
+            </div>
+            }
+          </div>
+
+          <!-- Observaciones -->
+          <div class="mb-4">
+            <label asp-for="Observaciones" class="form-label fw-semibold small">Observaciones</label>
+            <textarea asp-for="Observaciones" class="form-control rounded-3" rows="3"
+                      placeholder="Condiciones especiales, notas de mantenimiento…"></textarea>
+          </div>
+
+          <div class="d-flex gap-3">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+              <i class="bi @(esEdit?"bi-save":"bi-truck") me-2"></i>
+              @(esEdit ? "Guardar cambios" : "Registrar vehículo")
+            </button>
+            <a asp-area="Operaciones" asp-controller="Vehiculo" asp-action="Index"
+               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Documentos requeridos</h6>
+        @foreach(var (ico,doc,desc) in new[]{
+          ("bi-file-earmark-check","SOAT","Seguro Obligatorio de Accidentes de Tránsito"),
+          ("bi-wrench-adjustable","Rev. Técnico-Mecánica","Certificado de revisión periódica"),
+          ("bi-shield-shaded","Seguro del vehículo","Póliza todo riesgo o responsabilidad civil")
+        })
+        {
+        <div class="d-flex gap-3 mb-3">
+          <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+               style="width:34px;height:34px;background:#dbeafe;font-size:16px;color:#1d4ed8;">
+            <i class="bi @ico"></i>
+          </div>
+          <div>
+            <div class="fw-semibold small">@doc</div>
+            <div class="text-muted" style="font-size:12px;">@desc</div>
+          </div>
+        </div>
+        }
+        <div class="alert alert-warning rounded-3 small py-2 mb-0">
+          <i class="bi bi-bell me-1"></i>El sistema alerta 30 días antes del vencimiento.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+function setTipo(tipo) {
+    document.getElementById('seccionExterno').style.display = tipo === 'Externo' ? 'block' : 'none';
+    ['Interno','Externo'].forEach(t => {
+        const lbl = document.getElementById('lbl_' + t);
+        if (lbl) lbl.style.borderColor = t === tipo ? 'var(--cp)' : '#e2e8f0';
+    });
+}
+// Inicializar
+setTipo('@Model.TipoProveedor');
+</script>
+}

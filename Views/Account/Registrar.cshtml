@@ -1,0 +1,85 @@
+﻿<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form class="row" id="registroUsuario">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Nombre de usuario <span>*</span></label>
+                        <input type="text" id="userName" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Nombre Completo <span>*</span></label>
+                        <input type="text" id="nombre" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Correo <span>*</span></label>
+                        <input type="correo" id="correo" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Contraseña <span>*</span></label>
+                        <input type="password" id="clave" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">confirmadaar Contraseña <span>*</span></label>
+                        <input type="password" id="confirmadaarClave" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="form-label">Cargo</label>
+                        <input type="text" id="cargo" class="form-control" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Crear</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+            </form>            
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script>
+        $('#registroUsuario').on('submit', function (event) {
+            event.preventDefault();
+            let clave = $('#clave').val();
+            let confirmadaarclave = $('#confirmadaarClave').val();
+
+            if ($('#username').val() === '' || $('#clave').val() === '' || $('#nombre').val() === '' || $('#correo').val() === '') {
+                showAlert('warning', 'Diligencie el formulario', 'Por favor diligencie los campos obligatorios');
+                return;
+            }
+
+            var datos = {
+                username: $('#userName').val(),
+                nombre: $('#nombre').val(),
+                clave: $('#clave').val(),
+                correo: $('#correo').val(),
+                cargo: $('#cargo').val(),
+                administrador: 0,
+                activo: 1,
+                fechainhabilitacion: null,
+            };
+
+            $.ajax({
+                url: '@Url.Action("SetUsuario", "User")',
+                type: 'POST',
+                data: datos,
+                success: function (data) {
+                    showAlert(data.icono, '', data.message);
+                },
+                error: function (xhr, status, error) {
+                    showAlert('error', 'Se produjo un error', status + " - " + error);
+                }
+            });
+
+
+        });
+</script>
+}

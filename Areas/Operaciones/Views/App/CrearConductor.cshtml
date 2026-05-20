@@ -1,0 +1,76 @@
+﻿@* @model AppServiceAndTravel.Models.Conductor
+
+@{
+    ViewData["Title"] = "Nuevo Conductor";
+    ViewData["Breadcrumb"] = "Conductores / Nuevo";
+} *@
+<form asp-action="Create" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <div class="row g-3">
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input class="form-control" />
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <input type="date" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label"></label>
+            <select asp-items="Html.GetEnumSelectList<TipoProveedor>()" class="form-select">
+            </select>
+        </div>
+
+        <div class="col-md-6 d-flex align-items-center">
+            <div class="form-check mt-4">
+                <input class="form-check-input" />
+                <label class="form-check-label"></label>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mt-4 d-flex gap-2">
+        <button class="btn btn-primary">
+            <i class="bi bi-save me-1"></i>Guardar
+        </button>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+    </div>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

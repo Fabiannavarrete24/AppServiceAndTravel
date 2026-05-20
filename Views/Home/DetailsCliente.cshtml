@@ -1,0 +1,151 @@
+﻿@model AppServiceAndTravel.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalle Cliente";
+}
+<div class="row g-4">
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center p-4">
+
+                <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                     style="width:90px;height:90px;background:#dbeafe;color:#1d4ed8;font-size:36px;">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <h4 class="fw-semibold">@Model.NombreCompleto</h4>
+
+                <p class="text-muted mb-3">@Model.NitCedula</p>
+
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inactivo</span>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header bg-white fw-semibold">
+                Información del cliente
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-4">
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Teléfono</small>
+                        <div class="fw-semibold">@Model.Telefono</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">correo</small>
+                        <div class="fw-semibold">@Model.correo</div>
+                    </div>
+
+                    <div class="col-12">
+                        <small class="text-muted">Dirección</small>
+                        <div class="fw-semibold">@Model.Direccion</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <small class="text-muted">Fecha registro</small>
+                        <div class="fw-semibold">
+                            @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Cotizaciones -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-header bg-white fw-semibold">
+                Historial de cotizaciones
+            </div>
+
+            <div class="card-body p-0">
+
+                @if (Model.Cotizaciones == null || !Model.Cotizaciones.Any())
+                {
+                    <div class="text-center py-5 text-muted">
+                        No tiene cotizaciones registradas.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+
+                        <table class="table table-hover mb-0">
+
+                            <thead>
+                                <tr>
+                                    <th class="ps-4">Cotización</th>
+                                    <th>Ruta</th>
+                                    <th>Fecha servicio</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var c in Model.Cotizaciones)
+                                {
+                                    <tr>
+
+                                        <td class="ps-4">
+                                            #@c.Id.ToString("D6")
+                                        </td>
+
+                                        <td>
+                                            @c.Origen
+                                            →
+                                            @c.Destino
+                                        </td>
+
+                                        <td>
+                                            @c.FechaServicioRequerido.ToString("dd/MM/yyyy")
+                                        </td>
+
+                                        <td class="fw-semibold">
+                                            $@c.ValorCotizado.ToString("N0")
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

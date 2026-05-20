@@ -1,0 +1,256 @@
+@* @model AppServiceAndTravel.Models.Servicio
+@{
+    ViewData["Title"] = "Nuevo Servicio";
+    ViewData["Breadcrumb"] = "Generar servicio desde cotización aprobada";
+}
+ *@
+<div class="row g-4">
+    <!-- Formulario -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-white py-3 d-flex align-items-center gap-2">
+                <i class="bi bi-truck text-primary fs-5"></i>
+                <span class="fw-semibold">Datos del Servicio</span>
+            </div>
+            <div class="card-body">
+                <form asp-action="Create" method="post" id="formServicio">
+                    @* @Html.AntiForgeryToken() *@
+                    <asp-validation-summary class="alert alert-danger rounded-3" asp-validation-summary="All" />
+
+                    @* @if (ViewBag.ErroresValidacion != null)
+                    {
+                        @foreach (var err in (List<string>)ViewBag.ErroresValidacion)
+                        {
+                            
+                        }
+                    } *@
+                    <div class="alert alert-danger rounded-3 mb-4">
+                        <div class="fw-semibold mb-2"><i class="bi bi-shield-exclamation me-2"></i>El vehículo no pasó la validación:</div>
+                        <div class="d-flex align-items-center gap-2"><i class="bi bi-x-circle-fill text-danger"></i> err</div>
+                    </div>
+@*                     @if (ViewBag.AdvertenciasValidacion != null)
+                    {
+                        @foreach (var adv in (List<string>)ViewBag.AdvertenciasValidacion)
+                        {
+                            
+                        }
+                    } *@
+                    <div class="alert alert-warning rounded-3 mb-4">
+                        <div class="fw-semibold mb-2"><i class="bi bi-exclamation-triangle me-2"></i>Advertencias (no bloquean el servicio):</div>
+                        <div>adv</div>
+                    </div>
+                    <!-- Cotización -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            Cotización Aprobada <span class="text-danger">*</span>
+                        </label>
+                        <select asp-items="ViewBag.Cotizaciones"
+                                class="form-select" id="selectCotizacion" required>
+                            <option value="">— Seleccione una cotización aprobada —</option>
+                        </select>
+                        <span class="text-danger small"></span>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Vehículo -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Vehículo <span class="text-danger">*</span>
+                            </label>
+                            <select asp-items="ViewBag.Vehiculos"
+                                    class="form-select" id="selectVehiculo" required>
+                                <option value="">— Seleccione —</option>
+                            </select>
+                            <span class="text-danger small"></span>
+                        </div>
+
+                        <!-- Conductor -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Conductor <span class="text-danger">*</span>
+                            </label>
+                            <select asp-items="ViewBag.Conductores"
+                                    class="form-select" id="selectConductor" required>
+                                <option value="">— Seleccione —</option>
+                            </select>
+                            <span class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Fecha del servicio -->
+                    <div class="mb-4">
+                        <label  class="form-label fw-semibold">
+                            Fecha y Hora del Servicio <span class="text-danger">*</span>
+                        </label>
+                        <input type="datetime-local" class="form-control" required />
+                        <span  class="text-danger small"></span>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="mb-4">
+                        <label  class="form-label fw-semibold">Observaciones</label>
+                        <textarea  class="form-control" rows="3"
+                                  placeholder="Instrucciones especiales, puntos de encuentro…"></textarea>
+                    </div>
+
+                    <!-- Panel de validación en tiempo real -->
+                    <div id="panelValidacion" class="d-none mb-4">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span id="validacionSpinner" class="spinner-border spinner-border-sm text-primary d-none"></span>
+                            <strong id="validacionTitulo" class="fw-semibold">Validando vehículo y conductor…</strong>
+                        </div>
+                        <div id="validacionContenido"></div>
+                    </div>
+
+                    <div class="d-flex gap-3">
+                        <button type="button" id="btnValidar"
+                                class="btn btn-outline-primary d-none"
+                                onclick="validarVehiculo()">
+                            <i class="bi bi-shield-check me-1"></i>Validar documentación
+                        </button>
+                        <button type="submit" class="btn btn-primary px-4">
+                            <i class="bi bi-truck me-2"></i>Generar Servicio y Notificar
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel lateral -->
+    <div class="col-lg-4">
+        <!-- Info de la cotización -->
+        <div class="card mb-3" id="infoCotizacion" style="display:none!important;">
+            <div class="card-header bg-white py-3">
+                <span class="fw-semibold"><i class="bi bi-file-earmark-text me-2 text-primary"></i>Cotización</span>
+            </div>
+            <div class="card-body small" id="infoCotizacionBody"></div>
+        </div>
+
+        <!-- Qué pasará -->
+        <div class="card">
+            <div class="card-header bg-white py-3">
+                <span class="fw-semibold"><i class="bi bi-send me-2 text-primary"></i>Notificaciones automáticas</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-start gap-3 mb-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:36px;height:36px;background:#dbeafe;color:#1e40af;">
+                        <i class="bi bi-envelope"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold small">correo de confirmadaación</div>
+                        <div class="text-muted" style="font-size:12px;">Se enviará al correo del cliente con todos los detalles del servicio.</div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-start gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width:36px;height:36px;background:#d1fae5;color:#065f46;">
+                        <i class="bi bi-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="fw-semibold small">WhatsApp</div>
+                        <div class="text-muted" style="font-size:12px;">Mensaje automático via CallMeBot con los datos del vehículo y conductor.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist de validación -->
+        <div class="card mt-3">
+            <div class="card-header bg-white py-3">
+                <span class="fw-semibold"><i class="bi bi-shield-check me-2 text-primary"></i>Qué se valida</span>
+            </div>
+            <div class="card-body">
+                @foreach (var item in new[] {
+                    ("Estado del vehículo activo", "bi-truck"),
+                    ("SOAT vigente", "bi-file-earmark-check"),
+                    ("Revisión técnico-mecánica", "bi-wrench"),
+                    ("Seguro del vehículo", "bi-shield"),
+                    ("Licencia del conductor", "bi-person-badge")
+                })
+                {
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <i class="bi @item.Item2 text-primary"></i>
+                        <small>@item.Item1</small>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@* 
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+<script>
+    // Mostrar botón de validación cuando se seleccionan vehículo y conductor
+    function checkBtnValidar() {
+        var v = document.getElementById('selectVehiculo').value;
+        var c = document.getElementById('selectConductor').value;
+        document.getElementById('btnValidar').classList.toggle('d-none', !(v && c));
+        document.getElementById('panelValidacion').classList.add('d-none');
+    }
+
+    document.getElementById('selectVehiculo').addEventListener('change', checkBtnValidar);
+    document.getElementById('selectConductor').addEventListener('change', checkBtnValidar);
+
+    async function validarVehiculo() {
+        var vehiculoId = document.getElementById('selectVehiculo').value;
+        var conductorId = document.getElementById('selectConductor').value;
+
+        var panel = document.getElementById('panelValidacion');
+        var spinner = document.getElementById('validacionSpinner');
+        var titulo = document.getElementById('validacionTitulo');
+        var contenido = document.getElementById('validacionContenido');
+
+        panel.classList.remove('d-none');
+        spinner.classList.remove('d-none');
+        titulo.textContent = 'Validando documentación…';
+        contenido.innerHTML = '';
+
+        const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+        const resp = await fetch('@Url.Action("ValidarVehiculo", "Servicio")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'RequestVerificationToken': token },
+            body: JSON.stringify({ vehiculoId: parseInt(vehiculoId), conductorId: parseInt(conductorId) })
+        });
+
+        const data = await resp.json();
+        spinner.classList.add('d-none');
+
+        if (data.exitoso) {
+            titulo.innerHTML = '<i class="bi bi-shield-check text-success me-2"></i>Validación exitosa';
+            var html = '<div class="alert alert-success py-2 small mb-2">El vehículo y conductor están en regla.</div>';
+            if (data.advertencias.length > 0) {
+                html += '<div class="alert alert-warning py-2 small">';
+                data.advertencias.forEach(a => { html += '<div>' + a + '</div>'; });
+                html += '</div>';
+            }
+            contenido.innerHTML = html;
+        } else {
+            titulo.innerHTML = '<i class="bi bi-shield-exclamation text-danger me-2"></i>Validación fallida';
+            var html = '<div class="alert alert-danger py-2 small">';
+            data.errores.forEach(e => {
+                html += '<div class="d-flex align-items-center gap-2"><i class="bi bi-x-circle-fill"></i>' + e + '</div>';
+            });
+            html += '</div>';
+            contenido.innerHTML = html;
+        }
+    }
+
+    // Si hay cotización preseleccionada, marcarla
+    @if (Model.CotizacionId > 0)
+    {
+        <text>document.getElementById('selectCotizacion').value = '@Model.CotizacionId';</text>
+    }
+    @if (Model.FechaServicio != default)
+    {
+        <text>
+        document.querySelector('input[name="FechaServicio"]').value =
+            '@Model.FechaServicio.ToString("yyyy-MM-ddTHH:mm")';
+        </text>
+    }
+</script>
+} *@
