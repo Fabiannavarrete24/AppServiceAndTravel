@@ -8,7 +8,7 @@ namespace AppServiceAndTravel.ViewModels
         public bool success { get; set; }
         public bool restaurada { get; set; }
         public bool confirmado { get; set; }
-        [StringLength(200)] public string? mensage { get; set; }
+        [StringLength(200)] public string? message { get; set; }
     }
 }
 

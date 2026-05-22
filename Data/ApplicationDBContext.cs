@@ -35,57 +35,77 @@ public partial class ApplicationDBContext : DbContext
             break;
     }
 }
-    public DbSet<Cliente> Clientes { get; set; }
-    public DbSet<Vehiculo> Vehiculos { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }    
     public DbSet<Conductor> Conductores { get; set; }
-    public DbSet<ProveedorExterno> ProveedoresExternos { get; set; }
+    public DbSet<ConfiguracionGeneral> ConfiguracionGeneral { get; set; }
+    public DbSet<ConfigNotificaciones> ConfiguracionNotificaciones { get; set; }    
     public DbSet<Cotizacion> Cotizaciones { get; set; }
-    public DbSet<Servicio> Servicios { get; set; }
-    public DbSet<ValidacionVehiculo> ValidacionesVehiculo { get; set; }
-    public DbSet<ConfiguracionEmpresa> ConfiguracionEmpresa { get; set; }
+    public DbSet<FormatosCorreos> FormatosCorreos { get; set; }
     public DbSet<HistRefreshToken> HistRefreshToken { get; set; }
     public DbSet<HistLogin> HistLogin { get; set; }
     public DbSet<Notificacion> Notificaciones { get; set; }
     public DbSet<Permisos> Permisos { get; set; }
     public DbSet<Procesos> Procesos { get; set; }
     public DbSet<Proveedores> Proveedores { get; set; }
+    public DbSet<ProveedorExterno> ProveedoresExternos { get; set; }
+    public DbSet<Servicio> Servicios { get; set; }
     public DbSet<Roles> Roles { get; set; }
-    public DbSet<RolesUsuarios> RolsUsuarios { get; set; }
-    public DbSet<ApplicationUser> Usuarios { get; set; }    
+    public DbSet<RolesUsuarios> RolesUsuarios { get; set; }
+    public DbSet<ApplicationUser> Usuarios { get; set; }
+    public DbSet<ValidacionVehiculo> ValidacionesVehiculo { get; set; }
+    public DbSet<Vehiculo> Vehiculos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        builder.ApplyConfiguration(new PermissionsSeed());
-        builder.ApplyConfiguration(new procesoSeed());
+        
+        builder.ApplyConfiguration(new procesoSeed());        
         builder.ApplyConfiguration(new RolesSeed());
         builder.ApplyConfiguration(new RolesUsuariosSeed());
+        builder.ApplyConfiguration(new PermissionsSeed());
         builder.ApplyConfiguration(new UserSeed());
 
         builder.Entity<RolesUsuarios>(entity =>
         {
-            entity.HasOne(c => c.User)
-                  .WithMany()
+            entity.HasKey(p => new { p.idUsuario, p.idRol });
+
+            entity.HasOne(c => c.Usuario)
+                  .WithMany(c => c.RolesUsuarios)
                   .HasForeignKey(c => c.idUsuario)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.Rol)
-                  .WithMany()
+                  .WithMany(c => c.RolesUsuarios)
                   .HasForeignKey(c => c.idRol)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
         });
+
+        builder.Entity<Procesos>(entity =>
+        {
+            entity.HasKey(x => x.idProceso);
+
+            entity.Property(x => x.idProceso)
+                  .ValueGeneratedNever();
+
+            entity.HasOne(x => x.idProcesoPadreNavigation)
+                  .WithMany(x => x.inverseidProcesoPadreNavigation)
+                  .HasForeignKey(x => x.idProcesoPadre)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
         builder.Entity<Permisos>(entity =>
         {
+            entity.HasKey(p => new { p.idProceso, p.idRol });
+
             entity.HasOne(c => c.proceso)
-                  .WithMany()
-                  .HasForeignKey(c => c.IdProceso)
+                  .WithMany(c => c.Permisos)
+                  .HasForeignKey(c => c.idProceso)
                   .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(c => c.Rol)
-                  .WithMany()
+            entity.HasOne(c => c.rol)
+                  .WithMany(c => c.Permisos)
                   .HasForeignKey(c => c.idRol)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
         });
 
 
@@ -100,12 +120,12 @@ public partial class ApplicationDBContext : DbContext
             entity.HasOne(c => c.UsuarioCreador)
                   .WithMany()
                   .HasForeignKey(c => c.UsuarioCreadorId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.UsuarioAprobador)
                   .WithMany()
                   .HasForeignKey(c => c.UsuarioAprobadorId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
 
             entity.Property(c => c.Estado)
                   .HasConversion<string>();
@@ -136,7 +156,7 @@ public partial class ApplicationDBContext : DbContext
             entity.HasOne(s => s.UsuarioCreador)
                   .WithMany()
                   .HasForeignKey(s => s.UsuarioCreadorId)
-                  .OnDelete(DeleteBehavior.SetNull);
+                  .OnDelete(DeleteBehavior.Restrict);
 
             entity.Property(s => s.Estado)
                   .HasConversion<string>();
@@ -165,13 +185,13 @@ public partial class ApplicationDBContext : DbContext
         builder.Entity<ValidacionVehiculo>(entity =>
         {
             entity.HasOne(v => v.Vehiculo).WithMany()
-             .HasForeignKey(v => v.VehiculoId).OnDelete(DeleteBehavior.Restrict)
-                  .HasForeignKey(v => v.VehiculoId)
+             .HasForeignKey(v => v.idVehiculo).OnDelete(DeleteBehavior.Restrict)
+                  .HasForeignKey(v => v.idVehiculo)
                   .OnDelete(DeleteBehavior.Restrict);
         });
 
-        builder.Entity<ConfiguracionEmpresa>(entity =>
-        entity.HasData(new ConfiguracionEmpresa { Id = 1, NombreEmpresa = "AppServiceAndTravel" }));
+        builder.Entity<ConfiguracionGeneral>(entity =>
+        entity.HasData(new ConfiguracionGeneral { idConfiguracionGeneral = 1, NombreEmpresa = "Service And Travel" }));
 
     }
 }

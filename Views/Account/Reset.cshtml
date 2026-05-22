@@ -1,0 +1,1017 @@
+@using AppServiceAndTravel.ViewModels
+@model RestoreVM
+@{
+    Layout = null;
+    var token = Model?.Token ?? "";
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restablecer contraseña — TransporteApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --ink: #0a0f1e;
+            --panel: #111827;
+            --surface: #1a2236;
+            --border: rgba(255,255,255,.08);
+            --accent: #2563eb;
+            --accent2: #3b82f6;
+            --gold: #f59e0b;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --error: #ef4444;
+            --success: #22c55e;
+            --warn: #f59e0b;
+            --radius: 14px;
+            --font: 'Sora', sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font);
+            background: var(--ink);
+            overflow: hidden;
+        }
+
+        /* ── Layout split ── */
+        .reset-root {
+            display: grid;
+            grid-template-columns: 480px 1fr;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* ── Panel izquierdo ── */
+        .reset-panel {
+            background: var(--panel);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 36px 48px;
+            position: relative;
+            z-index: 10;
+            overflow-y: auto;
+            border-right: 1px solid var(--border);
+            background-image: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(37,99,235,.18) 0%, transparent 60%);
+        }
+
+        /* ── Logo ── */
+        .reset-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown .5s ease both;
+        }
+
+        .reset-logo-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(37,99,235,.35);
+        }
+
+        .reset-logo-img {
+            max-height: 40px;
+            max-width: 160px;
+            object-fit: contain;
+        }
+
+        .reset-logo-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .reset-logo-sub {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: .3px;
+        }
+
+        /* ── Centro ── */
+        .reset-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        /* ── Icono decorativo ── */
+        .reset-icon-wrap {
+            width: 72px;
+            height: 72px;
+            background: rgba(37,99,235,.12);
+            border: 1.5px solid rgba(37,99,235,.25);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--accent2);
+            margin-bottom: 24px;
+            animation: popIn .5s .05s cubic-bezier(.34,1.56,.64,1) both;
+        }
+
+        @@keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(.6);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .reset-heading {
+            margin-bottom: 28px;
+            animation: slideDown .5s .1s ease both;
+        }
+
+            .reset-heading h1 {
+                font-size: 26px;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: -.5px;
+                margin-bottom: 6px;
+            }
+
+            .reset-heading p {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.6;
+            }
+
+        /* ── Campos ── */
+        .field-group {
+            margin-bottom: 18px;
+            animation: slideUp .45s ease both;
+        }
+
+            .field-group:nth-child(1) {
+                animation-delay: .15s;
+            }
+
+            .field-group:nth-child(2) {
+                animation-delay: .22s;
+            }
+
+            .field-group:nth-child(3) {
+                animation-delay: .28s;
+            }
+
+        .field-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+
+        .field-wrap {
+            position: relative;
+        }
+
+        .field-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            font-size: 15px;
+            pointer-events: none;
+            transition: color .2s;
+        }
+
+        .field-input {
+            width: 100%;
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 14px;
+            padding: 13px 50px 13px 44px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+            -webkit-appearance: none;
+        }
+
+            .field-input::placeholder {
+                color: #374151;
+            }
+
+            .field-input:focus {
+                border-color: var(--accent);
+                box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+                background: #1e2d47;
+            }
+
+                .field-input:focus ~ .field-icon {
+                    color: var(--accent2);
+                }
+
+            .field-input.ok {
+                border-color: var(--success);
+            }
+
+            .field-input.err {
+                border-color: var(--error);
+            }
+
+        .btn-eye {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 15px;
+            transition: color .2s;
+        }
+
+            .btn-eye:hover {
+                color: var(--text);
+            }
+
+        /* ── Barra de fortaleza ── */
+        .strength-wrap {
+            margin-top: 8px;
+        }
+
+        .strength-track {
+            height: 4px;
+            border-radius: 4px;
+            background: var(--border);
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width .4s ease, background .4s ease;
+        }
+
+        .strength-label {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* ── Reglas de contraseña ── */
+        .pwd-rules {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .pwd-rule {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--muted);
+            transition: color .3s;
+        }
+
+            .pwd-rule i {
+                font-size: 11px;
+                transition: color .3s;
+            }
+
+            .pwd-rule.met {
+                color: var(--success);
+            }
+
+                .pwd-rule.met i {
+                    color: var(--success);
+                }
+
+            .pwd-rule .fa-circle {
+                color: #374151;
+            }
+
+        /* ── Match contraseña ── */
+        .match-msg {
+            font-size: 12px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: opacity .2s;
+        }
+
+            .match-msg.ok {
+                color: var(--success);
+            }
+
+            .match-msg.err {
+                color: var(--error);
+            }
+
+        /* ── Alert inline ── */
+        .reset-alert {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            padding: 11px 14px;
+            margin-bottom: 18px;
+        }
+
+            .reset-alert.show {
+                display: flex;
+                animation: shake .35s ease;
+            }
+
+            .reset-alert.alert-err {
+                background: rgba(239,68,68,.12);
+                border: 1px solid rgba(239,68,68,.3);
+                color: #fca5a5;
+            }
+
+            .reset-alert.alert-ok {
+                background: rgba(34,197,94,.12);
+                border: 1px solid rgba(34,197,94,.3);
+                color: #86efac;
+            }
+
+            .reset-alert.alert-warn {
+                background: rgba(245,158,11,.12);
+                border: 1px solid rgba(245,158,11,.3);
+                color: #fde68a;
+            }
+
+        @@keyframes shake {
+            0%, 100% {
+                transform: translateX(0)
+            }
+
+            20% {
+                transform: translateX(-6px)
+            }
+
+            40% {
+                transform: translateX(6px)
+            }
+
+            60% {
+                transform: translateX(-4px)
+            }
+
+            80% {
+                transform: translateX(4px)
+            }
+        }
+
+        /* ── Botón ── */
+        .btn-reset {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
+            border: none;
+            border-radius: var(--radius);
+            color: #fff;
+            font-family: var(--font);
+            font-size: 14px;
+            font-weight: 600;
+            padding: 14px;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .2s, filter .2s;
+            box-shadow: 0 8px 24px rgba(37,99,235,.35);
+            letter-spacing: .3px;
+            animation: slideUp .45s .33s ease both;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn-reset:hover {
+                transform: translateY(-1px);
+                filter: brightness(1.07);
+                box-shadow: 0 12px 32px rgba(37,99,235,.45);
+            }
+
+            .btn-reset:active {
+                transform: translateY(0) scale(.98);
+            }
+
+            .btn-reset:disabled {
+                opacity: .55;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            .btn-reset::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+                transform: translateX(-100%);
+                transition: transform .5s;
+            }
+
+            .btn-reset:hover::after {
+                transform: translateX(100%);
+            }
+
+        .btn-spinner {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border: 2px solid rgba(255,255,255,.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin .6s linear infinite;
+            vertical-align: middle;
+            margin-right: 7px;
+        }
+
+        @@keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── Volver al login ── */
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+            margin-top: 20px;
+            transition: color .2s;
+            animation: slideUp .45s .38s ease both;
+        }
+
+            .back-link:hover {
+                color: var(--text);
+            }
+
+        /* ── SUCCESS SCREEN ── */
+        #successScreen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .success-lottie {
+            width: 90px;
+            height: 90px;
+            background: rgba(34,197,94,.12);
+            border: 1.5px solid rgba(34,197,94,.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: var(--success);
+            margin-bottom: 24px;
+            animation: popIn .6s cubic-bezier(.34,1.56,.64,1) both;
+        }
+
+        .success-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .success-body {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 320px;
+            margin-bottom: 28px;
+        }
+
+        .countdown-ring {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent2);
+        }
+
+        .countdown-lbl {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* ── Panel derecho — imagen decorativa ── */
+        .reset-gallery {
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+        }
+
+            .reset-gallery::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to right, var(--panel) 0%, transparent 20%), linear-gradient(to top, rgba(0,0,0,.6) 0%, transparent 50%);
+                z-index: 5;
+                pointer-events: none;
+            }
+
+            .reset-gallery img {
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+                filter: brightness(.6) saturate(1.1);
+            }
+
+        .reset-gallery-content {
+            position: absolute;
+            bottom: 52px;
+            left: 52px;
+            right: 52px;
+            z-index: 10;
+            color: #fff;
+        }
+
+        .security-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 12px;
+            padding: 10px 16px;
+            color: #fff;
+            font-size: 13px;
+            width: fit-content;
+        }
+
+        .chip-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .reset-gallery-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 0 2px 16px rgba(0,0,0,.5);
+            margin-bottom: 6px;
+        }
+
+        .reset-gallery-content p {
+            font-size: 13px;
+            color: rgba(255,255,255,.6);
+            text-shadow: 0 1px 8px rgba(0,0,0,.4);
+            max-width: 360px;
+        }
+
+        /* ── Footer ── */
+        .reset-footer {
+            animation: slideUp .45s .45s ease both;
+        }
+
+            .reset-footer p {
+                font-size: 11px;
+                color: #374151;
+                text-align: center;
+            }
+
+        /* ── Responsive ── */
+        @@media (max-width: 900px) {
+            .reset-root {
+                grid-template-columns: 1fr;
+            }
+
+            .reset-gallery {
+                display: none;
+            }
+
+            .reset-panel {
+                padding: 32px 28px;
+            }
+        }
+
+        @@keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reset-root">
+        <div class="reset-panel">
+            <div class="reset-logo">
+                <img src="~/images/logos/logo_blue.jpg"
+                     onerror="this.style.display='none';document.getElementById('logoIcon').style.display='flex';"
+                     class="reset-logo-img" alt="Logo" />
+                <div class="reset-logo-icon" id="logoIcon" style="display:none;">
+                    <i class="fa-solid fa-truck"></i>
+                </div>
+                <div>
+                    <div class="reset-logo-name">TransporteApp</div>
+                    <div class="reset-logo-sub">Sistema de Gestión</div>
+                </div>
+            </div>
+            <div class="reset-center">
+                <div id="formScreen">
+
+                    <div class="reset-icon-wrap">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+
+                    <div class="reset-heading">
+                        <h1>Nueva contraseña</h1>
+                        <p>Crea una contraseña segura para tu cuenta.<br />Debe cumplir los requisitos mínimos de seguridad.</p>
+                    </div>
+                    <div class="reset-alert" id="resetAlert" role="alert">
+                        <i class="fa-solid fa-circle-exclamation" id="alertIcon"></i>
+                        <span id="alertMsg">Error al procesar.</span>
+                    </div>
+
+                    <form id="resetForm" novalidate>
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="token" value="@token" />
+
+                        <div class="field-group">
+                            <label class="field-label" for="clave">Nueva contraseña</label>
+                            <div class="field-wrap">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input type="password" id="clave" name="clave"
+                                       class="field-input" autocomplete="new-password"
+                                       placeholder="Mínimo 8 caracteres"
+                                       oninput="evaluarFortaleza(this.value); checkMatch();" />
+                                <button type="button" class="btn-eye"
+                                        onclick="toggleViz('clave','icoEye1')" tabindex="-1">
+                                    <i class="fa-solid fa-eye-slash" id="icoEye1"></i>
+                                </button>
+                            </div>
+
+                            <div class="strength-wrap">
+                                <div class="strength-track">
+                                    <div class="strength-fill" id="strengthFill"
+                                         style="width:0%;background:var(--error);"></div>
+                                </div>
+                                <span class="strength-label" id="strengthLabel">Ingresa una contraseña</span>
+                            </div>
+
+                            <div class="pwd-rules">
+                                <div class="pwd-rule" id="rule-len">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>Mínimo 8 caracteres</span>
+                                </div>
+                                <div class="pwd-rule" id="rule-upper">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>Al menos una letra mayúscula</span>
+                                </div>
+                                <div class="pwd-rule" id="rule-lower">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>Al menos una letra minúscula</span>
+                                </div>
+                                <div class="pwd-rule" id="rule-num">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>Al menos un número</span>
+                                </div>
+                                <div class="pwd-rule" id="rule-special">
+                                    <i class="fa-solid fa-circle"></i>
+                                    <span>Al menos un carácter especial (!@@#$%…)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="confirmarClave">Confirmar contraseña</label>
+                            <div class="field-wrap">
+                                <i class="fa-solid fa-lock-open field-icon"></i>
+                                <input type="password" id="confirmarClave" name="confirmarClave"
+                                       class="field-input" autocomplete="new-password"
+                                       placeholder="Repite la contraseña"
+                                       oninput="checkMatch()" />
+                                <button type="button" class="btn-eye"
+                                        onclick="toggleViz('confirmarClave','icoEye2')" tabindex="-1">
+                                    <i class="fa-solid fa-eye-slash" id="icoEye2"></i>
+                                </button>
+                            </div>
+                            <div class="match-msg" id="matchMsg" style="display:none;"></div>
+                        </div>
+
+                        <button type="submit" class="btn-reset" id="btnReset" disabled>
+                            <span id="btnText">
+                                <i class="fa-solid fa-shield-halved me-2"></i>Restablecer contraseña
+                            </span>
+                            <span id="btnLoading" style="display:none;">
+                                <span class="btn-spinner"></span>Procesando…
+                            </span>
+                        </button>
+                    </form>
+
+                    <a href="@Url.Action("Login", "Account")" class="back-link">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Volver al inicio de sesión
+                    </a>
+                </div>
+
+                <div id="successScreen">
+                    <div class="success-lottie">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <div class="success-title">¡Contraseña actualizada!</div>
+                    <p class="success-body">
+                        Tu contraseña ha sido restablecida correctamente.<br />
+                        Serás redirigido al inicio de sesión automáticamente.
+                    </p>
+                    <div class="countdown-ring" id="countdown">5</div>
+                    <div class="countdown-lbl">segundos para redirigir</div>
+
+                    <a href="@Url.Action("Login", "Account")"
+                       class="btn-reset mt-4" style="text-align:center;display:block;text-decoration:none;">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Ir al inicio de sesión ahora
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="reset-footer">
+                <p>© @DateTime.Now.Year Service And Travel SAS · Todos los derechos reservados</p>
+            </div>
+        </div>
+
+        <div class="reset-gallery">
+            <img src="~/images/carousel/2.jpg"
+                 onerror="this.src='/images/placeholder_img.png'" alt="Seguridad" />
+
+            <div class="reset-gallery-content">
+                <div class="security-chips">
+                    <div class="chip">
+                        <div class="chip-icon" style="background:rgba(37,99,235,.3);">
+                            <i class="fa-solid fa-shield-halved" style="color:#60a5fa;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:600;">Cifrado extremo a extremo</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,.5);">Tu contraseña nunca se almacena en texto plano</div>
+                        </div>
+                    </div>
+                    <div class="chip">
+                        <div class="chip-icon" style="background:rgba(245,158,11,.2);">
+                            <i class="fa-solid fa-clock" style="color:#fbbf24;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:600;">Token de un solo uso</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,.5);">El enlace expira después de usarse</div>
+                        </div>
+                    </div>
+                    <div class="chip">
+                        <div class="chip-icon" style="background:rgba(34,197,94,.2);">
+                            <i class="fa-solid fa-fingerprint" style="color:#4ade80;"></i>
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:600;">Verificación de identidad</div>
+                            <div style="font-size:11px;color:rgba(255,255,255,.5);">Proceso validado por correo electrónico</div>
+                        </div>
+                    </div>
+                </div>
+                <h2>Tu seguridad,<br />nuestra prioridad</h2>
+                <p>Este proceso garantiza que solo tú puedes restablecer el acceso a tu cuenta.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert.js"></script>
+    <script src="~/lib/fontawesome/js/all.min.js"></script>
+
+    <script>
+
+        var reglas = { len: false, upper: false, lower: false, num: false, special: false };
+        var formValido = false;
+
+        function evaluarRegla(id, cumple) {
+            var el = document.getElementById('rule-' + id);
+            var ico = el.querySelector('i');
+            reglas[id] = cumple;
+            if (cumple) {
+                el.classList.add('met');
+                ico.className = 'fa-solid fa-circle-check';
+            } else {
+                el.classList.remove('met');
+                ico.className = 'fa-solid fa-circle';
+            }
+        }
+
+        function evaluarFortaleza(pwd) {
+            evaluarRegla('len',     pwd.length >= 8);
+            evaluarRegla('upper',   /[A-Z]/.test(pwd));
+            evaluarRegla('lower',   /[a-z]/.test(pwd));
+            evaluarRegla('num',     /[0-9]/.test(pwd));
+            evaluarRegla('special', /[^A-Za-z0-9]/.test(pwd));
+
+            var score = Object.values(reglas).filter(Boolean).length;
+
+            var configs = [
+                { w: '0%',   bg: 'var(--error)',   lbl: 'Ingresa una contraseña',  color: 'var(--muted)' },
+                { w: '20%',  bg: 'var(--error)',   lbl: 'Muy débil',               color: 'var(--error)' },
+                { w: '40%',  bg: '#f97316',        lbl: 'Débil',                   color: '#f97316' },
+                { w: '60%',  bg: 'var(--gold)',    lbl: 'Regular',                 color: 'var(--gold)' },
+                { w: '80%',  bg: '#84cc16',        lbl: 'Fuerte',                  color: '#84cc16' },
+                { w: '100%', bg: 'var(--success)', lbl: 'Muy fuerte ✓',            color: 'var(--success)' },
+            ];
+
+            var idx = pwd.length === 0 ? 0 : score;
+            var cfg = configs[idx];
+
+            document.getElementById('strengthFill').style.width      = cfg.w;
+            document.getElementById('strengthFill').style.background = cfg.bg;
+            document.getElementById('strengthLabel').textContent     = cfg.lbl;
+            document.getElementById('strengthLabel').style.color     = cfg.color;
+
+            var inp = document.getElementById('clave');
+            inp.classList.remove('ok', 'err');
+            if (pwd.length > 0) inp.classList.add(score >= 3 ? 'ok' : 'err');
+
+            actualizarBoton();
+        }
+
+        function checkMatch() {
+            var p1  = document.getElementById('clave').value;
+            var p2  = document.getElementById('confirmarClave').value;
+            var msg = document.getElementById('matchMsg');
+            var inp = document.getElementById('confirmarClave');
+
+            if (!p2) { msg.style.display = 'none'; inp.classList.remove('ok','err'); actualizarBoton(); return; }
+
+            if (p1 === p2) {
+                msg.style.display = 'flex';
+                msg.className = 'match-msg ok';
+                msg.innerHTML = '<i class="fa-solid fa-circle-check"></i> Las contraseñas coinciden';
+                inp.classList.remove('err'); inp.classList.add('ok');
+            } else {
+                msg.style.display = 'flex';
+                msg.className = 'match-msg err';
+                msg.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Las contraseñas no coinciden';
+                inp.classList.remove('ok'); inp.classList.add('err');
+            }
+
+            actualizarBoton();
+        }
+
+        function actualizarBoton() {
+            var p1 = document.getElementById('clave').value;
+            var p2 = document.getElementById('confirmarClave').value;
+            var score = Object.values(reglas).filter(Boolean).length;
+            formValido = score >= 4 && p1 === p2 && p2.length > 0;
+            document.getElementById('btnReset').disabled = !formValido;
+        }
+
+        $('#resetForm').on('submit', function (e) {
+            e.preventDefault();
+
+            if (!formValido) {
+                mostrarAlerta('err', 'fa-circle-exclamation',
+                    'Completa todos los requisitos de seguridad antes de continuar.');
+                return;
+            }
+
+            var clave          = $('#clave').val();
+            var confirmarClave = $('#confirmarClave').val();
+            var token          = $('input[name="token"]').val();
+
+            if (clave !== confirmarClave) {
+                mostrarAlerta('err', 'fa-circle-exclamation', 'Las contraseñas no coinciden.');
+                return;
+            }
+
+            var btn = $('#btnReset');
+            btn.prop('disabled', true);
+            $('#btnText').hide();
+            $('#btnLoading').show();
+            $('#resetAlert').removeClass('show');
+
+            $.ajax({
+                url:  "@Url.Action("RestablecerContraseña", "Account")",
+                type: "POST",
+                data: {
+                    token:          token,
+                    clave:          clave,
+                    confirmarClave: confirmarClave,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    if (response && response.icono === 'error') {
+                        btn.prop('disabled', false);
+                        $('#btnText').show(); $('#btnLoading').hide();
+                        mostrarAlerta('err', 'fa-circle-exclamation',
+                            response.message || 'Error al restablecer la contraseña.');
+                    } else {
+                        mostrarExito();
+                    }
+                },
+                error: function (xhr) {
+                    btn.prop('disabled', false);
+                    $('#btnText').show(); $('#btnLoading').hide();
+
+                    var msg = 'Error al procesar la solicitud. Intenta de nuevo.';
+                    try {
+                        var r = JSON.parse(xhr.responseText);
+                        if (r.message) msg = r.message;
+                    } catch {}
+                    mostrarAlerta('err', 'fa-circle-exclamation', msg);
+                }
+            });
+        });
+
+        function mostrarExito() {
+            $('#formScreen').hide();
+            $('#successScreen').css('display', 'flex');
+
+            var seg = 5;
+            var interval = setInterval(function () {
+                seg--;
+                $('#countdown').text(seg);
+                if (seg <= 0) {
+                    clearInterval(interval);
+                    window.location.href = "@Url.Action("Login", "Account")";
+                }
+            }, 1000);
+        }
+
+        function mostrarAlerta(tipo, icono, msg) {
+            var $a = $('#resetAlert');
+            $a.attr('class', 'reset-alert alert-' + tipo);
+            $('#alertIcon').attr('class', 'fa-solid ' + icono);
+            $('#alertMsg').text(msg);
+            $a.removeClass('show');
+            void $a[0].offsetWidth;
+            $a.addClass('show');
+        }
+
+        function toggleViz(inputId, iconId) {
+            var inp = document.getElementById(inputId);
+            var ico = document.getElementById(iconId);
+            inp.type = inp.type === 'password' ? 'text' : 'password';
+            ico.className = inp.type === 'password'
+                ? 'fa-solid fa-eye-slash'
+                : 'fa-solid fa-eye';
+        }
+    </script>
+</body>
+</html>

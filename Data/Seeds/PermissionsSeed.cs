@@ -10,33 +10,23 @@ namespace AppServiceAndTravel.Data.Seeds
         {
             builder.HasData(
 
-                new Permisos() { IdProceso = 1, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 2, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 3, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 4, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 5, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 6, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 7, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 8, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 9, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 10, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 11, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 12, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 13, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 14, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 15, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 16, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 17, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 18, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 11, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 12, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 13, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 14, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 15, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 16, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 17, idRol = 2, lectura = true, edita = true, elimina = true },
-                new Permisos() { IdProceso = 18, idRol = 2, lectura = true, edita = true, elimina = true }
-
+                new Permisos() { idProceso = 1, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 2, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 3, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 4, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 5, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 6, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 7, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 8, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 9, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 10, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 11, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 12, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 13, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 14, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 15, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 16, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 17, idRol = 1, lectura = true, edita = true, elimina = true }
             );
         }
     }

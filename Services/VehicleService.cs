@@ -5,36 +5,35 @@ using AppServiceAndTravel.Data;
 
 namespace AppServiceAndTravel.Services
 {
-    public interface IVehiculoValidationService
+    public interface IVehicleService
     {
         Task<ValidacionResultado> ValidarParaServicioAsync(int vehiculoId, int conductorId, string? usuarioId = null, int? servicioId = null);
     }
 
     public class ValidacionResultado
     {
-        public bool Exitoso { get; set; }
+        public bool Success { get; set; }
         public List<string> Errores { get; set; } = new();
         public List<string> Advertencias { get; set; } = new();
         public Vehiculo? Vehiculo { get; set; }
         public Conductor? Conductor { get; set; }
     }
 
-    public class VehiculoValidationService : IVehiculoValidationService
+    public class VehicleService : IVehicleService
     {
         private readonly ApplicationDBContext _context;
-        private readonly ILogger<VehiculoValidationService> _logger;
+        private readonly ILogger<VehicleService> _logger;
 
         // Días de alerta anticipada para vencimientos
         private const int DiasAlertaAnticipada = 30;
 
-        public VehiculoValidationService(ApplicationDBContext context, ILogger<VehiculoValidationService> logger)
+        public VehicleService(ApplicationDBContext context, ILogger<VehicleService> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<ValidacionResultado> ValidarParaServicioAsync(
-            int vehiculoId, int conductorId, string? usuarioId = null, int? servicioId = null)
+        public async Task<ValidacionResultado> ValidarParaServicioAsync(int vehiculoId, int conductorId, string? usuarioId = null, int? servicioId = null)
         {
             var resultado = new ValidacionResultado();
 
@@ -44,7 +43,7 @@ namespace AppServiceAndTravel.Services
             if (resultado.Vehiculo == null)
             {
                 resultado.Errores.Add("El vehículo seleccionado no existe.");
-                resultado.Exitoso = false;
+                resultado.Success = false;
                 return resultado;
             }
 
@@ -54,7 +53,7 @@ namespace AppServiceAndTravel.Services
             if (resultado.Conductor == null)
             {
                 resultado.Errores.Add("El conductor seleccionado no existe.");
-                resultado.Exitoso = false;
+                resultado.Success = false;
                 return resultado;
             }
 
@@ -97,19 +96,19 @@ namespace AppServiceAndTravel.Services
             if (c.FechaVencimientoLicencia >= hoy && c.FechaVencimientoLicencia <= alertaFecha)
                 resultado.Advertencias.Add($"⚠️ Licencia del conductor vence pronto: {c.FechaVencimientoLicencia:dd/MM/yyyy} ({(c.FechaVencimientoLicencia - hoy).Days} días).");
 
-            resultado.Exitoso = resultado.Errores.Count == 0;
+            resultado.Success = resultado.Errores.Count == 0;
 
             // ── Guardar log de validación ─────────────────────────────────
             await _context.ValidacionesVehiculo.AddAsync(new ValidacionVehiculo
             {
-                VehiculoId = vehiculoId,
-                ServicioId = servicioId,
+                idVehiculo = vehiculoId,
+                idServicio = servicioId,
                 SOATVigente = v.FechaVencimientoSOAT >= hoy,
                 TecnoVigente = v.FechaVencimientoTecnoMecanica >= hoy,
                 SeguroVigente = v.FechaVencimientoSeguro >= hoy,
                 EstadoActivo = v.Estado == EstadoVehiculo.Activo,
                 LicenciaConductorVigente = c.FechaVencimientoLicencia >= hoy,
-                Resultado = resultado.Exitoso,
+                Resultado = resultado.Success,
                 Observaciones = resultado.Errores.Count > 0
                     ? string.Join(" | ", resultado.Errores)
                     : "Validación exitosa",
@@ -120,7 +119,7 @@ namespace AppServiceAndTravel.Services
 
             _logger.LogInformation(
                 "Validación vehículo {Placa}: {Resultado}. Errores: {NumErrores}",
-                v.Placa, resultado.Exitoso ? "OK" : "FALLO", resultado.Errores.Count);
+                v.Placa, resultado.Success ? "OK" : "FALLO", resultado.Errores.Count);
 
             return resultado;
         }

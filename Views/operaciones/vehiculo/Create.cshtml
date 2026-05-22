@@ -1,6 +1,6 @@
 @model AppServiceAndTravel.Models.Vehiculo
 @using AppServiceAndTravel.Models
-@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? $"Editar {Model.Placa}" : "Nuevo Vehículo"; }
+@{ var esEdit = Model.idVehiculo > 0; ViewData["Title"] = esEdit ? $"Editar {Model.Placa}" : "Nuevo Vehículo"; }
 
 <div class="row g-4">
   <div class="col-lg-8">
@@ -18,7 +18,7 @@
         <form asp-area="Operaciones" asp-controller="Vehiculo"
               asp-action="@(esEdit?"Edit":"Create")" method="post" enctype="multipart/form-data">
           @Html.AntiForgeryToken()
-          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          @if(esEdit){ <input type="hidden" asp-for="idVehiculo" /> }
           <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
 
           <!-- Tipo de proveedor -->

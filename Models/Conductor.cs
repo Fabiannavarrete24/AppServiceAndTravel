@@ -5,7 +5,8 @@ namespace AppServiceAndTravel.Models
 {
     public class Conductor
     {
-        public int Id { get; set; }
+        [Key]
+        public int idConductor { get; set; }
         [Required, StringLength(150)] public string NombreCompleto { get; set; } = string.Empty;
         [Required, StringLength(25)] public string Cedula { get; set; } = string.Empty;
         [Required, StringLength(25)] public string NumeroLicencia { get; set; } = string.Empty;

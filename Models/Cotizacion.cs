@@ -37,11 +37,9 @@ namespace AppServiceAndTravel.Models
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
         public DateTime? FechaAprobacion { get; set; }
-
-        [StringLength(200)] public string? UsuarioCreadorId { get; set; }
+        public int? UsuarioCreadorId { get; set; }
         public ApplicationUser? UsuarioCreador { get; set; }
-
-        [StringLength(200)] public string? UsuarioAprobadorId { get; set; }
+        public int? UsuarioAprobadorId { get; set; }
         public ApplicationUser? UsuarioAprobador { get; set; }
 
         [StringLength(1000)]

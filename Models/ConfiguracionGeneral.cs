@@ -2,9 +2,10 @@
 
 namespace AppServiceAndTravel.Models
 {
-    public class ConfiguracionEmpresa
+    public class ConfiguracionGeneral
     {
-        public int Id { get; set; }
+        [Key]
+        public int idConfiguracionGeneral { get; set; }
         [Required, StringLength(200)] public string NombreEmpresa { get; set; } = "AppServiceAndTravel";
         [StringLength(500)] public string? Eslogan { get; set; }
         [StringLength(500)] public string? RutaLogo { get; set; }

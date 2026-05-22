@@ -13,15 +13,15 @@ using Npgsql;
 
 namespace AppServiceAndTravel.Services
 {
-    public class Utilities
+    public class UtilitiesServices
     {
         private readonly IConfiguration _configuration;
-        private readonly ApplicationDBContext _dbContext;
+        private readonly ApplicationDBContext _context;
 
-        public Utilities(IConfiguration configuration, ApplicationDBContext dbContext)
+        public UtilitiesServices(IConfiguration configuration, ApplicationDBContext context)
         {
             _configuration = configuration;
-            _dbContext = dbContext;
+            _context = context;
         }
         public string Encriptar(string text)
         {
@@ -66,8 +66,7 @@ namespace AppServiceAndTravel.Services
             }
 
             return "";
-        }
-    
+        }   
         public IDbConnection GenerateConnection()
         {
             var provider = _configuration["ConnectionStrings:DatabaseProvider"]?.ToLower();
@@ -79,61 +78,27 @@ namespace AppServiceAndTravel.Services
                 "postgresql" => new NpgsqlConnection(connString),
                 _ => throw new Exception($"Proveedor no soportado: {provider}")
             };
-        }    
+        }
+        public FormatosCorreos FormatosCorreos(string tipo)
+        {
+            try
+            {
+                var results = _context.FormatosCorreos.FirstOrDefault(f => f.abreviatura == tipo);
 
-        //public string GenerarToken(int Longitud)
-        //{
-        //    string results = "";
-        //    try
-        //    {
-        //        using (FbConnection con = new FbConnection(_dbContext.Database.GetConnectionString()))
-        //        {
-        //            con.Open();
-        //            using (var transaction = con.BeginTransaction())
-        //            {
-        //                FbCommand cmd = new FbCommand
-        //                {
-        //                    Connection = con,
-        //                    Transaction = transaction,
-        //                    CommandText = "SELECT CLAVE FROM PROC_GENERAR_CLAVE_ALEATORIA(@LONGITUD)"
-        //                };
-
-        //                cmd.Parameters.Add("@LONGITUD", FbDbType.Integer).Value = Longitud;
-
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read())
-        //                    {
-        //                        results = reader.GetString(reader.GetOrdinal("CLAVE"));
-
-        //                    }
-        //                    else
-        //                    {
-        //                        results = null!;
-        //                    }
-        //                }
-
-        //                transaction.Commit();
-        //            }
-        //        }
-        //        if (results != null)
-        //        {
-        //            RegistrarLog("No se ejecuto correctamente", "GenerarToken", $"PROC_GENERAR_CLAVE_ALEATORIA({Longitud})");
-        //            return results;
-        //        }
-        //        else
-        //        {
-        //            RegistrarLog("Se ejecuto correctamente", "GenerarToken", $"PROC_GENERAR_CLAVE_ALEATORIA({Longitud})");
-        //            return results!;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        RegistrarLog(ex.Message, "GenerarToken", $"PROC_GENERAR_CLAVE_ALEATORIA({Longitud})");
-        //        return "Ocurrió un error interno";
-        //    }
-        //}
-
+                if (results != null)
+                {
+                    return results;
+                }
+                else
+                {
+                    return results!;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public void RegistrarLog(string message, string metodo, string prodimiento)
         {
             try
@@ -160,10 +125,8 @@ namespace AppServiceAndTravel.Services
             using var ms = new MemoryStream();
             file.CopyTo(ms);
             var base64 = Convert.ToBase64String(ms.ToArray());
-            RegistrarLog(base64, "SetProveedor", "PROC_SET_PROVEEDOR");
             return base64;
         }
-
         public string GenerateToken(string username, JwtSettings  settings)
         {
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SecretKey!));

@@ -10,7 +10,9 @@ namespace AppServiceAndTravel.Data.Seeds
         {
             builder.HasData(
             
-                new ApplicationUser() {idUsuario = 1,userName = "admin",password="admin",admin= true,activo = true,correo = "admin@correo.com" }
+                new ApplicationUser() {idUsuario = 1,userName = "admin",password="admin",nombreCompleto="Administrador",cargo= "Administrador",
+                    correo = "admin@correo.com", admin= true,activo = true,crypt=true,hast=true,
+                    fechaCreacion=DateTime.UtcNow,fechaCambioClave=DateTime.UtcNow.AddMonths(3),fechaModificacion=DateTime.UtcNow,restaurada=false,confirmada=true }
             
             );
         }

@@ -10,8 +10,8 @@ namespace AppServiceAndTravel.Data.Seeds
         {
             builder.HasData(
 
-                new Roles() { idRol= 1,descripcion= "Administrador" },
-                new Roles() { idRol= 2,descripcion= "Usuarios" }
+                new Roles() { idRol= 1,nombre = "Administrador" },
+                new Roles() { idRol= 2,nombre = "Usuarios" }
             );
         }
     }

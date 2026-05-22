@@ -34,7 +34,7 @@ namespace AppServiceAndTravel.Models
         public EstadoServicio Estado { get; set; } = EstadoServicio.Programado;
         [StringLength(1000)] public string? Observaciones { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        [StringLength(200)] public string? UsuarioCreadorId { get; set; }
+        public int? UsuarioCreadorId { get; set; }
         public ApplicationUser? UsuarioCreador { get; set; }
 
         public bool NotificacioncorreoEnviada { get; set; } = false;

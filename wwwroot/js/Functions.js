@@ -1,4 +1,11 @@
-﻿function resetForm(idForm, idDateTime, IdValue) {
+﻿function showLoader() {
+    $("#globalLoader").removeClass("d-none");
+}
+
+function hideLoader() {
+    $("#globalLoader").addClass("d-none");
+}
+function resetForm(idForm, idDateTime, IdValue) {
   $(idForm)[0].reset();
   $(idDateTime).text("");
   $(IdValue).text("");

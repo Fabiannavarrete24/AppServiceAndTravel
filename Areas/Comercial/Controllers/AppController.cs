@@ -92,7 +92,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
 
             cotizacion.Estado = EstadoCotizacion.Pendiente;
             cotizacion.FechaCreacion = DateTime.Now;
-            cotizacion.UsuarioCreadorId = _userManager.GetUserId(User);
+            cotizacion.UsuarioCreadorId = Convert.ToInt32(_userManager.GetUserId(User));
 
             _context.Cotizaciones.Add(cotizacion);
             await _context.SaveChangesAsync();
@@ -202,7 +202,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
             cotizacion.ValorAprobado = valorAprobado ?? cotizacion.ValorCotizado;
             cotizacion.ObservacionesAprobacion = observaciones;
             cotizacion.FechaAprobacion = DateTime.Now;
-            cotizacion.UsuarioAprobadorId = _userManager.GetUserId(User);
+            cotizacion.UsuarioAprobadorId = Convert.ToInt32(_userManager.GetUserId(User));
 
             await _context.SaveChangesAsync();
 
@@ -234,7 +234,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
             cotizacion.Estado = EstadoCotizacion.Rechazada;
             cotizacion.ObservacionesRechazo = motivo;
             cotizacion.FechaAprobacion = DateTime.Now;
-            cotizacion.UsuarioAprobadorId = _userManager.GetUserId(User);
+            cotizacion.UsuarioAprobadorId = Convert.ToInt32(_userManager.GetUserId(User));
 
             await _context.SaveChangesAsync();
 

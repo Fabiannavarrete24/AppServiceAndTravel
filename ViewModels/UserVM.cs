@@ -4,7 +4,7 @@ namespace AppServiceAndTravel.ViewModels
 {
     public class UserVM
     {
-        public int Id { get; set; }
+        public int idUser { get; set; }
 
         [StringLength(200)] public string? Username { get; set; }
 
@@ -20,7 +20,7 @@ namespace AppServiceAndTravel.ViewModels
 
         public DateTime? dateChangePassword { get; set; }
 
-        public int Valid { get; set; }
+        public bool Valid { get; set; }
 
         public int Admin { get; set; }
 
@@ -28,9 +28,9 @@ namespace AppServiceAndTravel.ViewModels
 
         public int IdRol { get; set; }
 
-        public int restaurada { get; set; }
+        public bool? restaurada { get; set; }
 
-        public int confirmada { get; set; }
+        public bool? confirmada { get; set; }
 
         [StringLength(200)] public string? Token { get; set; }
 

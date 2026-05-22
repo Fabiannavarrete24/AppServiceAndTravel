@@ -1,6 +1,6 @@
+using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
 using MailKit.Net.Smtp;
-using MailKit.Security;
 using MimeKit;
 
 namespace AppServiceAndTravel.Services
@@ -11,59 +11,63 @@ namespace AppServiceAndTravel.Services
         Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
         Task EnviarAprobacionCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
         Task EnviarRechazoCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
+        Task<(bool isSuccess, string errorMessage)> Enviarcorreo(string destinatario, string nombre, string asunto, string cuerpoHtml, byte[] archivo,string nombreArchivo);
     }
 
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
+        private readonly ApplicationDBContext _context;
         private readonly ILogger<EmailService> _logger;
 
-        public EmailService(IConfiguration config, ILogger<EmailService> logger)
+        public EmailService(IConfiguration config, ApplicationDBContext context, ILogger<EmailService> logger)
         {
-            _config = config;
+            _configuration = config;
+            _context = context;
             _logger = logger;
         }
 
         // ?? Método base para enviar correos ????????????????????????????????
-        private async Task EnviarcorreoAsync(string destinatario, string nombre, string asunto, string cuerpoHtml)
+        public async Task<(bool isSuccess, string errorMessage)> Enviarcorreo(string para, string copia, string asunto, string cuerpo, byte[] archivo, string nombreArchivo)
         {
             try
             {
-                var settings = _config.GetSection("correoSettings");
+                var configSMTP = _context.ConfiguracionNotificaciones.FirstOrDefault();
+                var email = new MimeMessage();
 
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress(
-                    settings["SenderName"],
-                    settings["Sendercorreo"]!
-                ));
-                message.To.Add(new MailboxAddress(nombre, destinatario));
-                message.Subject = asunto;
+                email.From.Add(MailboxAddress.Parse(configSMTP!.smtpUserName!));
+                email.To.Add(MailboxAddress.Parse(para));
 
-                var bodyBuilder = new BodyBuilder { HtmlBody = cuerpoHtml };
-                message.Body = bodyBuilder.ToMessageBody();
+                if (!string.IsNullOrEmpty(copia))
+                {
+                    foreach (var emailCopia in copia.Split(','))
+                    {
+                        email.Cc.Add(MailboxAddress.Parse(emailCopia.Trim()));
+                    }
+                }
 
-                using var client = new SmtpClient();
+                email.Subject = asunto;
 
-                var useSsl = bool.Parse(settings["UseSsl"] ?? "false");
-                var useStartTls = bool.Parse(settings["UseStartTls"] ?? "true");
-                var port = int.Parse(settings["SmtpPort"] ?? "587");
+                var builder = new BodyBuilder { HtmlBody = cuerpo };
 
-                await client.ConnectAsync(
-                    settings["SmtpServer"]!,
-                    port,
-                    useStartTls ? SecureSocketOptions.StartTls : SecureSocketOptions.SslOnConnect
-                );
+                if (archivo != null && archivo.Length > 0)
+                {
+                    builder.Attachments.Add(nombreArchivo, archivo);
+                }
 
-                await client.AuthenticateAsync(settings["Sendercorreo"]!, settings["Password"]!);
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
+                email.Body = builder.ToMessageBody();
 
-                _logger.LogInformation("correo enviado a {correo}: {Asunto}", destinatario, asunto);
+                using var smtp = new SmtpClient();
+                await smtp.ConnectAsync(configSMTP.smtpServer!, int.Parse(configSMTP.smtpPort!), true);
+                await smtp.AuthenticateAsync(configSMTP.smtpUserName!, configSMTP.smtpPassword!);
+                await smtp.SendAsync(email);
+                await smtp.DisconnectAsync(true);
+
+                return (true, "correo enviado con exito");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al enviar correo a {correo}", destinatario);
-                throw;
+                return (false, ex.Message);
             }
         }
 
@@ -102,7 +106,7 @@ namespace AppServiceAndTravel.Services
                     <p>Su cotización está siendo <strong>revisada</strong> por nuestro equipo. Le notificaremos cuando sea aprobada.</p>"
             );
 
-            await EnviarcorreoAsync(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - Recibida", html);
+            await Enviarcorreo(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - Recibida", html, null!, null!);
         }
 
         // ?? Cotización aprobada ???????????????????????????????????????????
@@ -137,7 +141,7 @@ namespace AppServiceAndTravel.Services
                     <p>Próximamente recibirá la confirmadaación del servicio con el vehículo y conductor asignados.</p>"
             );
 
-            await EnviarcorreoAsync(destinatario, nombreCliente, $"? Cotización #{cotizacion.Id:D6} - Aprobada", html);
+            await Enviarcorreo(destinatario, nombreCliente, $"? Cotización #{cotizacion.Id:D6} - Aprobada", html, null!, null!);
         }
 
         // ?? Cotización rechazada ??????????????????????????????????????????
@@ -154,7 +158,7 @@ namespace AppServiceAndTravel.Services
                     <p>Si desea, puede generar una nueva cotización con los ajustes correspondientes o contactar a nuestro equipo para más información.</p>"
             );
 
-            await EnviarcorreoAsync(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - No Aprobada", html);
+            await Enviarcorreo(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - No Aprobada", html,null!,null!);
         }
 
         // ?? confirmadaación de servicio ??????????????????????????????????????
@@ -196,50 +200,50 @@ namespace AppServiceAndTravel.Services
                     {(string.IsNullOrEmpty(servicio.Observaciones) ? "" : $"<p><strong>Observaciones:</strong> {servicio.Observaciones}</p>")}"
             );
 
-            await EnviarcorreoAsync(destinatario, nombreCliente, $"?? Servicio #{servicio.Id:D6} - confirmadaado", html);
+            await Enviarcorreo(destinatario, nombreCliente, $"?? Servicio #{servicio.Id:D6} - confirmadaado", html, null!, null!);
         }
 
         // ?? Plantilla HTML base ???????????????????????????????????????????
         private static string GenerarPlantillaBase(string titulo, string colorHeader, string icono, string contenido)
         {
             return $@"
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width,initial-scale=1'>
-</head>
-<body style='margin:0;padding:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9;'>
-  <table width='100%' cellpadding='0' cellspacing='0' style='padding:30px 0;'>
-    <tr>
-      <td align='center'>
-        <table width='600' cellpadding='0' cellspacing='0' style='background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);'>
-          <!-- Header -->
-          <tr>
-            <td style='background:{colorHeader};padding:30px;text-align:center;'>
-              <div style='font-size:40px;margin-bottom:10px;'>{icono}</div>
-              <h1 style='color:#fff;margin:0;font-size:24px;font-weight:600;'>{titulo}</h1>
-            </td>
-          </tr>
-          <!-- Content -->
-          <tr>
-            <td style='padding:30px;color:#333;font-size:15px;line-height:1.7;'>
-              {contenido}
-            </td>
-          </tr>
-          <!-- Footer -->
-          <tr>
-            <td style='background:#f8f9fa;padding:20px;text-align:center;border-top:1px solid #eee;'>
-              <p style='color:#888;font-size:13px;margin:0;'>Sistema de Gestión de Transporte</p>
-              <p style='color:#aaa;font-size:12px;margin:5px 0 0;'>Este es un mensaje automático, por favor no responda a este correo.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>";
+                <!DOCTYPE html>
+                <html>
+                <head>
+                  <meta charset='utf-8'>
+                  <meta name='viewport' content='width=device-width,initial-scale=1'>
+                </head>
+                <body style='margin:0;padding:0;font-family:Segoe UI,Arial,sans-serif;background:#f4f6f9;'>
+                  <table width='100%' cellpadding='0' cellspacing='0' style='padding:30px 0;'>
+                    <tr>
+                      <td align='center'>
+                        <table width='600' cellpadding='0' cellspacing='0' style='background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08);'>
+                          <!-- Header -->
+                          <tr>
+                            <td style='background:{colorHeader};padding:30px;text-align:center;'>
+                              <div style='font-size:40px;margin-bottom:10px;'>{icono}</div>
+                              <h1 style='color:#fff;margin:0;font-size:24px;font-weight:600;'>{titulo}</h1>
+                            </td>
+                          </tr>
+                          <!-- Content -->
+                          <tr>
+                            <td style='padding:30px;color:#333;font-size:15px;line-height:1.7;'>
+                              {contenido}
+                            </td>
+                          </tr>
+                          <!-- Footer -->
+                          <tr>
+                            <td style='background:#f8f9fa;padding:20px;text-align:center;border-top:1px solid #eee;'>
+                              <p style='color:#888;font-size:13px;margin:0;'>Sistema de Gestión de Transporte</p>
+                              <p style='color:#aaa;font-size:12px;margin:5px 0 0;'>Este es un mensaje automático, por favor no responda a este correo.</p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </body>
+                </html>";
         }
     }
 }

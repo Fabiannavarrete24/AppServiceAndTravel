@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppServiceAndTravel.Models
 {
@@ -6,8 +7,10 @@ namespace AppServiceAndTravel.Models
     {
         public DateTime fechaCreacion { get; set; }= DateTime.UtcNow;
         public int idUsuario { get; set; }
-        public ApplicationUser? User { get; set; }
+        [ForeignKey("idUser")]
+        public ApplicationUser? Usuario { get; set; }
         public int idRol { get; set; }
-        public Roles? Rol { get; set; }
+        [ForeignKey("idRol")]
+        public Roles? Rol { get; set; }        
     }
 }

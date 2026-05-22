@@ -5,10 +5,11 @@ namespace AppServiceAndTravel.Models
     public enum EstadoVehiculo { Activo, Inactivo, EnMantenimiento }
     public class ValidacionVehiculo
     {
-        public int Id { get; set; }
-        public int VehiculoId { get; set; }
+        [Key]
+        public int idValidacionVehiculo { get; set; }
+        public int idVehiculo { get; set; }
         public Vehiculo? Vehiculo { get; set; }
-        public int? ServicioId { get; set; }
+        public int? idServicio { get; set; }
         public DateTime FechaValidacion { get; set; } = DateTime.Now;
         public bool SOATVigente { get; set; }
         public bool TecnoVigente { get; set; }

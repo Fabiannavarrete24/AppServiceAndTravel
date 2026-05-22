@@ -125,13 +125,13 @@
           </td>
           <td class="text-end pe-4">
             <div class="d-flex justify-content-end gap-1">
-              <a asp-area="RH" asp-controller="Conductor" asp-action="Details" asp-route-id="@c.Id"
+              <a asp-area="RH" asp-controller="Conductor" asp-action="Details" asp-route-id="@c.idConductor"
                  class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
               @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("RHManager"))
               {
-              <a asp-area="RH" asp-controller="Conductor" asp-action="Edit" asp-route-id="@c.Id"
+              <a asp-area="RH" asp-controller="Conductor" asp-action="Edit" asp-route-id="@c.idConductor"
                  class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
-              <form asp-area="RH" asp-controller="Conductor" asp-action="ToggleActivo" asp-route-id="@c.Id" method="post">
+              <form asp-area="RH" asp-controller="Conductor" asp-action="ToggleActivo" asp-route-id="@c.idConductor" method="post">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-sm rounded-3"
                         style="@(c.Activo?"border:1px solid #f59e0b;color:#92400e;":"border:1px solid #16a34a;color:#065f46;")"

@@ -559,16 +559,18 @@ new Chart(document.getElementById('chartTrend'), {
 // ── 4. Por tipo de servicio ───────────────────────────────────────────────────
 new Chart(document.getElementById('chartTipo'), {
   type: 'bar',
-  data: {
-    labels: ["servicio"],
-    datasets: [{
-      label: 'Ingresos (M)',
-      data: [0],
-      backgroundColor: "#1a6fc4";
-      )),
-      borderRadius: 4, borderSkipped: false
-    }]
-  },
+    data: {
+        labels: ["servicio"],
+        datasets: [
+            {
+                label: 'Ingresos (M)',
+                data: [0],
+                backgroundColor: "#1a6fc4",
+                borderRadius: 4,
+                borderSkipped: false
+            }
+        ]
+    },
   options: {
     indexAxis: 'y',
     responsive: true, maintainAspectRatio: false,

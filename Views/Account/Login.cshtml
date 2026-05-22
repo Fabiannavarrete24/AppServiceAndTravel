@@ -1,278 +1,384 @@
-﻿﻿@if (ViewData.Keys.Contains("message"))
-{
-    <p style="color: red">
-        @ViewData["message"]
-    </p>
-}
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio de sesión — AppServiceAndTravel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-    <meta name="viewport" content="width=device-width" />
-    <link href="~/css/Login.css" rel="stylesheet" />
-    <link href="~/css/Style.css" rel="stylesheet" />    
-    <link href="~/lib/fontawesome/css/all.css" rel="stylesheet" />
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
-    <title>Login</title>
+    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <style>
 
     </style>
 </head>
+<body>
 
-<body class="m-0 p-0">
-    <div class="container-layout">
-        <div class="form-column">
-            <form class="row justify-content-center m-2" id="loginForm">
-                <div class="col-sm-12">
-                    <div class="d-flex justify-content-center">
-                        <img onerror="this.src='/images/placeholder_img.png'" src="~/images/logos/logo_blue.jpg" alt="Logo" class="g-3" style="width: 250px;" />
+<div class="login-root">
+    <div class="login-panel">
+        <div class="login-logo">
+            <img src="~/images/logos/logo_blue.jpg"
+                 onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+                 class="login-logo-img" alt="Logo empresa" />
+            <div class="login-logo-icon" id="logoFallback" style="display:none;">
+                <i class="fa-solid fa-truck"></i>
+            </div>
+            <div>
+                <div class="login-logo-text">Service And Travel</div>
+                <div class="login-logo-sub">Sistema de Gestión</div>
+            </div>
+        </div>
+        <div class="login-center">
+            <div class="login-heading">
+                <div class="badge-pill">
+                    <i class="fa-solid fa-lock" style="font-size:9px;"></i>
+                    Acceso seguro
+                </div>
+                <h1>Bienvenido</h1>
+                <p>Ingresa tus credenciales para continuar</p>
+            </div>
+            <div class="login-alert" id="loginAlert" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="loginAlertMsg">Credenciales incorrectas.</span>
+            </div>
+            <form id="loginForm" novalidate>
+                @Html.AntiForgeryToken()
+                <div class="field-group">
+                    <label class="field-label" for="userName">Usuario</label>
+                    <div class="field-wrap">
+                        <i class="fa-regular fa-user field-icon"></i>
+                        <input type="text" id="userName" name="usuario"
+                               class="field-input" autocomplete="username"
+                               placeholder="Ingresa tu usuario o email" />
+                        <i class="fa-solid fa-check field-icon" id="userCheck"
+                           style="left:auto;right:14px;color:var(--success);display:none;"></i>
                     </div>
                 </div>
-                <div class="col-sm-12 mt-2 text-center align-content-center">
-                    <h2 class="text-center">Iniciar Sesión</h2>
-                </div>
-                <div class="col-sm-12 mt-2">
-                    <div class="form-group">
-                        <label class="form-label" for="UserName">Usuario:</label>
-                        <input type="text" name="UserName" id="userName" class="form-control form-control-lg"
-                            placeholder="Ingrese el Usuario" required />
-                    </div>
-                </div>
-                <div class="col-sm-12 mt-2">
-                    <div class="form-group">
-                        <label class="form-label" for="Password">Contraseña:</label>
-                        <input type="password" name="Password" id="Password" class="form-control form-control-lg" placeholder="••••••••••••" required />
-                        <div class="icon-eye" id="show-password">
+                <div class="field-group">
+                    <label class="field-label" for="Password">Contraseña</label>
+                    <div class="field-wrap">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="Password" name="clave"
+                               class="field-input" autocomplete="current-password"
+                               placeholder="••••••••••••" />
+                        <button type="button" class="btn-eye" id="show-password" tabindex="-1"
+                                aria-label="Mostrar u ocultar contraseña">
                             <i class="fa-solid fa-eye-slash" id="icon-eye"></i>
-                        </div>
+                        </button>
                     </div>
                 </div>
-                <div class="col-sm-12 mt-2">
-                    <div class="row">
-                        <div class="col-sm-12 mt-2">
-                            <button id="login" class="btn btn-primary w-100" type="submit">
-                                <span>Ingresar</span>
-                            </button>
-                        </div>
-                        <div class="col-sm-12 mt-2 text-center">
-                            <a href="#" class="my-1" id="btnModalRestablecer" data-bs-toggle="modal" data-bs-target="#modalRestablecer">
-                                ¿olvidaste tu contraseña?
-                            </a>
-                        </div>
-                        @* <div class="col-lg-6 mt-2">
-                            <a class="btn btn-light w-100" asp-action="LoginExterno" style="flex-direction: row; display: flex; align-items: center;" asp-route-proveedor="Google">
-                                <img onerror="this.src='/images/placeholder_img.png'" src="~/images/iconos/google.png" class="mt-0 me-2"/> 
-                                <span>Continuar con Google</span>
-                            </a>
-                        </div>
-                        <div class="col-lg-6 mt-2">
-                            <a class="btn btn-light w-100" asp-action="LoginExterno" style="flex-direction: row; display: flex; align-items: center;" asp-route-proveedor="Microsoft">
-                                <img onerror="this.src='/images/placeholder_img.png'" src="~/images/iconos/microsoft.png" class="mt-0 me-2"/> 
-                                <span>Continuar con Microsoft</span>
-                            </a>
-                        </div> *@
-                    </div>
+                <div class="login-options">
+                    <label class="check-remember">
+                        <input type="checkbox" id="rememberMe" />
+                        <span>Recordar sesión</span>
+                    </label>
+                    <a href="#" class="link-forgot" id="btnModalRestablecer"
+                       data-bs-toggle="modal" data-bs-target="#modalRestablecer">
+                        ¿Olvidaste tu contraseña?
+                    </a>
                 </div>
+                <button type="submit" class="btn-login" id="btnLogin">
+                    <span id="btnLoginText"><i class="fa-solid fa-arrow-right-to-bracket" style="margin-right:8px;"></i>Ingresar</span>
+                    <span id="btnLoginLoading" style="display:none;">
+                        <span class="spinner"></span>Verificando…
+                    </span>
+                </button>
             </form>
+
         </div>
-        <div class="carousel-column">
-            <div id="carouselLogin" class="carousel slide h-100" ata-bs-ride="carousel"
-                data-bs-interval="3000">
-                <div class="carousel-indicators">
-                    <button type="button" data-bs-target="#carouselLogin" data-bs-slide-to="0" class="activo"
-                        aria-current="true" aria-label="Slide 1" style="border-radius: 50%;width: 15px;height: 15px;"></button>
-                    <button type="button" data-bs-target="#carouselLogin" data-bs-slide-to="1"
-                        aria-label="Slide 2" style="border-radius: 50%;width: 15px;height: 15px;"></button>
-                    <button type="button" data-bs-target="#carouselLogin" data-bs-slide-to="2"
-                        aria-label="Slide 3" style="border-radius: 50%;width: 15px;height: 15px;"></button>
+        <div class="login-footer">
+            <p class="login-footer-text">
+                © @DateTime.Now.Year Service And Travel S.A.S — Todos los derechos reservados<br />
+                <a href="#">Términos de uso</a> · <a href="#">Política de privacidad</a>
+            </p>
+        </div>
+    </div>
+    <div class="gallery-panel">
+@*         <div class="gallery-stats">
+            <div class="stat-chip">
+                <div class="stat-chip-icon" style="background:rgba(37,99,235,.3);">
+                    <i class="fa-solid fa-truck" style="color:#60a5fa;"></i>
                 </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item activo">
-                        <img onerror="this.src='/images/placeholder_img.png'" src="~/images/carousel/cas8746.jpg" class="d-block w-100" style="height:100vh" alt="portada carrusel 1"/>
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5></h5>
-                            <p></p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img onerror="this.src='/images/placeholder_img.png'" src="~/images/carousel/cas8749.jpg" class="d-block w-100" style="height:100vh" alt="portada carrusel 2"/>
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5></h5>
-                            <p></p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img onerror="this.src='/images/placeholder_img.png'" src="~/images/carousel/cas8756.jpg" class="d-block w-100" style="height:100vh" alt="portada carrusel 3"/>
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5></h5>
-                            <p></p>
-                        </div>
-                    </div>
+                <div>
+                    <div class="stat-chip-val">Fleet+</div>
+                    <div class="stat-chip-lbl">Gestión de flota</div>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-chip-icon" style="background:rgba(22,163,74,.25);">
+                    <i class="fa-solid fa-chart-line" style="color:#4ade80;"></i>
+                </div>
+                <div>
+                    <div class="stat-chip-val">99.8%</div>
+                    <div class="stat-chip-lbl">Disponibilidad</div>
+                </div>
+            </div>
+            <div class="stat-chip">
+                <div class="stat-chip-icon" style="background:rgba(245,158,11,.2);">
+                    <i class="fa-solid fa-bolt" style="color:#fbbf24;"></i>
+                </div>
+                <div>
+                    <div class="stat-chip-val">Real-time</div>
+                    <div class="stat-chip-lbl">Tracking activo</div>
+                </div>
+            </div>
+        </div> *@
+        <div id="carouselLogin" class="carousel slide h-100"
+             data-bs-ride="carousel" data-bs-interval="4000">
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselLogin"
+                        data-bs-slide-to="0" class="active"
+                        aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselLogin"
+                        data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselLogin"
+                        data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner h-100">
+                <div class="carousel-item active h-100">
+                    <img onerror="this.src='/images/placeholder_img.png'"
+                         src="~/images/carousel/1.jpg" class="d-block w-100" alt="Slide 1" />
+                </div>
+                <div class="carousel-item h-100">
+                    <img onerror="this.src='/images/placeholder_img.png'"
+                         src="~/images/carousel/2.jpg" class="d-block w-100" alt="Slide 2" />
+                </div>
+                <div class="carousel-item h-100">
+                    <img onerror="this.src='/images/placeholder_img.png'"
+                         src="~/images/carousel/3.jpg" class="d-block w-100" alt="Slide 3" />
                 </div>
             </div>
         </div>
+        <div class="gallery-caption">
+@*             <div class="gallery-caption-tag">
+                <i class="fa-solid fa-circle" style="font-size:6px;color:var(--success);"></i>
+                Sistema activo
+            </div> *@
+            <h2>Gestión inteligente<br />de transporte</h2>
+            <p>Cotizaciones, servicios y flota en un solo lugar. Control total de tu operación.</p>
+        </div>
     </div>
-    <!--Modal Cambiar Contraseña -->
-    <div class="modal fade" id="modalRestablecer" tabindex="-1" aria-labelledby="modalRestablecerLabel">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalRestablecerLabel">Restablecer Contraseña</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+
+</div>
+
+<div class="modal fade" id="modalRestablecer" tabindex="-1" aria-labelledby="modalRestablecerLabel">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content">
+            <div class="modal-header px-4 pt-4 border-0 pb-2">
+                <div>
+                    <h5 class="modal-title fw-bold" id="modalRestablecerLabel">
+                        <i class="fa-solid fa-key me-2" style="color:var(--accent2);"></i>
+                        Restablecer contraseña
+                    </h5>
+                    <p style="font-size:13px;color:var(--muted);margin-top:4px;">
+                        Ingresa tu correo y recibirás un enlace de recuperación.
+                    </p>
                 </div>
-                <div class="modal-body d-flex justify-content-center p-3">
-                    <form id="formRestablecer" class="row g-sm-3">
-                        <div class="col-sm-12">
-                            <div class="form-group mb-3">
-                                <label for="correo" class="form-label">Correo electrónico</label>
-                                <input type="correo" class="form-control form-control-lg" id="correo" name="correo" required>
-                            </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body px-4 pb-4">
+                <form id="formRestablecer">
+                    <div style="margin-bottom:16px;">
+                        <label for="correo" style="display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;">
+                            Correo electrónico
+                        </label>
+                        <div style="position:relative;">
+                            <i class="fa-regular fa-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;pointer-events:none;"></i>
+                            <input type="email" class="modal-input" id="correo" name="correo"
+                                   placeholder="tucorreo@empresa.com"
+                                   style="padding-left:42px;" required />
                         </div>
-                        <div class="col-sm-12 mt-2">
-                            <button type="submit" class="btn btn-primary" style="width:100%;">Restablecer</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" class="btn-restablecer">
+                        <i class="fa-solid fa-paper-plane me-2"></i>Enviar enlace de recuperación
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-    <!-- Ventana de Carga -->
-    <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" style="padding-left:100px">
-            <div class="loader"></div>
-        </div>
+</div>
+
+<div id="globalLoader" class="loader-overlay d-none">
+    <div class="loader-box">
+        <div class="spinner-border" role="status"></div>
+        <span class="ms-2">Cargando...</span>
     </div>
-    </div>
-    <!--Sweetaler2-->
-    <script src="~/lib/sweetalert2/sweetalert.js"></script>
-    <!-- Fontawesome -->
-    <script src="~/lib/fontawesome/js/all.js"></script>
-    <script src="~/lib/fontawesome/js/all.min.js"></script>
+</div>
 
-    <script src="~/lib/moment/moment-with-locales.js"></script>
-    <script src="~/lib/moment/locale/es-us.js"></script>
-    <!-- Bootstrap -->
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <!-- Jquery -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <!-- Jquery -->
-    <script src="~/js/Functions.js"></script>
-    <script>
-        
-        $(document).ready(function () {
-            $("#carouselExampleCaptions").carousel({
-                interval: 3000,
-                ride: "carousel",
-                pause: false,
-                wrap: true
-            });
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="~/lib/sweetalert2/sweetalert.js"></script>
+<script src="~/lib/fontawesome/js/all.min.js"></script>
+<script src="~/js/Functions.js"></script>
 
-            $("#carouselLogin").carousel("cycle");
+<script>
+$(document).ready(function () {
 
-            $("#show-password").click(function () {
-                var passwordInput = $("#Password");
-                var icon = $("#icon-eye");
-                if (passwordInput.attr("type") === "password") {
-                    passwordInput.attr("type", "text");
-                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+    $("#carouselLogin").carousel({ interval: 4000, ride: "carousel", pause: false, wrap: true });
+
+    $("#show-password").on("click", function () {
+        var inp  = $("#Password");
+        var icon = $("#icon-eye");
+        if (inp.attr("type") === "password") {
+            inp.attr("type", "text");
+            icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        } else {
+            inp.attr("type", "password");
+            icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        }
+    });
+
+    $("#userName").on("input", function () {
+        var v = $(this).val().trim();
+        $(this).toggleClass("is-valid", v.length >= 3);
+        $(this).toggleClass("is-invalid", v.length > 0 && v.length < 3);
+        $("#userCheck").toggle(v.length >= 3);
+    });
+
+    $("#Password").on("input", function () {
+        var v = $(this).val();
+        $(this).toggleClass("is-valid",   v.length >= 6);
+        $(this).toggleClass("is-invalid", v.length > 0 && v.length < 4);
+    });
+
+    $("#loginForm").on("submit", function (e) {
+        e.preventDefault();
+
+        var usuario = $("#userName").val().trim();
+        var clave   = $("#Password").val();
+
+        if (!usuario || !clave) {
+            mostrarAlerta("Los campos de usuario y contraseña son obligatorios.");
+            return;
+        }
+
+        var btn = $("#btnLogin");
+        btn.prop("disabled", true);
+        $("#btnLoginText").hide();
+        $("#btnLoginLoading").show();
+        $("#loginAlert").removeClass("show");
+
+        $.ajax({
+            url:  "@Url.Action("Login", "Account")",
+            type: "POST",
+            data: {
+                usuario: usuario,
+                clave:   clave,
+                __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+            },
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                if (response.success) {
+                    $("#btnLoginLoading").html('<i class="fa-solid fa-check" style="margin-right:8px;"></i>¡Bienvenido!');
+
+                    setTimeout(function () {
+                        window.location.href = "/";
+                    }, 900);
                 } else {
-                    passwordInput.attr("type", "password");
-                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
-                }
-            });
-        });
-
-        $("#loginForm").on("submit", function (event) {
-            event.preventDefault();
-
-            var UserName = $("#userName").val();
-            var Password = $("#Password").val();
-
-            if (UserName == "" || Password == "") {
-                showAlert("error","los campos se encuentran en blanco","");
-            } else {
-                $.ajax({
-                    url: "@Url.Action("Login","Account")",
-                    type: "POST",
-                    data: {
-                        usuario: UserName,
-                        clave: Password
-                    },
-                    beforeSend: function () {
-                        $("#staticBackdrop").modal("show");
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            showAlert("success", response.message, "");
-                            setTimeout(function(){
-                                location.reload();
-                            }, 1000);
-                        } else {
-                            showAlert("error", "", response.message);
-                        }
-                    },
-                    error: function (error) {
-                        console.log(error.responseText);
-                        showAlertError("error", "", "Error al Procesar la solicitud:", error.responseText);
-                    },
-                    complete: function () {
-                        $("#staticBackdrop").modal("hide");
-                    }
-                });
-            }
-        });
-
-        $("#formRestablecer").on("submit", function (e) {
-            e.preventDefault();
-
-            const correo = $("#correo").val();
-
-            const regexCorreo = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!regexCorreo.test(correo)) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "Formato de correo no válido",
-                    text: "Por favor, ingrese un correo válido.",
-                    showconfirmadaButton: true
-                });
-                return;
-            }
-
-            $.ajax({
-                url: "@Url.Action("EnvioCorreoRestablecerCuenta", "Account")",
-                type: "POST",
-                data: { correo: correo },
-                beforeSend: function () {
-                    $("#modalRestablecer").modal("hide");
-                    $("#staticBackdrop").modal("show");
-                },
-                success: function (respuesta) {
-                    Swal.fire({
-                        icon: respuesta.icono || "info",
-                        title: "",
-                        text: respuesta.message || "Correo enviado correctamente verifica tu bandeja de entrada.",
-                        showconfirmadaButton: true
-                    });
-                },
-                error: function (error) {
-                    showAlertError("error","Error","Ocurrió un error al procesar la solicitud:",error.message)
-                },
-                complete: function () {
-                    $("#loginForm")[0].reset();
-                    $("#formRestablecer")[0].reset();
-                    $("#correo").val("");
                     $("#staticBackdrop").modal("hide");
+                    btn.prop("disabled", false);
+                    $("#btnLoginText").show();
+                    $("#btnLoginLoading").hide();
+                    mostrarAlerta(response.message || "Usuario o contraseña incorrectas. Intente de nuevo.");
+                    $("#userName, #Password").addClass("is-invalid");
+                    setTimeout(() => $("#userName, #Password").removeClass("is-invalid"), 1200);
                 }
-            });
+            },
+            error: function (xhr) {
+                $("#staticBackdrop").modal("hide");
+                btn.prop("disabled", false);
+                $("#btnLoginText").show();
+                $("#btnLoginLoading").hide();
+
+                var errMsg = "Error al procesar la solicitud. Intente de nuevo.";
+                try {
+                    var resp = JSON.parse(xhr.responseText);
+                    if (resp.message) errMsg = resp.message;
+                } catch {}
+                mostrarAlerta(errMsg);
+            },
+            complete: function () {
+                hideLoader()
+            }
         });
+    });
 
-    </script>
+    $("#formRestablecer").on("submit", function (e) {
+        e.preventDefault();
+
+        var correo = $("#correo").val().trim();
+        var regex  = /^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        if (!regex.test(correo)) {
+            Swal.fire({
+                icon: "warning",
+                title: "Correo inválido",
+                text: "Por favor ingresa un correo electrónico válido.",
+                background: "#1a2236",
+                color: "#e2e8f0",
+                confirmButtonColor: "#2563eb"
+            });
+            return;
+        }
+
+        $.ajax({
+            url:  "@Url.Action("EnvioCorreoRestablecerCuenta", "Account")",
+            type: "POST",
+            data: { correo: correo },
+            beforeSend: function () {
+                $("#modalRestablecer").modal("hide");
+                showLoader();
+            },
+            success: function (respuesta) {
+                Swal.fire({
+                    icon:  respuesta.icono || "success",
+                    title: "Correo enviado",
+                    text:  respuesta.message || "Revisa tu bandeja de entrada.",
+                    background: "#1a2236",
+                    color: "#e2e8f0",
+                    confirmButtonColor: "#2563eb"
+                });
+            },
+            error: function (error) {
+                console.log(error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "No se pudo enviar el correo. Intenta más tarde.",
+                    background: "#1a2236",
+                    color: "#e2e8f0",
+                    confirmButtonColor: "#2563eb"
+                });
+            },
+            complete: function () {
+                $("#formRestablecer")[0].reset();
+                hideLoader();
+            }
+        });
+    });
+
+    $("#carouselLogin").on("slide.bs.carousel", function () {
+        $(".carousel-item.active img").css("transform", "scale(1)");
+    }).on("slid.bs.carousel", function () {
+        $(".carousel-item.active img").css("transform", "scale(1.04)");
+    });
+});
+
+function mostrarAlerta(msg) {
+    $("#loginAlertMsg").text(msg);
+    var $alert = $("#loginAlert");
+    $alert.removeClass("show");
+    void $alert[0].offsetWidth;
+    $alert.addClass("show");
+}
+</script>
 </body>
-
 </html>

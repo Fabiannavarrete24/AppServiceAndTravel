@@ -87,9 +87,9 @@ namespace AppServiceAndTravel.Controllers
         //[Authorize(Rols = "Administrador,Coordinador")]
         public async Task<IActionResult> Edit(int id, Vehiculo vehiculo)
         {
-            if (id != vehiculo.Id) return NotFound();
+            if (id != vehiculo.idVehiculo) return NotFound();
 
-            if (await _context.Vehiculos.AnyAsync(v => v.Placa == vehiculo.Placa && v.Id != id))
+            if (await _context.Vehiculos.AnyAsync(v => v.Placa == vehiculo.Placa && v.idVehiculo != id))
                 ModelState.AddModelError("Placa", "Ya existe otro vehículo con esa placa.");
 
             if (!ModelState.IsValid) return View(vehiculo);
@@ -103,7 +103,7 @@ namespace AppServiceAndTravel.Controllers
         // GET: /Vehiculo/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
-            var v = await _context.Vehiculos.Include(x => x.Servicios).ThenInclude(s => s.Cotizacion).ThenInclude(c => c!.Cliente).FirstOrDefaultAsync(x => x.Id == id);
+            var v = await _context.Vehiculos.Include(x => x.Servicios).ThenInclude(s => s.Cotizacion).ThenInclude(c => c!.Cliente).FirstOrDefaultAsync(x => x.idVehiculo == id);
             if (v == null) return NotFound();
             return View(v);
         }
@@ -113,7 +113,7 @@ namespace AppServiceAndTravel.Controllers
         //[Authorize(Rols = "Administrador")]
         public async Task<IActionResult> Delete(int id)
         {
-            var v = await _context.Vehiculos.Include(x => x.Servicios).FirstOrDefaultAsync(x => x.Id == id);
+            var v = await _context.Vehiculos.Include(x => x.Servicios).FirstOrDefaultAsync(x => x.idVehiculo == id);
             if (v == null) return NotFound();
 
             if (v.Servicios.Any())

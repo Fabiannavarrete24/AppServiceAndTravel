@@ -38,20 +38,18 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     }
 });
 
-
-//injecccion de dependencias
+//inyeccion de dependencias
 builder.Services.AddHttpClient();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ApplicationUser>();
-builder.Services.AddScoped<Utilities>();
-builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<UtilitiesServices>();
 builder.Services.AddScoped<WhatsAppService>();
-builder.Services.AddScoped<VehiculoValidationService>();
+builder.Services.AddScoped<VehicleService>();
 builder.Services.AddScoped<ConfiguracionService>();
+
 builder.Services.AddHttpClient("WhatsApp");
-//builder.Services.AddResponseCompression();
-//builder.Services.AddControllersWithViews();
-//builder.Services.AddAntiforgery(o => o.HeaderName = "X-CSRF-TOKEN");
 builder.Services.AddHttpContextAccessor();
 
 // Cargar configuración de autenticacion
@@ -60,23 +58,23 @@ var keyBytes = Encoding.ASCII.GetBytes(key!);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminOnly", policy =>
-        policy.RequireClaim(ClaimTypes.Role, "admin"));
+        policy.RequireClaim(ClaimTypes.Role, "administrador"));
 
     options.AddPolicy("CanAccessVentas", policy =>
         policy.RequireClaim("permission", "/ventas"));
 });
 builder.Services.AddAuthentication(options =>
 {
-
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
         .AddCookie(options =>
         {
             options.LoginPath = "/Account/Login";
             options.LogoutPath = "/Account/Logout";
-            options.AccessDeniedPath = "/App/AccessDenied";
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
             options.Cookie.HttpOnly = true;
             options.Cookie.SameSite = SameSiteMode.Lax;
             options.Cookie.SecurePolicy = CookieSecurePolicy.None;
@@ -97,7 +95,6 @@ builder.Services.AddAuthentication(options =>
     };
 }
 );
-builder.Services.AddAuthorization();
 
 // Configuracion de URL
 builder.WebHost.ConfigureKestrel((context, options) =>
@@ -148,33 +145,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Pepeleria")
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api Service And Travel")
 );
 app.UseAuthentication();
 app.UseAuthorization();
 
 var isConfigured = builder.Configuration.GetValue<bool>("IsConfigured");
-
-app.Use(async (context, next) =>
-{
-    var path = context.Request.Path.Value?.ToLower();
-
-    if (!isConfigured &&
-            // !path!.StartsWith("/admin/app") &&
-            // !path!.StartsWith("/app") &&
-            !path!.StartsWith("/setup") &&
-            !path.StartsWith("/api") &&
-            !path.StartsWith("/swagger") &&
-            !path.StartsWith("/css") &&
-            !path.StartsWith("/js") &&
-            !path.StartsWith("/lib"))
-    {
-        context.Response.Redirect("/setup/index");
-        return;
-    }
-
-    await next();
-});
 
 app.MapControllerRoute(
     name: "areas",
