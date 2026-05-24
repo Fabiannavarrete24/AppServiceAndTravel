@@ -1,4 +1,4 @@
-﻿@model AppServiceAndTravel.Models.Cliente
+﻿@model AppServiceAndTravel.Models.Clientes
 
 @{
     ViewData["Title"] = "Detalle Cliente";
@@ -115,7 +115,7 @@
                                     <tr>
 
                                         <td class="ps-4">
-                                            #@c.Id.ToString("D6")
+                                            #@c.idCotizacion.ToString("D6")
                                         </td>
 
                                         <td>
@@ -125,7 +125,7 @@
                                         </td>
 
                                         <td>
-                                            @c.FechaServicioRequerido.ToString("dd/MM/yyyy")
+                                            @c.FechaServicio.ToString("dd/MM/yyyy")
                                         </td>
 
                                         <td class="fw-semibold">

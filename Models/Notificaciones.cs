@@ -2,7 +2,7 @@
 
 namespace AppServiceAndTravel.Models
 {
-    public class Notificacion
+    public class Notificaciones
     {
         [Key]
         public int? idNotificacion { get; set; }

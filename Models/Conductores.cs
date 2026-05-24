@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppServiceAndTravel.Models
 {
-    public class Conductor
+    public class Conductores
     {
         [Key]
         public int idConductor { get; set; }
@@ -15,15 +15,13 @@ namespace AppServiceAndTravel.Models
         [Required, StringLength(25)] public string Telefono { get; set; } = string.Empty;
         [StringLength(200)] public string? correo { get; set; }
         public TipoProveedor TipoProveedor { get; set; } = TipoProveedor.Interno;
-
         [StringLength(150)] public string? EmpresaExterna { get; set; }
         [StringLength(25)] public string? NitEmpresa { get; set; }
         [Column(TypeName = "decimal(12,2)")] public decimal? TarifaExterna { get; set; }
         [StringLength(500)] public string? ObservacionesExterno { get; set; }
-
         public bool Activo { get; set; } = true;
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        public ICollection<Servicio> Servicios { get; set; } = new List<Servicio>();
+        public ICollection<Servicios> Servicios { get; set; } = new List<Servicios>();
 
         [NotMapped] public bool LicenciaVigente => FechaVencimientoLicencia >= DateTime.Today;
         [NotMapped] public bool EsExterno => TipoProveedor == TipoProveedor.Externo;

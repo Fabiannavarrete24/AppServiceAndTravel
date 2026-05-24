@@ -1,4 +1,4 @@
-﻿@model AppServiceAndTravel.Models.Cliente
+﻿@model AppServiceAndTravel.Models.Clientes
 
 @{
     ViewData["Title"] = "Editar Cliente";
@@ -26,7 +26,7 @@
             <div class="card-body p-4">
 
                 <form asp-action="Create" method="post">
-                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="idCliente" />
                     @Html.AntiForgeryToken()
 
                     <div asp-validation-summary="ModelOnly"

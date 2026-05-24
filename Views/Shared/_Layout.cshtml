@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/AppServiceAndTravel.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/datatables/datatables.css" rel="stylesheet" />
     <link href="~/lib/datatables/datatables.min.css" rel="stylesheet" />
@@ -74,7 +75,6 @@
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                 </div>
             }
-
             @RenderBody()
         </div>
     </div>
@@ -99,6 +99,7 @@ else
     <script src="~/lib/fontawesome/js/all.min.js"></script>
     <script src="~/lib/moment/moment-with-locales.js"></script>
     <script src="~/lib/moment/locale/es-us.js"></script>
+    <script src="~/lib/Chart/chart.umd.min.js"></script>
     <script src="~/js/functions.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
@@ -137,12 +138,8 @@ else
                     showLoader();
                 },
                 success: function (response) {
-                    console.log(response);
-                    sessionStorage.setItem(
-                        "app_menu",
-                        JSON.stringify(response.data)
+                    sessionStorage.setItem("app_menu",JSON.stringify(response.data)
                     );
-
                     renderMenu(response.data);
                 },
                 error: function (error) {
@@ -155,28 +152,19 @@ else
         }
 
         function renderMenu(data) {
-
             const container = $("#sidebarMenuContainer");
-
             container.html("");
-
             let html = "";
-
             data.forEach(menu => {
                 html += renderMenuItem(menu);
             });
-
             container.append(html);
         }
 
         function renderMenuItem(menu, level = 0) {
-
             const tieneHijos = menu.hijos && menu.hijos.length > 0;
-
             let url = "#";
-
             if (menu.controlador && menu.url) {
-
                 if (menu.area) {
                     url = `/${menu.area}/${menu.controlador}/${menu.url}`;
                 } else {
@@ -185,31 +173,20 @@ else
             }
 
             const icono = menu.icono ? `<i class="fa ${menu.icono} me-2"></i>` : `<i class="fa fa-circle me-2 fs-6"></i>`;
-
             if (tieneHijos) {
-
                 let subMenuHtml = "";
-
                 menu.hijos.forEach(hijo => {
                     subMenuHtml += renderMenuItem(hijo, level + 1);
                 });
-
                 return `
                     <div class="sidebar-group level-${level}">
-
-                        <a class="sidebar-link sidebar-dropdown-toggle"
-                           data-id="menu-${menu.idProceso}"
-                           href="javascript:void(0)">
-
+                        <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
                             ${icono}
                             <span>${menu.proceso}</span>
-
                             <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
                         </a>
-
                         <div class="sidebar-submenu"
                              id="menu-${menu.idProceso}">
-
                             ${subMenuHtml}
                         </div>
                     </div>
@@ -217,20 +194,15 @@ else
             }
 
             return `
-                <a href="${url}"
-                   class="sidebar-link level-${level}">
-
+                <a href="${url}" class="sidebar-link level-${level}">
                     ${icono}
                     <span>${menu.proceso}</span>
                 </a>
             `;
         }
         $(document).on("click", ".sidebar-dropdown-toggle", function () {
-
             const id = $(this).data("id");
-
             $("#" + id).slideToggle(200);
-
             $(this).find(".dropdown-icon").toggleClass("rotate");
         });
     </script>

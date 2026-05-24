@@ -30,14 +30,14 @@ namespace AppServiceAndTravel.Models
         [StringLength(7)] public string ColorAcento { get; set; } = "#16a34a";
         [StringLength(7)] public string ColorTexto { get; set; } = "#1e293b";
         [StringLength(7)] public string ColorFondo { get; set; } = "#f0f4f8";
-        [StringLength(200)] public string? correoRemitente { get; set; }
-        [StringLength(100)] public string? NombreRemitente { get; set; }
         public bool NotificarPorcorreo { get; set; } = true;
         public bool NotificarPorWhatsApp { get; set; } = true;
         public int DiasAlertaVencimiento { get; set; } = 30;
-        [StringLength(500)] public string? JwtSecret { get; set; }
-        public int JwtExpiracionMinutos { get; set; } = 60;
+        [StringLength(500)] public string? JwtSecretKey { get; set; } = "EstaEsUnaLlaveSecretaSeguraYBienLarga";
+        [StringLength(500)] public string? JwtIssuer { get; set; } = "AppServiceAndTravelAPI";
+        [StringLength(500)] public string? JwtAudience { get; set; } = "AppServiceAndTravelApp";
+        public int JwtExpirationMinutes { get; set; } = 60;
         public DateTime UltimaModificacion { get; set; } = DateTime.Now;
-        [StringLength(200)] public string? ModificadoPorId { get; set; }
+        [StringLength(200)] public int? ModificadoPorId { get; set; }
     }
 }

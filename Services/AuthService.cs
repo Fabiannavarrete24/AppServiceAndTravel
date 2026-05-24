@@ -583,7 +583,7 @@ namespace AppServiceAndTravel.Services
             {
                 return (false, "Correo no encontrado.");
             }
-            var jwt = _jwtService.ConfigJWT();
+            var jwt =  _jwtService.ConfigJWT();
             var token = _utilities.GenerateToken(usuario.Username!, jwt);
 
             if (string.IsNullOrEmpty(token))

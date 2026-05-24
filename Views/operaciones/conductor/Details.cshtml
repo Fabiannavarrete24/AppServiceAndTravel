@@ -1,4 +1,4 @@
-@model AppServiceAndTravel.Models.Conductor
+@model AppServiceAndTravel.Models.Conductores
 @using AppServiceAndTravel.Models
 @{ ViewData["Title"] = Model.NombreCompleto; var hoy = DateTime.Today; var alerta = hoy.AddDays(30); }
 
@@ -167,7 +167,7 @@
                   _                         => "background:#f1f5f9;color:#475569;"
                 };
                 <tr>
-                  <td class="small fw-semibold text-primary">#@s.Id.ToString("D6")</td>
+                  <td class="small fw-semibold text-primary">#@s.idServicio.ToString("D6")</td>
                   <td class="small">@s.FechaServicio.ToString("dd/MM/yyyy")</td>
                   <td class="small text-muted">@s.Cotizacion?.Origen → @s.Cotizacion?.Destino</td>
                   <td><span class="badge rounded-pill px-2 py-1" style="font-size:11px;@sCss">@s.Estado</span></td>

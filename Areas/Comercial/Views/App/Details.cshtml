@@ -1,6 +1,6 @@
-@model AppServiceAndTravel.Models.Cotizacion
+@model AppServiceAndTravel.Models.Cotizaciones
 @{
-    ViewData["Title"] = $"Cotización #{Model.Id:D6}";
+    ViewData["Title"] = $"Cotización #{Model.idCotizacion:D6}";
     ViewData["Breadcrumb"] = "Cotizaciones / Detalle";
 
     var badgeCss = Model.Estado switch {
@@ -20,7 +20,7 @@
 <!-- Header con estado y acciones -->
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
   <div>
-    <h4 class="mb-1 fw-bold">Cotización <span class="text-primary">#@Model.Id.ToString("D6")</span></h4>
+    <h4 class="mb-1 fw-bold">Cotización <span class="text-primary">#@Model.idCotizacion.ToString("D6")</span></h4>
     <span class="badge rounded-pill px-3 py-2 fs-6" style="@badgeCss">
       <i class="bi @badgeIcon me-1"></i>@Model.Estado
     </span>
@@ -34,7 +34,7 @@
     {
 
     } *@
-        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary rounded-3">
+        <a asp-action="Edit" asp-route-id="@Model.idCotizacion" class="btn btn-outline-primary rounded-3">
             <i class="bi bi-pencil me-1"></i>Editar
         </a>
 @*     @if ((User.IsInRole("Administrador") || User.IsInRole("Aprobador")) &&
@@ -54,7 +54,7 @@
     {
 
     } *@
-        <a asp-controller="Servicio" asp-action="Create" asp-route-cotizacionId="@Model.Id"
+        <a asp-controller="Servicio" asp-action="Create" asp-route-cotizacionId="@Model.idCotizacion"
            class="btn btn-primary rounded-3">
             <i class="bi bi-truck me-1"></i>Generar servicio
         </a>

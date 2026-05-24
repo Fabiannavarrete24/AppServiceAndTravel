@@ -1,4 +1,4 @@
-@model AppServiceAndTravel.Models.Vehiculo
+@model AppServiceAndTravel.Models.Vehiculos
 @using AppServiceAndTravel.Models
 @{ var esEdit = Model.idVehiculo > 0; ViewData["Title"] = esEdit ? $"Editar {Model.Placa}" : "Nuevo Vehículo"; }
 
@@ -128,7 +128,7 @@
             <div class="col-md-4">
               <label class="form-label fw-semibold small"><i class="bi @icon me-1"></i>@label</label>
               <input name="@field" type="date" class="form-control rounded-3"
-                     value="@(typeof(AppServiceAndTravel.Models.Vehiculo).GetProperty(field)?.GetValue(Model) is DateTime d ? d.ToString("yyyy-MM-dd") : "")" required />
+                     value="@(typeof(AppServiceAndTravel.Models.Vehiculos).GetProperty(field)?.GetValue(Model) is DateTime d ? d.ToString("yyyy-MM-dd") : "")" required />
               <div class="mt-2">
                 <label class="form-label small text-muted">Adjuntar documento</label>
                 <input type="file" name="@ruta" class="form-control form-control-sm rounded-3"

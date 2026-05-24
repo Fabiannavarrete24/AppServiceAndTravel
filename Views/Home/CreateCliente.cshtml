@@ -1,5 +1,5 @@
-@model AppServiceAndTravel.Models.Cliente
-@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? "Editar Cliente" : "Nuevo Cliente"; }
+@model AppServiceAndTravel.Models.Clientes
+@{ var esEdit = Model.idCliente > 0; ViewData["Title"] = esEdit ? "Editar Cliente" : "Nuevo Cliente"; }
 
 <div class="row g-4">
   <div class="col-lg-8">
@@ -18,7 +18,7 @@
         <form asp-area="Comercial" asp-controller="Cliente"
               asp-action="@(esEdit ? "Edit" : "Create")" method="post">
           @Html.AntiForgeryToken()
-          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          @if(esEdit){ <input type="hidden" asp-for="idCliente" /> }
           <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
 
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Información principal</h6>

@@ -13,7 +13,7 @@ namespace AppServiceAndTravel.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     [Migration("20260522142450_seed permisos")]
-    partial class seedpermisos
+    partial class seedPermisos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

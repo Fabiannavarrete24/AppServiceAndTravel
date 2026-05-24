@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AppServiceAndTravel.Migrations
 {
     /// <inheritdoc />
-    public partial class seedpermisos : Migration
+    public partial class seedPermisos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

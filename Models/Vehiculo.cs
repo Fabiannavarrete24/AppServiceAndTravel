@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppServiceAndTravel.Models
 {
     public enum TipoProveedor { Interno, Externo }
-    public class Vehiculo
+    public class Vehiculos
     {
         [Key]
         public int idVehiculo { get; set; }
@@ -31,7 +31,7 @@ namespace AppServiceAndTravel.Models
         [StringLength(200)] public string? RutaSeguro { get; set; }
         [StringLength(1000)] public string? Observaciones { get; set; }
 
-        public ICollection<Servicio> Servicios { get; set; } = new List<Servicio>();
+        public ICollection<Servicios> Servicios { get; set; } = new List<Servicios>();
 
         [NotMapped] public bool SOATVigente => FechaVencimientoSOAT >= DateTime.Today;
         [NotMapped] public bool TecnoVigente => FechaVencimientoTecnoMecanica >= DateTime.Today;

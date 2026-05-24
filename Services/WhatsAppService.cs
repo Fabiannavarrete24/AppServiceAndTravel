@@ -7,12 +7,9 @@ namespace AppServiceAndTravel.Services
 {
     public interface IWhatsAppService
     {
-        Task<bool> EnviarconfirmadaacionServicioAsync(string telefono, Servicio servicio);
+        Task<bool> EnviarconfirmadaacionServicioAsync(string telefono, Servicios servicio);
 
-        Task<bool> EnviarAprobacionCotizacionAsync(
-            string telefono,
-            string nombreCliente,
-            Cotizacion cotizacion);
+        Task<bool> EnviarAprobacionCotizacionAsync(string telefono,string nombreCliente,Cotizaciones cotizacion);
 
         Task<bool> EnviarMensajeAsync(string telefono, string mensaje);
     }
@@ -37,9 +34,7 @@ namespace AppServiceAndTravel.Services
         // MENSAJE GENÉRICO
         // =========================================================
 
-        public async Task<bool> EnviarMensajeAsync(
-            string telefono,
-            string mensaje)
+        public async Task<bool> EnviarMensajeAsync(string telefono,string mensaje)
         {
             try
             {
@@ -71,15 +66,13 @@ namespace AppServiceAndTravel.Services
         // confirmadaACIÓN SERVICIO
         // =========================================================
 
-        public async Task<bool> EnviarconfirmadaacionServicioAsync(
-            string telefono,
-            Servicio servicio)
+        public async Task<bool> EnviarconfirmadaacionServicioAsync(string telefono,Servicios servicio)
         {
             var mensaje = $"""
             🚌 *SERVICIO confirmadaADO*
             ━━━━━━━━━━━━━━━━━━━
 
-            📋 Servicio: #{servicio.Id:D6}
+            📋 Servicio: #{servicio.idCotizacion:D6}
 
             📅 Fecha:
             {servicio.FechaServicio:dd/MM/yyyy HH:mm}
@@ -115,10 +108,7 @@ namespace AppServiceAndTravel.Services
         // APROBACIÓN COTIZACIÓN
         // =========================================================
 
-        public async Task<bool> EnviarAprobacionCotizacionAsync(
-            string telefono,
-            string nombreCliente,
-            Cotizacion cotizacion)
+        public async Task<bool> EnviarAprobacionCotizacionAsync(string telefono,string nombreCliente,Cotizaciones cotizacion)
         {
             var mensaje = $"""
             ✅ *COTIZACIÓN APROBADA*
@@ -127,7 +117,7 @@ namespace AppServiceAndTravel.Services
             Hola {nombreCliente}
 
             📋 Cotización:
-            #{cotizacion.Id:D6}
+            #{cotizacion.idCotizacion:D6}
 
             🗺️ Ruta:
             {cotizacion.Origen}
@@ -135,7 +125,7 @@ namespace AppServiceAndTravel.Services
             {cotizacion.Destino}
 
             📅 Fecha:
-            {cotizacion.FechaServicioRequerido:dd/MM/yyyy}
+            {cotizacion.FechaServicio:dd/MM/yyyy}
 
             💰 Valor:
             ${cotizacion.ValorAprobado ?? cotizacion.ValorCotizado:N0}

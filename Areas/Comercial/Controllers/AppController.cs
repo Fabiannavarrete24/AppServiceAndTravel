@@ -82,7 +82,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
         // ── POST: Cotizacion/Create ───────────────────────────────────────
         [HttpPost, ValidateAntiForgeryToken]
         //[Authorize(Rols = "Administrador,Coordinador,Operador")]
-        public async Task<IActionResult> Create(Cotizacion cotizacion)
+        public async Task<IActionResult> Create(Cotizaciones cotizacion)
         {
             if (!ModelState.IsValid)
             {
@@ -92,13 +92,13 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
 
             cotizacion.Estado = EstadoCotizacion.Pendiente;
             cotizacion.FechaCreacion = DateTime.Now;
-            cotizacion.UsuarioCreadorId = Convert.ToInt32(_userManager.GetUserId(User));
+            cotizacion.idUsuarioCreador = Convert.ToInt32(_userManager.GetUserId(User));
 
             _context.Cotizaciones.Add(cotizacion);
             await _context.SaveChangesAsync();
 
             // Notificar al cliente
-            var cliente = await _context.Clientes.FindAsync(cotizacion.ClienteId);
+            var cliente = await _context.Clientes.FindAsync(cotizacion.idCliente);
             if (cliente != null)
             {
                 try
@@ -111,7 +111,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
                 }
             }
 
-            TempData["Success"] = $"Cotización #{cotizacion.Id:D6} creada exitosamente.";
+            TempData["Success"] = $"Cotización #{cotizacion.idCotizacion:D6} creada exitosamente.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -123,7 +123,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
                 .Include(c => c.UsuarioCreador)
                 .Include(c => c.UsuarioAprobador)
                 .Include(c => c.Servicio)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.idCotizacion == id);
 
             if (cotizacion == null) return NotFound();
             return View(cotizacion);
@@ -149,9 +149,9 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
         // ── POST: Cotizacion/Edit/{id} ────────────────────────────────────
         [HttpPost, ValidateAntiForgeryToken]
         //[Authorize(Rols = "Administrador,Coordinador")]
-        public async Task<IActionResult> Edit(int id, Cotizacion cotizacion)
+        public async Task<IActionResult> Edit(int id, Cotizaciones cotizacion)
         {
-            if (id != cotizacion.Id) return NotFound();
+            if (id != cotizacion.idCotizacion) return NotFound();
 
             var cotizacionDb = await _context.Cotizaciones.FindAsync(id);
             if (cotizacionDb == null) return NotFound();
@@ -168,10 +168,10 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
                 return View(cotizacion);
             }
 
-            cotizacionDb.ClienteId = cotizacion.ClienteId;
+            cotizacionDb.idCliente = cotizacion.idCliente;
             cotizacionDb.Origen = cotizacion.Origen;
             cotizacionDb.Destino = cotizacion.Destino;
-            cotizacionDb.FechaServicioRequerido = cotizacion.FechaServicioRequerido;
+            cotizacionDb.FechaServicio = cotizacion.FechaServicio;
             cotizacionDb.DescripcionCarga = cotizacion.DescripcionCarga;
             cotizacionDb.NumPasajeros = cotizacion.NumPasajeros;
             cotizacionDb.ValorCotizado = cotizacion.ValorCotizado;
@@ -188,7 +188,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
         {
             var cotizacion = await _context.Cotizaciones
                 .Include(c => c.Cliente)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.idCotizacion == id);
 
             if (cotizacion == null) return NotFound();
 
@@ -202,7 +202,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
             cotizacion.ValorAprobado = valorAprobado ?? cotizacion.ValorCotizado;
             cotizacion.ObservacionesAprobacion = observaciones;
             cotizacion.FechaAprobacion = DateTime.Now;
-            cotizacion.UsuarioAprobadorId = Convert.ToInt32(_userManager.GetUserId(User));
+            cotizacion.idUsuarioAprobador = Convert.ToInt32(_userManager.GetUserId(User));
 
             await _context.SaveChangesAsync();
 
@@ -216,7 +216,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
                 catch (Exception ex) { _logger.LogError(ex, "Error WhatsApp aprobación"); }
             }
 
-            TempData["Success"] = $"Cotización #{cotizacion.Id:D6} aprobada exitosamente.";
+            TempData["Success"] = $"Cotización #{cotizacion.idCotizacion:D6} aprobada exitosamente.";
             return RedirectToAction(nameof(Details), new { id });
         }
 
@@ -227,14 +227,14 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
         {
             var cotizacion = await _context.Cotizaciones
                 .Include(c => c.Cliente)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.idCotizacion == id);
 
             if (cotizacion == null) return NotFound();
 
             cotizacion.Estado = EstadoCotizacion.Rechazada;
             cotizacion.ObservacionesRechazo = motivo;
             cotizacion.FechaAprobacion = DateTime.Now;
-            cotizacion.UsuarioAprobadorId = Convert.ToInt32(_userManager.GetUserId(User));
+            cotizacion.idUsuarioAprobador = Convert.ToInt32(_userManager.GetUserId(User));
 
             await _context.SaveChangesAsync();
 
@@ -244,7 +244,7 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
                 catch { /* log */ }
             }
 
-            TempData["Warning"] = $"Cotización #{cotizacion.Id:D6} rechazada.";
+            TempData["Warning"] = $"Cotización #{cotizacion.idCotizacion:D6} rechazada.";
             return RedirectToAction(nameof(Details), new { id });
         }
 

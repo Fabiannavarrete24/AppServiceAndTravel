@@ -4,24 +4,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppServiceAndTravel.Models
 {    
-    public enum EstadoServicio { Programado, EnCurso, Completado, Cancelado }
+    public enum EstadoServicio { Programado, EnCurso, Completado, Cancelado,Pendiente, Finalizado }
 
-    public class Servicio
+    public class Servicios
     {
-        public int Id { get; set; }
-        [Required] public int CotizacionId { get; set; }
-        public Cotizacion? Cotizacion { get; set; }
-
-        // Interno
-        public int VehiculoId { get; set; }
-        public Vehiculo? Vehiculo { get; set; }
-        public int ConductorId { get; set; }
-        public Conductor? Conductor { get; set; }
+        [Key]
+        public int idServicio { get; set; }
+        [Required] public int idCotizacion { get; set; }
+        [ForeignKey(nameof(idCotizacion))]
+        public Cotizaciones? Cotizacion { get; set; }
+        public int idVehiculo { get; set; }
+        [ForeignKey(nameof(idVehiculo))]
+        public Vehiculos? Vehiculo { get; set; }
+        public int idConductor { get; set; }
+        [ForeignKey(nameof(idConductor))]
+        public Conductores? Conductor { get; set; }
         [StringLength(200)] public string? TipoServicio { get; set; }
-
-        // Externo
-        public int? ProveedorExternoId { get; set; }
-        public ProveedorExterno? ProveedorExterno { get; set; }
+        public int? idProveedorExterno { get; set; }
+        [ForeignKey(nameof(idProveedorExterno))]
+        public ProveedoresExternos? ProveedorExterno { get; set; }
         [StringLength(20)] public string? VehiculoExternoPlaca { get; set; }
         [StringLength(120)] public string? VehiculoExternoDescripcion { get; set; }
         [StringLength(150)] public string? ConductorExternoNombre { get; set; }
@@ -29,14 +30,13 @@ namespace AppServiceAndTravel.Models
         [StringLength(25)] public string? ConductorExternoTelefono { get; set; }
         public bool UsaRecursoExterno { get; set; } = false;
         [Column(TypeName = "decimal(14,2)")] public decimal? CostoExterno { get; set; }
-
         public DateTime FechaServicio { get; set; }
         public EstadoServicio Estado { get; set; } = EstadoServicio.Programado;
         [StringLength(1000)] public string? Observaciones { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
-        public int? UsuarioCreadorId { get; set; }
+        public int? idUsuarioCreador { get; set; }
+        [ForeignKey(nameof(idUsuarioCreador))]
         public ApplicationUser? UsuarioCreador { get; set; }
-
         public bool NotificacioncorreoEnviada { get; set; } = false;
         public bool NotificacionWhatsAppEnviada { get; set; } = false;
         public DateTime? FechaNotificacion { get; set; }

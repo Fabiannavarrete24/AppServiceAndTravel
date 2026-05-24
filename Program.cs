@@ -44,6 +44,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<UtilitiesServices>();
 builder.Services.AddScoped<WhatsAppService>();
 builder.Services.AddScoped<VehicleService>();
@@ -149,8 +150,6 @@ app.UseSwaggerUI(c =>
 );
 app.UseAuthentication();
 app.UseAuthorization();
-
-var isConfigured = builder.Configuration.GetValue<bool>("IsConfigured");
 
 app.MapControllerRoute(
     name: "areas",

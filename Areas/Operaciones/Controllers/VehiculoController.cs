@@ -55,12 +55,12 @@ namespace AppServiceAndTravel.Controllers
 
         // GET: /Vehiculo/Create
         //[Authorize(Rols = "Administrador,Coordinador")]
-        public IActionResult Create() => View(new Vehiculo { FechaVencimientoSOAT = DateTime.Today.AddYears(1), FechaVencimientoTecnoMecanica = DateTime.Today.AddYears(2), FechaVencimientoSeguro = DateTime.Today.AddYears(1) });
+        public IActionResult Create() => View(new Vehiculos { FechaVencimientoSOAT = DateTime.Today.AddYears(1), FechaVencimientoTecnoMecanica = DateTime.Today.AddYears(2), FechaVencimientoSeguro = DateTime.Today.AddYears(1) });
 
         // POST: /Vehiculo/Create
         [HttpPost, ValidateAntiForgeryToken]
         //[Authorize(Rols = "Administrador,Coordinador")]
-        public async Task<IActionResult> Create(Vehiculo vehiculo)
+        public async Task<IActionResult> Create(Vehiculos vehiculo)
         {
             if (await _context.Vehiculos.AnyAsync(v => v.Placa == vehiculo.Placa))
                 ModelState.AddModelError("Placa", "Ya existe un vehículo con esa placa.");
@@ -85,7 +85,7 @@ namespace AppServiceAndTravel.Controllers
         // POST: /Vehiculo/Edit/{id}
         [HttpPost, ValidateAntiForgeryToken]
         //[Authorize(Rols = "Administrador,Coordinador")]
-        public async Task<IActionResult> Edit(int id, Vehiculo vehiculo)
+        public async Task<IActionResult> Edit(int id, Vehiculos vehiculo)
         {
             if (id != vehiculo.idVehiculo) return NotFound();
 

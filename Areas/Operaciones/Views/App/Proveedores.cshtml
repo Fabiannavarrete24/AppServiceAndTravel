@@ -1,4 +1,4 @@
-@model IEnumerable<AppServiceAndTravel.Models.ProveedorExterno>
+@model IEnumerable<AppServiceAndTravel.Models.ProveedoresExternos>
 @using AppServiceAndTravel.Models
 @{ ViewData["Title"] = "Proveedores Externos"; }
 
@@ -85,13 +85,13 @@
           <td><span class="badge rounded-pill px-3 py-1" style="@(p.Activo?"background:#d1fae5;color:#065f46;":"background:#fee2e2;color:#991b1b;")">@(p.Activo?"Activo":"Inactivo")</span></td>
           <td class="text-end pe-4">
             <div class="d-flex justify-content-end gap-1">
-              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Details" asp-route-id="@p.Id"
+              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Details" asp-route-id="@p.IdProveedorExterno"
                  class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
               @if(User.IsInRole("Administrador")||User.IsInRole("Coordinador")||User.IsInRole("RHManager"))
               {
-              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Edit" asp-route-id="@p.Id"
+              <a asp-area="RH" asp-controller="ProveedorExterno" asp-action="Edit" asp-route-id="@p.IdProveedorExterno"
                  class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
-              <form asp-area="RH" asp-controller="ProveedorExterno" asp-action="ToggleActivo" asp-route-id="@p.Id" method="post">
+              <form asp-area="RH" asp-controller="ProveedorExterno" asp-action="ToggleActivo" asp-route-id="@p.IdProveedorExterno" method="post">
                 @Html.AntiForgeryToken()
                 <button type="submit" class="btn btn-sm rounded-3"
                         style="@(p.Activo?"border:1px solid #f59e0b;color:#92400e;":"border:1px solid #16a34a;color:#065f46;")">

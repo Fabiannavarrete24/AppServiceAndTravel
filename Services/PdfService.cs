@@ -5,7 +5,7 @@ using QuestPDF.Infrastructure;
 
 public class PdfService
 {
-    public byte[] GenerarCotizacion(Cotizacion c)
+    public byte[] GenerarCotizacion(Cotizaciones c)
     {
         return Document.Create(container =>
         {

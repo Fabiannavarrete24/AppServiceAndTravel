@@ -8,7 +8,7 @@ namespace AppServiceAndTravel.Models
         [Key]
         public int idValidacionVehiculo { get; set; }
         public int idVehiculo { get; set; }
-        public Vehiculo? Vehiculo { get; set; }
+        public Vehiculos? Vehiculo { get; set; }
         public int? idServicio { get; set; }
         public DateTime FechaValidacion { get; set; } = DateTime.Now;
         public bool SOATVigente { get; set; }

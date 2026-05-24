@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AppServiceAndTravel.Models
 {
     public enum TipoServicioExterno { Vehiculo, Conductor, Ambos }
-    public class ProveedorExterno
+    public class ProveedoresExternos
     {
-        public int Id { get; set; }
+        [Key]
+        public int IdProveedorExterno { get; set; }
         [Required, StringLength(200)] public string RazonSocial { get; set; } = string.Empty;
         [Required, StringLength(30)] public string NitCedula { get; set; } = string.Empty;
         [StringLength(200)] public string? Contacto { get; set; }

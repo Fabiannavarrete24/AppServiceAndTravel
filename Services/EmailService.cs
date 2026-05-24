@@ -7,10 +7,10 @@ namespace AppServiceAndTravel.Services
 {
     public interface IEmailService
     {
-        Task EnviarconfirmadaacionServicioAsync(string destinatario, string nombreCliente, Servicio servicio);
-        Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
-        Task EnviarAprobacionCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
-        Task EnviarRechazoCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion);
+        Task EnviarconfirmadaacionServicioAsync(string destinatario, string nombreCliente, Servicios servicio);
+        Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion);
+        Task EnviarAprobacionCotizacionAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion);
+        Task EnviarRechazoCotizacionAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion);
         Task<(bool isSuccess, string errorMessage)> Enviarcorreo(string destinatario, string nombre, string asunto, string cuerpoHtml, byte[] archivo,string nombreArchivo);
     }
 
@@ -27,7 +27,7 @@ namespace AppServiceAndTravel.Services
             _logger = logger;
         }
 
-        // ?? Método base para enviar correos ????????????????????????????????
+        // ?? Mï¿½todo base para enviar correos ????????????????????????????????
         public async Task<(bool isSuccess, string errorMessage)> Enviarcorreo(string para, string copia, string asunto, string cuerpo, byte[] archivo, string nombreArchivo)
         {
             try
@@ -71,20 +71,20 @@ namespace AppServiceAndTravel.Services
             }
         }
 
-        // ?? Cotización creada ?????????????????????????????????????????????
-        public async Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizacion cotizacion)
+        // ?? Cotizaciï¿½n creada ?????????????????????????????????????????????
+        public async Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion)
         {
             var html = GenerarPlantillaBase(
-                titulo: "Cotización Recibida",
+                titulo: "Cotizaciï¿½n Recibida",
                 colorHeader: "#1e3a5f",
                 icono: "??",
                 contenido: $@"
                     <p>Estimado/a <strong>{nombreCliente}</strong>,</p>
-                    <p>Hemos recibido su solicitud de cotización. A continuación los detalles:</p>
+                    <p>Hemos recibido su solicitud de cotizaciï¿½n. A continuaciï¿½n los detalles:</p>
                     <table style='width:100%;border-collapse:collapse;margin:20px 0;'>
                         <tr style='background:#f0f4f8;'>
-                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #ddd;'>Número de Cotización</td>
-                            <td style='padding:10px;border:1px solid #ddd;'>#{cotizacion.Id:D6}</td>
+                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #ddd;'>Nï¿½mero de Cotizaciï¿½n</td>
+                            <td style='padding:10px;border:1px solid #ddd;'>#{cotizacion.idCotizacion:D6}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Origen</td>
@@ -96,33 +96,33 @@ namespace AppServiceAndTravel.Services
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Fecha del Servicio</td>
-                            <td style='padding:10px;border:1px solid #ddd;'>{cotizacion.FechaServicioRequerido:dd/MM/yyyy}</td>
+                            <td style='padding:10px;border:1px solid #ddd;'>{cotizacion.FechaServicio:dd/MM/yyyy}</td>
                         </tr>
                         <tr style='background:#f0f4f8;'>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Valor Cotizado</td>
                             <td style='padding:10px;border:1px solid #ddd;color:#1e3a5f;font-weight:bold;font-size:16px;'>${cotizacion.ValorCotizado:N2}</td>
                         </tr>
                     </table>
-                    <p>Su cotización está siendo <strong>revisada</strong> por nuestro equipo. Le notificaremos cuando sea aprobada.</p>"
+                    <p>Su cotizaciï¿½n estï¿½ siendo <strong>revisada</strong> por nuestro equipo. Le notificaremos cuando sea aprobada.</p>"
             );
 
-            await Enviarcorreo(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - Recibida", html, null!, null!);
+            await Enviarcorreo(destinatario, nombreCliente, $"Cotizaciï¿½n #{cotizacion.idCotizacion:D6} - Recibida", html, null!, null!);
         }
 
-        // ?? Cotización aprobada ???????????????????????????????????????????
-        public async Task EnviarAprobacionCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion)
+        // ?? Cotizaciï¿½n aprobada ???????????????????????????????????????????
+        public async Task EnviarAprobacionCotizacionAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion)
         {
             var html = GenerarPlantillaBase(
-                titulo: "¡Cotización Aprobada!",
+                titulo: "ï¿½Cotizaciï¿½n Aprobada!",
                 colorHeader: "#155724",
                 icono: "?",
                 contenido: $@"
                     <p>Estimado/a <strong>{nombreCliente}</strong>,</p>
-                    <p>Nos complace informarle que su cotización ha sido <strong style='color:#155724;'>APROBADA</strong>.</p>
+                    <p>Nos complace informarle que su cotizaciï¿½n ha sido <strong style='color:#155724;'>APROBADA</strong>.</p>
                     <table style='width:100%;border-collapse:collapse;margin:20px 0;'>
                         <tr style='background:#d4edda;'>
-                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #c3e6cb;'>Cotización N°</td>
-                            <td style='padding:10px;border:1px solid #c3e6cb;'>#{cotizacion.Id:D6}</td>
+                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #c3e6cb;'>Cotizaciï¿½n Nï¿½</td>
+                            <td style='padding:10px;border:1px solid #c3e6cb;'>#{cotizacion.idCotizacion:D6}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Ruta</td>
@@ -130,7 +130,7 @@ namespace AppServiceAndTravel.Services
                         </tr>
                         <tr style='background:#d4edda;'>
                             <td style='padding:10px;font-weight:bold;border:1px solid #c3e6cb;'>Fecha del Servicio</td>
-                            <td style='padding:10px;border:1px solid #c3e6cb;'>{cotizacion.FechaServicioRequerido:dd/MM/yyyy}</td>
+                            <td style='padding:10px;border:1px solid #c3e6cb;'>{cotizacion.FechaServicio:dd/MM/yyyy}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Valor Aprobado</td>
@@ -138,31 +138,31 @@ namespace AppServiceAndTravel.Services
                         </tr>
                     </table>
                     {(string.IsNullOrEmpty(cotizacion.ObservacionesAprobacion) ? "" : $"<p><strong>Observaciones:</strong> {cotizacion.ObservacionesAprobacion}</p>")}
-                    <p>Próximamente recibirá la confirmadaación del servicio con el vehículo y conductor asignados.</p>"
+                    <p>Prï¿½ximamente recibirï¿½ la confirmadaaciï¿½n del servicio con el vehï¿½culo y conductor asignados.</p>"
             );
 
-            await Enviarcorreo(destinatario, nombreCliente, $"? Cotización #{cotizacion.Id:D6} - Aprobada", html, null!, null!);
+            await Enviarcorreo(destinatario, nombreCliente, $"? Cotizaciï¿½n #{cotizacion.idCotizacion:D6} - Aprobada", html, null!, null!);
         }
 
-        // ?? Cotización rechazada ??????????????????????????????????????????
-        public async Task EnviarRechazoCotizacionAsync(string destinatario, string nombreCliente, Cotizacion cotizacion)
+        // ?? Cotizaciï¿½n rechazada ??????????????????????????????????????????
+        public async Task EnviarRechazoCotizacionAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion)
         {
             var html = GenerarPlantillaBase(
-                titulo: "Cotización No Aprobada",
+                titulo: "Cotizaciï¿½n No Aprobada",
                 colorHeader: "#721c24",
                 icono: "?",
                 contenido: $@"
                     <p>Estimado/a <strong>{nombreCliente}</strong>,</p>
-                    <p>Lamentamos informarle que su cotización N° <strong>#{cotizacion.Id:D6}</strong> no pudo ser aprobada en esta oportunidad.</p>
+                    <p>Lamentamos informarle que su cotizaciï¿½n Nï¿½ <strong>#{cotizacion.idCotizacion:D6}</strong> no pudo ser aprobada en esta oportunidad.</p>
                     {(string.IsNullOrEmpty(cotizacion.ObservacionesRechazo) ? "" : $"<div style='background:#f8d7da;padding:15px;border-radius:8px;border-left:4px solid #f5c6cb;margin:15px 0;'><strong>Motivo:</strong> {cotizacion.ObservacionesRechazo}</div>")}
-                    <p>Si desea, puede generar una nueva cotización con los ajustes correspondientes o contactar a nuestro equipo para más información.</p>"
+                    <p>Si desea, puede generar una nueva cotizaciï¿½n con los ajustes correspondientes o contactar a nuestro equipo para mï¿½s informaciï¿½n.</p>"
             );
 
-            await Enviarcorreo(destinatario, nombreCliente, $"Cotización #{cotizacion.Id:D6} - No Aprobada", html,null!,null!);
+            await Enviarcorreo(destinatario, nombreCliente, $"Cotizaciï¿½n #{cotizacion.idCotizacion:D6} - No Aprobada", html,null!,null!);
         }
 
-        // ?? confirmadaación de servicio ??????????????????????????????????????
-        public async Task EnviarconfirmadaacionServicioAsync(string destinatario, string nombreCliente, Servicio servicio)
+        // ?? confirmadaaciï¿½n de servicio ??????????????????????????????????????
+        public async Task EnviarconfirmadaacionServicioAsync(string destinatario, string nombreCliente, Servicios servicio)
         {
             var html = GenerarPlantillaBase(
                 titulo: "Servicio confirmadaado",
@@ -170,11 +170,11 @@ namespace AppServiceAndTravel.Services
                 icono: "??",
                 contenido: $@"
                     <p>Estimado/a <strong>{nombreCliente}</strong>,</p>
-                    <p>Su servicio de transporte ha sido <strong style='color:#004085;'>confirmadaADO</strong>. A continuación los detalles:</p>
+                    <p>Su servicio de transporte ha sido <strong style='color:#004085;'>confirmadaADO</strong>. A continuaciï¿½n los detalles:</p>
                     <table style='width:100%;border-collapse:collapse;margin:20px 0;'>
                         <tr style='background:#cce5ff;'>
-                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #b8daff;'>N° Servicio</td>
-                            <td style='padding:10px;border:1px solid #b8daff;'>#{servicio.Id:D6}</td>
+                            <td style='padding:10px;font-weight:bold;width:40%;border:1px solid #b8daff;'>Nï¿½ Servicio</td>
+                            <td style='padding:10px;border:1px solid #b8daff;'>#{servicio.idServicio:D6}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Fecha del Servicio</td>
@@ -185,7 +185,7 @@ namespace AppServiceAndTravel.Services
                             <td style='padding:10px;border:1px solid #b8daff;'>{servicio.Cotizacion?.Origen} ? {servicio.Cotizacion?.Destino}</td>
                         </tr>
                         <tr>
-                            <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Vehículo</td>
+                            <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Vehï¿½culo</td>
                             <td style='padding:10px;border:1px solid #ddd;'>{servicio.Vehiculo?.Marca} {servicio.Vehiculo?.Modelo} - Placa: <strong>{servicio.Vehiculo?.Placa}</strong></td>
                         </tr>
                         <tr style='background:#cce5ff;'>
@@ -193,14 +193,14 @@ namespace AppServiceAndTravel.Services
                             <td style='padding:10px;border:1px solid #b8daff;'>{servicio.Conductor?.NombreCompleto}</td>
                         </tr>
                         <tr>
-                            <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Teléfono Conductor</td>
+                            <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Telï¿½fono Conductor</td>
                             <td style='padding:10px;border:1px solid #ddd;'>{servicio.Conductor?.Telefono}</td>
                         </tr>
                     </table>
                     {(string.IsNullOrEmpty(servicio.Observaciones) ? "" : $"<p><strong>Observaciones:</strong> {servicio.Observaciones}</p>")}"
             );
 
-            await Enviarcorreo(destinatario, nombreCliente, $"?? Servicio #{servicio.Id:D6} - confirmadaado", html, null!, null!);
+            await Enviarcorreo(destinatario, nombreCliente, $"?? Servicio #{servicio.idServicio:D6} - confirmadaado", html, null!, null!);
         }
 
         // ?? Plantilla HTML base ???????????????????????????????????????????
@@ -234,8 +234,8 @@ namespace AppServiceAndTravel.Services
                           <!-- Footer -->
                           <tr>
                             <td style='background:#f8f9fa;padding:20px;text-align:center;border-top:1px solid #eee;'>
-                              <p style='color:#888;font-size:13px;margin:0;'>Sistema de Gestión de Transporte</p>
-                              <p style='color:#aaa;font-size:12px;margin:5px 0 0;'>Este es un mensaje automático, por favor no responda a este correo.</p>
+                              <p style='color:#888;font-size:13px;margin:0;'>Sistema de Gestiï¿½n de Transporte</p>
+                              <p style='color:#aaa;font-size:12px;margin:5px 0 0;'>Este es un mensaje automï¿½tico, por favor no responda a este correo.</p>
                             </td>
                           </tr>
                         </table>

@@ -15,8 +15,8 @@ namespace AppServiceAndTravel.Services
         public bool Success { get; set; }
         public List<string> Errores { get; set; } = new();
         public List<string> Advertencias { get; set; } = new();
-        public Vehiculo? Vehiculo { get; set; }
-        public Conductor? Conductor { get; set; }
+        public Vehiculos? Vehiculo { get; set; }
+        public Conductores? Conductor { get; set; }
     }
 
     public class VehicleService : IVehicleService

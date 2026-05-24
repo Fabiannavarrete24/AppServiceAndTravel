@@ -35,35 +35,39 @@ public partial class ApplicationDBContext : DbContext
             break;
     }
 }
-    public DbSet<Cliente> Clientes { get; set; }    
-    public DbSet<Conductor> Conductores { get; set; }
+    public DbSet<Clientes> Clientes { get; set; }    
+    public DbSet<Conductores> Conductores { get; set; }
     public DbSet<ConfiguracionGeneral> ConfiguracionGeneral { get; set; }
     public DbSet<ConfigNotificaciones> ConfiguracionNotificaciones { get; set; }    
-    public DbSet<Cotizacion> Cotizaciones { get; set; }
+    public DbSet<Cotizaciones> Cotizaciones { get; set; }
     public DbSet<FormatosCorreos> FormatosCorreos { get; set; }
     public DbSet<HistRefreshToken> HistRefreshToken { get; set; }
     public DbSet<HistLogin> HistLogin { get; set; }
-    public DbSet<Notificacion> Notificaciones { get; set; }
+    public DbSet<Notificaciones> Notificaciones { get; set; }
     public DbSet<Permisos> Permisos { get; set; }
     public DbSet<Procesos> Procesos { get; set; }
     public DbSet<Proveedores> Proveedores { get; set; }
-    public DbSet<ProveedorExterno> ProveedoresExternos { get; set; }
-    public DbSet<Servicio> Servicios { get; set; }
+    public DbSet<ProveedoresExternos> ProveedoresExternos { get; set; }
+    public DbSet<Servicios> Servicios { get; set; }
     public DbSet<Roles> Roles { get; set; }
     public DbSet<RolesUsuarios> RolesUsuarios { get; set; }
     public DbSet<ApplicationUser> Usuarios { get; set; }
     public DbSet<ValidacionVehiculo> ValidacionesVehiculo { get; set; }
-    public DbSet<Vehiculo> Vehiculos { get; set; }
+    public DbSet<Vehiculos> Vehiculos { get; set; }
+    public DbSet<ActividadSistema> ActividadesSistema { get; set; }
+    public DbSet<TipoActividadSistema> TiposActividadSistema { get; set; }
+    public DbSet<LogSistema> LogsSistema { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         
-        builder.ApplyConfiguration(new procesoSeed());        
+        builder.ApplyConfiguration(new procesoSeed());
         builder.ApplyConfiguration(new RolesSeed());
         builder.ApplyConfiguration(new RolesUsuariosSeed());
         builder.ApplyConfiguration(new PermissionsSeed());
         builder.ApplyConfiguration(new UserSeed());
+        builder.ApplyConfiguration(new TypeActitySeed());
 
         builder.Entity<RolesUsuarios>(entity =>
         {
@@ -110,21 +114,21 @@ public partial class ApplicationDBContext : DbContext
 
 
         // ── Cotizacion ────────────────────────────────────────────────
-        builder.Entity<Cotizacion>(entity =>
+        builder.Entity<Cotizaciones>(entity =>
         {
             entity.HasOne(c => c.Cliente)
                   .WithMany(cl => cl.Cotizaciones)
-                  .HasForeignKey(c => c.ClienteId)
+                  .HasForeignKey(c => c.idCliente)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.UsuarioCreador)
                   .WithMany()
-                  .HasForeignKey(c => c.UsuarioCreadorId)
+                  .HasForeignKey(c => c.idUsuarioCreador)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.UsuarioAprobador)
                   .WithMany()
-                  .HasForeignKey(c => c.UsuarioAprobadorId)
+                  .HasForeignKey(c => c.idUsuarioAprobador)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.Property(c => c.Estado)
@@ -132,30 +136,30 @@ public partial class ApplicationDBContext : DbContext
         });
 
         // ── Servicio ──────────────────────────────────────────────────
-        builder.Entity<Servicio>(entity =>
+        builder.Entity<Servicios>(entity =>
         {
             entity.HasOne(s => s.Cotizacion)
                   .WithOne(c => c.Servicio)
-                  .HasForeignKey<Servicio>(s => s.CotizacionId)
+                  .HasForeignKey<Servicios>(s => s.idCotizacion)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.Vehiculo)
                   .WithMany(v => v.Servicios)
-                  .HasForeignKey(s => s.VehiculoId)
+                  .HasForeignKey(s => s.idVehiculo)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.Conductor)
                   .WithMany(c => c.Servicios)
-                  .HasForeignKey(s => s.ConductorId)
+                  .HasForeignKey(s => s.idConductor)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.ProveedorExterno).WithMany()
-                  .HasForeignKey(s => s.ProveedorExternoId)
+                  .HasForeignKey(s => s.idProveedorExterno)
                   .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasOne(s => s.UsuarioCreador)
                   .WithMany()
-                  .HasForeignKey(s => s.UsuarioCreadorId)
+                  .HasForeignKey(s => s.idUsuarioCreador)
                   .OnDelete(DeleteBehavior.Restrict);
 
             entity.Property(s => s.Estado)
@@ -163,7 +167,7 @@ public partial class ApplicationDBContext : DbContext
         });
 
         // ── Vehiculo ──────────────────────────────────────────────────
-        builder.Entity<Vehiculo>(entity =>
+        builder.Entity<Vehiculos>(entity =>
         {
             entity.Property(v => v.Estado)
                   .HasConversion<string>();
@@ -174,7 +178,7 @@ public partial class ApplicationDBContext : DbContext
         });
 
         // ── Conductor ─────────────────────────────────────────────────
-        builder.Entity<Conductor>(entity =>
+        builder.Entity<Conductores>(entity =>
         {
             entity.HasIndex(c => c.Cedula).IsUnique();
             entity.HasIndex(c => c.NumeroLicencia).IsUnique();

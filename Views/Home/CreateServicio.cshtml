@@ -1,4 +1,4 @@
-@model AppServiceAndTravel.Models.Servicio
+@model AppServiceAndTravel.Models.Servicios
 @using AppServiceAndTravel.Models
 @{ ViewData["Title"] = "Nuevo Servicio"; }
 
@@ -31,11 +31,11 @@
           <!-- Cotización -->
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Cotización base</h6>
           <div class="mb-4">
-            <label asp-for="CotizacionId" class="form-label fw-semibold small">Cotización aprobada *</label>
-            <select asp-for="CotizacionId" asp-items="ViewBag.Cotizaciones" class="form-select rounded-3" required>
+            <label asp-for="idCotizacion" class="form-label fw-semibold small">Cotización aprobada *</label>
+            <select asp-for="idCotizacion" asp-items="ViewBag.Cotizaciones" class="form-select rounded-3" required>
               <option value="">— Seleccione una cotización aprobada —</option>
             </select>
-            <span asp-validation-for="CotizacionId" class="text-danger small"></span>
+            <span asp-validation-for="idCotizacion" class="text-danger small"></span>
           </div>
 
           <!-- Fecha -->
@@ -73,16 +73,16 @@
             <h6 class="fw-semibold small text-uppercase text-muted mb-3">Vehículo y conductor</h6>
             <div class="row g-3 mb-4">
               <div class="col-md-6">
-                <label asp-for="VehiculoId" class="form-label fw-semibold small">Vehículo *</label>
-                <select asp-for="VehiculoId" asp-items="ViewBag.Vehiculos"
+                <label asp-for="idVehiculo" class="form-label fw-semibold small">Vehículo *</label>
+                <select asp-for="idVehiculo" asp-items="ViewBag.Vehiculos"
                         class="form-select rounded-3" id="selVehiculo"
                         onchange="validarDoc()">
                   <option value="">— Seleccione —</option>
                 </select>
               </div>
               <div class="col-md-6">
-                <label asp-for="ConductorId" class="form-label fw-semibold small">Conductor *</label>
-                <select asp-for="ConductorId" asp-items="ViewBag.Conductores"
+                <label asp-for="idConductor" class="form-label fw-semibold small">Conductor *</label>
+                <select asp-for="idConductor" asp-items="ViewBag.Conductores"
                         class="form-select rounded-3" id="selConductor"
                         onchange="validarDoc()">
                   <option value="">— Seleccione —</option>
@@ -100,8 +100,8 @@
             <h6 class="fw-semibold small text-uppercase text-muted mb-3">Proveedor externo</h6>
             <div class="row g-3 mb-4">
               <div class="col-md-12">
-                <label asp-for="ProveedorExternoId" class="form-label fw-semibold small">Proveedor registrado</label>
-                <select asp-for="ProveedorExternoId" asp-items="ViewBag.Proveedores"
+                <label asp-for="idProveedorExterno" class="form-label fw-semibold small">Proveedor registrado</label>
+                <select asp-for="idProveedorExterno" asp-items="ViewBag.Proveedores"
                         class="form-select rounded-3">
                   <option value="">— Seleccione o complete manualmente —</option>
                 </select>
@@ -246,7 +246,7 @@ async function validarDoc() {
 }
 
 // Preseleccionar cotización si viene por querystring
-@if(Model.CotizacionId > 0)
-{ <text>document.querySelector('[name="CotizacionId"]').value = '@Model.CotizacionId';</text> }
+@if(Model.idCotizacion > 0)
+{ <text>document.querySelector('[name="CotizacionId"]').value = '@Model.idCotizacion';</text> }
 </script>
 }

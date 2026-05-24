@@ -15,7 +15,7 @@ namespace AppServiceAndTravel.Services
     public interface IConfiguracionService
     {
         Task<ConfiguracionGeneral> ObtenerAsync();
-        Task GuardarAsync(ConfiguracionGeneral config, string userId);
+        Task GuardarAsync(ConfiguracionGeneral config, int userId);
     }
 
     public class ConfiguracionService : IConfiguracionService
@@ -33,7 +33,7 @@ namespace AppServiceAndTravel.Services
             return _cache;
         }
 
-        public async Task GuardarAsync(ConfiguracionGeneral config, string userId)
+        public async Task GuardarAsync(ConfiguracionGeneral config, int userId)
         {
             config.UltimaModificacion = DateTime.Now;
             config.ModificadoPorId = userId;

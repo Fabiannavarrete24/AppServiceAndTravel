@@ -1,5 +1,5 @@
-@model AppServiceAndTravel.Models.Cotizacion
-@{ var esEdit = Model.Id > 0; ViewData["Title"] = esEdit ? "Editar Cotización" : "Nueva Cotización"; }
+@model AppServiceAndTravel.Models.Cotizaciones
+@{ var esEdit = Model.idCotizacion > 0; ViewData["Title"] = esEdit ? "Editar Cotización" : "Nueva Cotización"; }
 
 <div class="row g-4">
   <div class="col-lg-8">
@@ -17,16 +17,16 @@
         <form asp-area="Comercial" asp-controller="Cotizacion"
               asp-action="@(esEdit?"Edit":"Create")" method="post">
           @Html.AntiForgeryToken()
-          @if(esEdit){ <input type="hidden" asp-for="Id" /> }
+          @if(esEdit){ <input type="hidden" asp-for="idCotizacion" /> }
           <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
 
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Cliente</h6>
           <div class="mb-4">
-            <label asp-for="ClienteId" class="form-label fw-semibold small">Cliente *</label>
-            <select asp-for="ClienteId" asp-items="ViewBag.Clientes" class="form-select rounded-3" required>
+            <label asp-for="idCliente" class="form-label fw-semibold small">Cliente *</label>
+            <select asp-for="idCliente" asp-items="ViewBag.Clientes" class="form-select rounded-3" required>
               <option value="">— Seleccione un cliente —</option>
             </select>
-            <span asp-validation-for="ClienteId" class="text-danger small"></span>
+            <span asp-validation-for="idCliente" class="text-danger small"></span>
             <div class="mt-1">
               <a asp-area="Comercial" asp-controller="Cliente" asp-action="Create"
                  class="text-decoration-none small"><i class="bi bi-person-plus me-1"></i>Registrar nuevo cliente</a>
@@ -58,10 +58,10 @@
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Detalles del servicio</h6>
           <div class="row g-3 mb-4">
             <div class="col-md-6">
-              <label asp-for="FechaServicioRequerido" class="form-label fw-semibold small">Fecha del servicio *</label>
-              <input asp-for="FechaServicioRequerido" type="date" class="form-control rounded-3"
+              <label asp-for="FechaServicio" class="form-label fw-semibold small">Fecha del servicio *</label>
+              <input asp-for="FechaServicio" type="date" class="form-control rounded-3"
                      min="@DateTime.Today.ToString("yyyy-MM-dd")" required />
-              <span asp-validation-for="FechaServicioRequerido" class="text-danger small"></span>
+              <span asp-validation-for="FechaServicio" class="text-danger small"></span>
             </div>
             <div class="col-md-6">
               <label asp-for="NumPasajeros" class="form-label fw-semibold small">N° de pasajeros</label>

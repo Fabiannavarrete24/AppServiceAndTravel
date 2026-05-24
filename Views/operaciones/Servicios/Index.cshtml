@@ -1,4 +1,4 @@
-@model IEnumerable<AppServiceAndTravel.Models.Servicio>
+@model IEnumerable<AppServiceAndTravel.Models.Servicios>
 @using AppServiceAndTravel.Models
 @{
     ViewData["Title"] = "Servicios";
@@ -91,10 +91,10 @@
       @foreach(var s in Model)
       {
         <tr>
-          <td class="ps-4 fw-semibold text-muted">#@s.Id.ToString("D6")</td>
+          <td class="ps-4 fw-semibold text-muted">#@s.idServicio.ToString("D6")</td>
           <td>
             <div class="fw-semibold small">@s.Cotizacion?.Cliente?.NombreCompleto</div>
-            <div class="text-muted" style="font-size:11px;">Cot. #@s.CotizacionId.ToString("D6")</div>
+            <div class="text-muted" style="font-size:11px;">Cot. #@s.idCotizacion.ToString("D6")</div>
           </td>
           <td class="small text-muted">
             @s.Cotizacion?.Origen <i class="bi bi-arrow-right mx-1"></i>@s.Cotizacion?.Destino
@@ -126,7 +126,7 @@
             </div>
           </td>
           <td class="text-end pe-4">
-            <a asp-area="Operaciones" asp-controller="Servicio" asp-action="Details" asp-route-id="@s.Id"
+            <a asp-area="Operaciones" asp-controller="Servicio" asp-action="Details" asp-route-id="@s.idServicio"
                class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
           </td>
         </tr>

@@ -4,107 +4,15 @@
 
 <h2 class="sr-only">Dashboard administrativo</h2>
 
-<style>
-  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px; }
-
-  .kpi {
-    background: var(--bs-body-bg, #fff);
-    border: 1px solid rgba(0,0,0,.07);
-    border-radius: 14px;
-    padding: 18px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .kpi::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
-  .kpi.blue::before   { background: #1a6fc4; }
-  .kpi.green::before  { background: #16a34a; }
-  .kpi.amber::before  { background: #d97706; }
-  .kpi.red::before    { background: #dc2626; }
-  .kpi.purple::before { background: #7c3aed; }
-  .kpi.teal::before   { background: #0d9488; }
-
-  .kpi-icon {
-    width: 38px; height: 38px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; margin-bottom: 12px;
-  }
-  .kpi-icon.blue   { background: #dbeafe; color: #1d4ed8; }
-  .kpi-icon.green  { background: #dcfce7; color: #15803d; }
-  .kpi-icon.amber  { background: #fef3c7; color: #b45309; }
-  .kpi-icon.red    { background: #fee2e2; color: #b91c1c; }
-  .kpi-icon.purple { background: #ede9fe; color: #6d28d9; }
-  .kpi-icon.teal   { background: #ccfbf1; color: #0f766e; }
-
-  .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: #94a3b8; margin-bottom: 4px; }
-  .kpi-value { font-size: 22px; font-weight: 700; color: #1e293b; line-height: 1.2; }
-  .kpi-sub   { font-size: 12px; color: #64748b; margin-top: 4px; }
-  .kpi-delta { font-size: 12px; font-weight: 600; }
-  .delta-up   { color: #16a34a; }
-  .delta-down { color: #dc2626; }
-
-  .section-card {
-    background: var(--bs-body-bg, #fff);
-    border: 1px solid rgba(0,0,0,.07);
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 20px;
-  }
-  .section-header {
-    padding: 16px 20px 14px;
-    border-bottom: 1px solid rgba(0,0,0,.06);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .section-title { font-size: 14px; font-weight: 600; color: #1e293b; }
-  .section-body  { padding: 20px; }
-
-  .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .progress-label { font-size: 13px; color: #475569; min-width: 110px; }
-  .progress-track { flex: 1; height: 8px; background: #f1f5f9; border-radius: 99px; overflow: hidden; }
-  .progress-fill  { height: 100%; border-radius: 99px; transition: width .6s ease; }
-  .progress-count { font-size: 13px; font-weight: 600; min-width: 34px; text-align: right; color: #1e293b; }
-  .progress-pct   { font-size: 12px; color: #94a3b8; min-width: 38px; text-align: right; }
-
-  .legend-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; }
-  .legend-dot  { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-
-  .mini-stat { text-align: center; padding: 12px; }
-  .mini-stat-val { font-size: 28px; font-weight: 700; }
-  .mini-stat-lbl { font-size: 12px; color: #64748b; }
-
-  .donut-wrap { display: flex; align-items: center; gap: 24px; }
-  .donut-legend { flex: 1; }
-  .donut-legend-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .donut-legend-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #475569; }
-  .donut-legend-val   { font-size: 13px; font-weight: 600; color: #1e293b; }
-
-  .activity-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.05); }
-  .activity-item:last-child { border-bottom: none; }
-  .activity-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-  .activity-text { font-size: 13px; color: #475569; line-height: 1.5; }
-  .activity-time { font-size: 11px; color: #94a3b8; }
-
-  .fin-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,.05); }
-  .fin-row:last-child { border-bottom: none; }
-  .fin-label { font-size: 14px; color: #475569; display: flex; align-items: center; gap: 8px; }
-  .fin-amount { font-size: 14px; font-weight: 600; color: #1e293b; }
-  .fin-amount.green  { color: #16a34a; }
-  .fin-amount.red    { color: #dc2626; }
-  .fin-amount.purple { color: #7c3aed; }
-</style>
-
 <!-- ─── ROW 1: KPIs principales ─────────────────────────────────────────────── -->
 <div class="kpi-grid">
 
   <div class="kpi blue">
     <div class="kpi-icon blue"><i class="bi bi-cash-coin"></i></div>
     <div class="kpi-label">Ingresos totales</div>
-    <div class="kpi-value"></div>
+    <div class="kpi-value" id="kpiIngresos">$0</div>
     <div class="kpi-sub d-flex align-items-center gap-1 mt-1">
-      <span class="kpi-delta delta-up"><i class="bi bi-arrow-up-right"></i> +18.4%</span>
+      <span class="kpi-delta delta-up" id="id="ingresosVS"><i class="fa-solid fa-arrow-up-right"></i></span>
       <span class="text-muted">vs. año anterior</span>
     </div>
   </div>
@@ -112,9 +20,9 @@
   <div class="kpi red">
     <div class="kpi-icon red"><i class="bi bi-receipt-cutoff"></i></div>
     <div class="kpi-label">Costos operativos</div>
-    <div class="kpi-value"></div>
+    <div class="kpi-value" id="kpiCostos">$0</div>
     <div class="kpi-sub d-flex align-items-center gap-1 mt-1">
-      <span class="kpi-delta delta-down"><i class="bi bi-arrow-up-right"></i> +9.2%</span>
+      <span class="kpi-delta delta-down" id="id="costosVs"><i class="fa-solid fa-arrow-up-right"></i></span>
       <span class="text-muted">vs. año anterior</span>
     </div>
   </div>
@@ -122,37 +30,35 @@
   <div class="kpi green">
     <div class="kpi-icon green"><i class="bi bi-graph-up-arrow"></i></div>
     <div class="kpi-label">Utilidad neta</div>
-    <div class="kpi-value"></div>
+    <div class="kpi-value" id="kpiUtilidad">$0</div>
     <div class="kpi-sub d-flex align-items-center gap-1 mt-1">
-      <span class="kpi-delta delta-up"><i class="bi bi-arrow-up-right"></i> % margen</span>
+      <span class="kpi-delta delta-up" id="kpiMargen">
     </div>
   </div>
 
   <div class="kpi amber">
     <div class="kpi-icon amber"><i class="bi bi-file-earmark-text"></i></div>
     <div class="kpi-label">Cotizaciones</div>
-    <div class="kpi-value"></div>
+    <div class="kpi-value" id="kpiCotizaciones">0</div>
     <div class="kpi-sub">
-      <span class="badge" style="background:#fef3c7;color:#92400e;font-size:11px;"> pendientes</span>
+      <span class="badge" style="background:#fef3c7;color:#92400e;font-size:11px;" id="kpiPendientes"></span>
     </div>
   </div>
 
   <div class="kpi teal">
     <div class="kpi-icon teal"><i class="bi bi-truck"></i></div>
     <div class="kpi-label">Servicios</div>
-    <div class="kpi-value">0</div>
+    <div class="kpi-value" id="kpiServicios">0</div>
     <div class="kpi-sub">
-      <span class="badge" style="background:#ccfbf1;color:#0f766e;font-size:11px;">0 en curso</span>
+      <span class="badge" style="background:#ccfbf1;color:#0f766e;font-size:11px;" id="kpiServiciosCurso"></span>
     </div>
   </div>
 
   <div class="kpi purple">
     <div class="kpi-icon purple"><i class="bi bi-percent"></i></div>
     <div class="kpi-label">Tasa de aprobación</div>
-        <div class="kpi-value">
-           0%
-        </div>
-    <div class="kpi-sub">0 de 0 cotizaciones</div>
+    <div class="kpi-value" id="kpiAprobacion">0%</div>
+    <div class="kpi-sub" id="kpiConversion"></div>
   </div>
 
 </div>
@@ -359,37 +265,7 @@
       <div class="section-header">
         <div class="section-title"><i class="bi bi-activity me-2 text-primary"></i>Actividad reciente</div>        
       </div>
-      <div class="section-body" style="padding:12px 20px;">
-                <div class="activity-item">
-                    <div class="activity-dot" style="background:#1a6fc4;"></div>
-
-                    <div class="flex-grow-1">
-                        <div class="activity-text">
-                            Cotización
-                            <strong>#0</strong>
-                        </div>
-
-                        <div class="activity-time">
-                            FechaCreacion
-                        </div>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-dot" style="background:#16a34a;"></div>
-
-                    <div class="flex-grow-1">
-                        <div class="activity-text">
-                            Servicio
-                            <strong>#0</strong>
-                            —
-                            placa
-                        </div>
-
-                        <div class="activity-time">
-                            FechaCreacion
-                        </div>
-                    </div>
-                </div>
+      <div class="section-body" style="padding:12px 20px;" id="actividadReciente">
       </div>
     </div>
   </div>
@@ -439,150 +315,257 @@
 </div>
 
 @section Scripts {
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
 <script>
-// ── Colores ──────────────────────────────────────────────────────────────────
+
 const C = {
-  blue:   '#1a6fc4', blueL: 'rgba(26,111,196,.12)',
-  green:  '#16a34a', greenL:'rgba(22,163,74,.12)',
-  red:    '#ef4444', redL:  'rgba(239,68,68,.12)',
-  amber:  '#f59e0b',
-  teal:   '#0d9488', tealL: 'rgba(13,148,136,.12)',
-  purple: '#7c3aed',
-  gray:   '#94a3b8'
+    blue: '#1a6fc4',
+    blueL: 'rgba(26,111,196,.12)',
+    green: '#16a34a',
+    greenL: 'rgba(22,163,74,.12)',
+    red: '#ef4444',
+    redL: 'rgba(239,68,68,.12)',
+    amber: '#f59e0b',
+    teal: '#0d9488',
+    tealL: 'rgba(13,148,136,.12)',
+    purple: '#7c3aed',
+    gray: '#94a3b8'
 };
 
-// ── 1. Ingresos vs Costos ─────────────────────────────────────────────────────
-new Chart(document.getElementById('chartIngCost'), {
-  type: 'bar',
-  data: {
-    labels: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
-    datasets: [
-      {
-        label: 'Ingresos',
-        data: [0],
-        backgroundColor: C.blue, borderRadius: 4, borderSkipped: false
-      },
-      {
-        label: 'Costos',
-        data: [0],
-        backgroundColor: C.red, borderRadius: 4, borderSkipped: false
-      },
-      {
-        label: 'Utilidad',
-        data: [0],
-        backgroundColor: C.green, borderRadius: 4, borderSkipped: false
-      }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } },
-      y: {
-        grid: { color: 'rgba(0,0,0,.05)' },
-        ticks: {
-          color: '#94a3b8', font: { size: 11 },
-          callback: v => '$' + v + 'M'
+let chartIngCost;
+let chartCot;
+let chartTrend;
+let chartTipo;
+
+function money(v) {
+
+    return new Intl.NumberFormat('es-CO', {
+        style: 'currency',
+        currency: 'COP',
+        minimumFractionDigits: 0
+    }).format(v);
+}
+
+chartIngCost = new Chart(
+    $('#chartIngCost'),
+    {
+        type: 'bar',
+
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: [],
+                    backgroundColor: C.blue
+                },
+                {
+                    label: 'Costos',
+                    data: [],
+                    backgroundColor: C.red
+                },
+                {
+                    label: 'Utilidad',
+                    data: [],
+                    backgroundColor: C.green
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
         }
-      }
     }
-  }
-});
+);
 
-// ── 2. Cotizaciones donut ─────────────────────────────────────────────────────
-new Chart(document.getElementById('chartCot'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Pendientes','Aprobadas','Rechazadas'],
-    datasets: [{
-      data: [0, 0, 0],
-      backgroundColor: [C.amber, C.green, C.red],
-      borderWidth: 0,
-      hoverOffset: 6
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false, cutout: '72%',
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: ctx => {
-              const total = 0;
-              const pct = total > 0
-                  ? Math.round(ctx.raw / total * 100)
-                  : 0;
+chartCot = new Chart(
+    $('#chartCot'),
+    {
+        type: 'doughnut',
 
-              return ` ${ctx.label}: ${ctx.raw} (${pct}%)`;
-          }
+        data: {
+            labels: [
+                'Pendientes',
+                'Aprobadas',
+                'Rechazadas'
+            ],
+
+            datasets: [
+                {
+                    data: [0, 0, 0],
+
+                    backgroundColor: [
+                        C.amber,
+                        C.green,
+                        C.red
+                    ]
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '72%'
         }
-      }
     }
-  }
-});
+);
 
-// ── 3. Tendencia semanal ──────────────────────────────────────────────────────
-new Chart(document.getElementById('chartTrend'), {
-  type: 'line',
-  data: {
-    labels: ['Sem 1','Sem 2','Sem 3','Sem 4','Sem 5','Sem 6','Sem 7','Sem 8'],
-    datasets: [
-      {
-        label: 'Servicios',
-        data:[0],
-        borderColor: C.teal, backgroundColor: C.tealL,
-        fill: true, tension: 0.4, pointRadius: 4,
-        pointBackgroundColor: C.teal, yAxisID: 'y'
-      },
-      {
-        label: 'Ingresos (M)',
-        data: [0],
-        borderColor: C.blue, backgroundColor: 'transparent',
-        borderDash: [5,4], tension: 0.4, pointRadius: 4,
-        pointBackgroundColor: C.blue, yAxisID: 'y2'
-      }
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x:  { grid: { display: false }, ticks: { color: '#94a3b8', font: { size: 11 } } },
-      y:  { position: 'left',  grid: { color: 'rgba(0,0,0,.05)' }, ticks: { color: C.teal, font: { size: 11 }, callback: v => v + ' srv' } },
-      y2: { position: 'right', grid: { display: false }, ticks: { color: C.blue, font: { size: 11 }, callback: v => '$' + v + 'M' } }
-    }
-  }
-});
+chartTrend = new Chart(
+    $('#chartTrend'),
+    {
+        type: 'line',
 
-// ── 4. Por tipo de servicio ───────────────────────────────────────────────────
-new Chart(document.getElementById('chartTipo'), {
-  type: 'bar',
-    data: {
-        labels: ["servicio"],
-        datasets: [
-            {
-                label: 'Ingresos (M)',
-                data: [0],
-                backgroundColor: "#1a6fc4",
-                borderRadius: 4,
-                borderSkipped: false
-            }
-        ]
-    },
-  options: {
-    indexAxis: 'y',
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      x: {
-        grid: { color: 'rgba(0,0,0,.05)' },
-        ticks: { color: '#94a3b8', font: { size: 11 }, callback: v => '$' + v + 'M' }
-      },
-      y: { grid: { display: false }, ticks: { color: '#475569', font: { size: 12 } } }
+        data: {
+            labels: [
+                'Sem 1',
+                'Sem 2',
+                'Sem 3',
+                'Sem 4',
+                'Sem 5',
+                'Sem 6',
+                'Sem 7',
+                'Sem 8'
+            ],
+
+            datasets: [
+                {
+                    label: 'Servicios',
+                    data: [],
+                    borderColor: C.teal,
+                    backgroundColor: C.tealL,
+                    fill: true,
+                    tension: 0.4
+                },
+
+                {
+                    label: 'Ingresos',
+                    data: [],
+                    borderColor: C.blue,
+                    borderDash: [5, 5],
+                    tension: 0.4
+                }
+            ]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
     }
-  }
-});
+);
+
+chartTipo = new Chart(
+    $('#chartTipo'),
+    {
+        type: 'bar',
+
+        data: {
+            labels: [],
+
+            datasets: [
+                {
+                    label: 'Ingresos',
+                    data: [],
+                    backgroundColor: C.blue
+                }
+            ]
+        },
+
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    }
+);
+
+async function loadDashboard() {
+
+    try {
+
+        const response = await fetch('/api/dashboard');
+        const data = await response.json();
+        $("#kpiIngresosDelta").text(`<i class="bi bi-arrow-up-right"></i> +${data.variacionIngresos}%`);
+        $("#kpiMargen").text(`${data.margenUtilidad}% margen`);
+        $("#kpiPendientes").text(`${data.cotizacionesPendientes} pendientes`);
+        $("#kpiServiciosCurso").text(`${data.serviciosEnCurso} en curso`);
+        $("#kpiConversion").text(`${data.cotizacionesAprobadas} de ${data.totalCotizaciones} cotizaciones`);        
+        $('#kpiIngresos').text(money(data.ingresosTotales));        
+        $("#ingresosVS").text(`${data.IngresosAnioAnterior}`)        
+        $('#kpiCostos').text(money(data.costosOperativos));        
+        $("#costosVs").text(`${data.CostosAnioAnterior}`)        
+        $('#kpiUtilidad').text(money(data.utilidadNeta));
+        $('#kpiCotizaciones').text(data.totalCotizaciones);
+        $('#kpiServicios').text(data.totalServicios);
+
+        let aprobacion = 0;
+
+        if (data.totalCotizaciones > 0) {
+            aprobacion =
+                (
+                    data.cotizacionesAprobadas *
+                    100
+                ) / data.totalCotizaciones;
+        }
+
+        $('#kpiAprobacion').text(`${aprobacion} %`);
+
+        chartIngCost.data.labels = data.meses;
+        chartIngCost.data.datasets[0].data = data.ingresosMensuales;
+        chartIngCost.data.datasets[1].data = data.costosMensuales;
+        chartIngCost.data.datasets[2].data = data.utilidadMensual;
+        chartIngCost.update();
+
+        chartCot.data.datasets[0].data = [
+            data.cotizacionesPendientes,
+            data.cotizacionesAprobadas,
+            data.cotizacionesRechazadas
+        ];
+        chartCot.update();
+
+        chartTrend.data.datasets[0].data = data.serviciosSemanal;
+        chartTrend.data.datasets[1].data = data.ingresosSemanal;
+        chartTrend.update();
+
+        chartTipo.data.labels = data.tiposServicio;
+        chartTipo.data.datasets[0].data = data.ingresosPorTipo;
+        chartTipo.update();
+
+        const actividad = $('#actividadReciente');
+        actividad.innerHTML = ''; 
+        data.actividades.forEach(x => {
+            actividad.innerHTML += `
+                <div class="activity-item">
+                    <div class="activity-dot"
+                         style="background:#1a6fc4;">
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="activity-text">
+                            ${x.descripcion}
+                        </div>
+                        <div class="activity-time">
+                            ${new Date(x.fecha)
+                                .toLocaleString()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+loadDashboard();
+
+setInterval(() => {
+
+    loadDashboard();
+
+}, 60000);
+
 </script>
 }
