@@ -1,0 +1,478 @@
+@{
+    ViewData["Title"] = "Usuarios del sistema";
+}
+
+<div class="row g-3 mb-3">
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#dbeafe;color:#1d4ed8;font-size:20px;">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">
+                        Total usuarios
+                    </div>
+                    <div class="fw-bold fs-4 text-primary"
+                         id="cardTotalUsuarios">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#d1fae5;color:#065f46;font-size:20px;">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">
+                        Activos
+                    </div>
+                    <div class="fw-bold fs-4"
+                         style="color:#065f46;"
+                         id="cardUsuariosActivos">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#fee2e2;color:#991b1b;font-size:20px;">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">
+                        Inactivos
+                    </div>
+                    <div class="fw-bold fs-4"
+                         style="color:#991b1b;"
+                         id="cardUsuariosInactivos">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#ede9fe;color:#6d28d9;font-size:20px;">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">
+                        Roles definidos
+                    </div>
+                    <div class="fw-bold fs-4"
+                         style="color:#6d28d9;"
+                         id="cardRolesDefinidos">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="card mb-3">
+    <div class="card-body row gy-3">
+        <strong>Filtros Disponibles</strong>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label for="filterDateInitReport" class="form-label">Usuario</label>
+                <input type="text" id="filterUserTable" class="form-control rounded-3" />
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label for="filterDateLastReport" class="form-label">Cargo</label>
+                <input type="text" id="filterCargoTable" class="form-control rounded-3" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3">
+    <div class="card-body table-responsive">
+        <table class="table table-bordered table-striped" id="tableContent">
+            <thead>
+                <tr>
+                    <th class="ps-4">Usuario</th>
+                    <th>Cargo</th>
+                    <th>Roles</th>
+                    <th>Último acceso</th>
+                    <th>Estado</th>
+                    <th class="text-end pe-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="d-flex justify-content-between align-items-center gap-2 p-2">
+            <div id="infoTable" class="mt-2 text-muted"></div>
+            <div id="paginationTable" class="btn-group" role="group" aria-label="Basic outlined example">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal Editar Usuarios -->
+<div class="modal fade" id="EditUserModal" aria-labelledby="EditUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <div class="ms-2">
+                    <h5 class="mb-0 fw-semibold">Actualizar usuario</h5>
+                    <small class="text-muted">Complete el formulario</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCreateUser">
+                    <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos personales</h6>
+                    <div class="row gy-3 mb-4">
+                        <div class="col-sm-3">
+                            <label class="form-label fw-semibold small">UserName</label>
+                            <input class="form-control rounded-3" required disabled id="userName" />
+                            <input type="hidden" class="form-control rounded-3" required disabled id="idUser" />
+                            <span class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label fw-semibold small">Nombre completo *</label>
+                            <input class="form-control rounded-3" id="nombreUser" required />
+                            <span class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label fw-semibold small">Cargo</label>
+                            <input class="form-control rounded-3" id="cargoUser"
+                                   placeholder="Ej: Coordinador operativo" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label fw-semibold small">Teléfono</label>
+                            <input class="form-control rounded-3" id="telefonoUser" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label fw-semibold small">Email *</label>
+                            <input type="email" class="form-control rounded-3" id="correoUser" required />
+                            <span lass="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Contraseña *</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="pwUser">
+                                <button type="button" class="btn btn-outline-secondary"
+                                        onclick="togglePwd('pwUser','icoPW')">
+                                    <i class="fa-solid fa-eye" id="icoPW"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="form-label">Roles y Permisos</label>
+                            <select id="selectRol" class="form-select" id="idRolUser">
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Admin</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="adminUser">
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-label">Activo</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="activoUser">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex gap-3 pt-2">
+                    <button type="submit" class="btn btn-primary px-4 rounded-3" onclick="editarUsuario()">
+                        <i class="fa-solid fa-user-plus me-2"></i>Guardar Cambios
+                    </button>
+                    <a class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal restablecer contraseña Usuarios -->
+<div class="modal fade" id="ResetUserModel" aria-labelledby="ResetUserModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+                    <i class="fa-solid fa-user-pen"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-semibold">Cambio de Contraseña</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCreateUser">
+                    <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos personales</h6>
+                    <div class="row gy-3 mb-4">
+                        <div class="col-sm-12">
+                            <span>
+                                La contraseña debe tener: mínimo 8 caracteres,
+                                mayúsculas, minúsculas, números y por lo menos un caracter de los siguientes
+                                _#$&!%*?.,
+                            </span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="pwUserReset">
+                                <button type="button" class="btn btn-outline-secondary"
+                                        onclick="togglePwd('pwUserReset','icoResetPW')">
+                                    <i class="fa-solid fa-eye" id="icoResetPW"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="d-flex gap-3 pt-2">
+                    <button type="submit" class="btn btn-primary px-4 rounded-3" onclick="resetPassword()">
+                        <i class="fa-solid fa-user-plus me-2"></i>Guardar Cambios
+                    </button>
+                    <a class="btn btn-outline-secondary rounded-3" data-bs-dismiss="modal">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadRoles();
+             cargarDashboardUsuarios();
+        });
+
+        function loadRoles() {
+            $.ajax({
+                url: '/Admin/Configuracion/GetRoles',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (response) {
+                    LoadSelect("#selectRol", response.data);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        const usuariosTable = new TableManager({
+            url: '/Admin/Usuarios/ObtenerUsuarios',
+            tableId: '#tableContent',
+            paginationId: '#paginationTable',
+            infoId: '#infoTable',
+            pageSize: 10,
+            filters: {
+                userName: '#filterUserTable',
+                cargo: '#filterCargoTable',
+            },
+            beforeSend: () => {
+                showLoader();
+            },
+            onComplete: () => {
+                hideLoader();
+            },
+            renderTable: (data) => {
+                let tbody = $("#tableContent tbody");
+                tbody.empty();
+                if (!data || data.length === 0) {
+
+                    tbody.append(`
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        `);
+                    return;
+                }
+                data.forEach(item => {
+                    var estado = item.activo ? `<div class="alert alert-danger p-1 text-center" role="alert">Deshabilidado</div>` : `<div class="alert alert-success p-1 text-center" role="alert">Activo</div>`
+                    const ultimoAcceso = item.fechaUltimoAcceso ? moment(item.fechaUltimoAcceso).startOf('day').fromNow() : 'Nunca';
+                    tbody.append(`
+                            <tr>
+                                <td class="ps-4">${item.username ?? ''}</td>
+                                <td>${item.cargo ?? ''}</td>
+                                <td>${item.rol ?? ''}</td>
+                                <td>${ultimoAcceso ?? ''}</td>
+                                <td style="display:flex;">${estado ?? ''}</td>
+                                <td class="text-end pe-4">
+                                    <button type="button" class="btn btn-sm btn-light" data-id="${item.idUsuario}" data-bs-toggle="modal" data-bs-target="#EditUserModal">
+                                        <i class="fa-solid fa-pencil"></i>
+                                    </button>
+                                    <button type="button"  class="btn btn-sm btn-light" data-id="${item.idUsuario}" data-bs-toggle="modal" data-bs-target="#ResetUserModel">
+                                        <i class="fa-solid fa-key"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" data-id="${item.idUsuario}" id="DisabledUser">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                });
+            }
+        });
+        usuariosTable.load();
+
+        function editarUsuario(id) {
+            data = {
+                idUsuario: $("#id").val(),
+                Username: $("#userName").val(),
+                nombreCompleto: $("#nombreUser").val(),
+                correo: $("#correoUser").val(),
+                cargo: $("#cargoUser").val(),
+                telefono: $("#telefonoUser").val(),
+                admin: $("#adminUser").val(),
+                activo: $("#activoUser").val(),
+                password: $("#pwUser").val(),
+                idRol: $("#idRolUser").val(),
+            };
+            $.ajax({
+                url: '/Admin/Configuracion/UpdateUsuario',
+                type: 'POST',
+                beforeSend: function () {
+                    showLoader();
+                },
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        function resetPassword(id) {
+            data = {
+                idUsuario: $("#idUserReset").val(),
+                password: $("#pwUserReset").val(),
+            };
+            console.log(data);
+            $.ajax({
+                url: '/Admin/Configuracion/UpdateUsuario',
+                type: 'POST',
+                beforeSend: function () {
+                    showLoader();
+                },
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        function eliminarUsuario(id) {
+            new Date().toISOString();
+            data = {
+                idUsuario: $("#idUserReset").val(),
+                fechaBaja: new Date().toISOString(),
+            };
+            $.ajax({
+                url: '/Admin/Configuracion/UpdateUsuario',
+                type: 'POST',
+                beforeSend: function () {
+                    showLoader();
+                },
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log(response);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        $("#DisabledUser").click(function (){
+            var id = $(this).data("id");
+            Swal.fire({
+                title: "Esta seguro de deshabilitar este usuario",
+                showDenyButton: true,
+                confirmButtonText: "Deshabilitar",
+            }).then((result) => {
+                if (result.isConfirmed) eliminarUsuario(id);
+            });
+        });
+        function cargarDashboardUsuarios() {
+
+            $.ajax({
+
+                url: '/Admin/Usuarios/ObtenerDashboardUsuarios',
+
+                type: 'GET',
+
+                success: function (response) {
+
+                    if (!response.success) {
+                        mostrarAlerta(
+                            'error',
+                            '',
+                            response.message
+                        );
+
+                        return;
+                    }
+
+                    const data = response.data;
+
+                    $('#cardTotalUsuarios')
+                        .text(data.totalUsuarios);
+
+                    $('#cardUsuariosActivos')
+                        .text(data.usuariosActivos);
+
+                    $('#cardUsuariosInactivos')
+                        .text(data.usuariosInactivos);
+
+                    $('#cardRolesDefinidos')
+                        .text(data.rolesDefinidos);
+                },
+
+                error: function (error) {
+
+                    mostrarAlerta(
+                        'error',
+                        '',
+                        error.responseJSON?.message ||
+                        'Error al cargar dashboard'
+                    );
+                }
+            });
+        }
+    </script>
+}

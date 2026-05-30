@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Areas.Admin.Models;
 
 namespace AppServiceAndTravel.Data.Seeds
 {

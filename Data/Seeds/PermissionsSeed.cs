@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Areas.Admin.Models;
 
 namespace AppServiceAndTravel.Data.Seeds
 {
@@ -26,7 +26,15 @@ namespace AppServiceAndTravel.Data.Seeds
                 new Permisos() { idProceso = 14, idRol = 1, lectura = true, edita = true, elimina = true },
                 new Permisos() { idProceso = 15, idRol = 1, lectura = true, edita = true, elimina = true },
                 new Permisos() { idProceso = 16, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { idProceso = 17, idRol = 1, lectura = true, edita = true, elimina = true }
+                new Permisos() { idProceso = 17, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 18, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 19, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 20, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 21, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 22, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 23, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 24, idRol = 1, lectura = true, edita = true, elimina = true }
+
             );
         }
     }

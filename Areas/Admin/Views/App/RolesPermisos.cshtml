@@ -1,0 +1,911 @@
+@using AppServiceAndTravel.Areas.Admin.ViewModels
+@model GestionPermisosVM
+@{
+    ViewData["Title"]     = "Gestión de permisos";
+    ViewData["Subtitulo"] = "Administración / Roles y permisos";
+}
+
+<style>
+.permisos-toolbar {
+    display: flex; flex-wrap: wrap;
+    align-items: center; gap: 16px;
+    background: #fff; border-radius: 14px;
+    padding: 18px 24px; margin-bottom: 20px;
+    box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    border: 1px solid rgba(0,0,0,.05);
+}
+.toolbar-rol-wrap { display: flex; align-items: center; gap: 12px; flex-grow: 1; }
+.toolbar-rol-label {
+    font-size: 12px; font-weight: 700; color: #64748b;
+    text-transform: uppercase; letter-spacing: .6px; white-space: nowrap;
+}
+.rol-select {
+    border: 1.5px solid #e2e8f0; border-radius: 10px;
+    padding: 10px 36px 10px 14px; font-size: 14px;
+    font-weight: 600; color: #1e293b; background: #f8fafc;
+    appearance: none; cursor: pointer; min-width: 220px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+    transition: border-color .2s, box-shadow .2s;
+    outline: none;
+}
+.rol-select:focus {
+    border-color: var(--cp, #1a6fc4);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp, #1a6fc4) 15%, transparent);
+}
+
+/* Estado del rol */
+.rol-badge {
+    display: none; align-items: center; gap: 6px;
+    background: #dbeafe; color: #1d4ed8;
+    font-size: 12px; font-weight: 600;
+    padding: 5px 12px; border-radius: 99px;
+}
+.rol-badge.show { display: flex; }
+
+/* Botones toolbar */
+.btn-toolbar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 10px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    border: none; transition: all .15s; white-space: nowrap;
+}
+.btn-toolbar-primary {
+    background: var(--cp, #1a6fc4); color: #fff;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--cp, #1a6fc4) 30%, transparent);
+}
+.btn-toolbar-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-toolbar-secondary { background: #f1f5f9; color: #475569; }
+.btn-toolbar-secondary:hover { background: #e2e8f0; color: #1e293b; }
+.btn-toolbar-danger { background: #fee2e2; color: #991b1b; }
+.btn-toolbar-danger:hover { background: #fecaca; }
+
+/* Clonado de permisos */
+.clone-wrap {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    padding: 10px 14px; background: #f8fafc;
+    border: 1.5px dashed #cbd5e1; border-radius: 10px;
+}
+.clone-label { font-size: 12px; color: #64748b; white-space: nowrap; }
+.clone-select {
+    border: 1.5px solid #e2e8f0; border-radius: 8px;
+    padding: 6px 28px 6px 10px; font-size: 13px;
+    background: #fff; appearance: none; cursor: pointer; outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 8px center;
+}
+
+.permisos-stats {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.pstat {
+    background: #fff; border-radius: 12px; padding: 14px 18px;
+    border: 1px solid rgba(0,0,0,.05); box-shadow: 0 1px 8px rgba(0,0,0,.05);
+    display: flex; align-items: center; gap: 12px; flex: 1; min-width: 140px;
+}
+.pstat-icon {
+    width: 36px; height: 36px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0;
+}
+.pstat-val { font-size: 20px; font-weight: 700; color: #1e293b; line-height: 1; }
+.pstat-lbl { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+.sk { background: linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+    background-size:400% 100%; animation:shimmer 1.4s ease infinite; border-radius:8px; }
+@@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+#permisosContent { display: none; }
+
+        #permisosContent.visible {
+            display: flex !important;
+            flex-direction: row;
+            flex-wrap: wrap;
+            column-gap: 16px;
+            animation: fadeIn .3s ease;
+        }
+@@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.area-card {
+    width:calc(50% - 10px);
+    background: #fff; border-radius: 14px;
+    border: 1px solid rgba(0,0,0,.05);
+    box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    margin-bottom: 16px; overflow: hidden;
+}
+
+.area-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px; cursor: pointer;
+    user-select: none; border-bottom: 1px solid transparent;
+    transition: border-color .2s;
+}
+.area-header.open { border-bottom-color: rgba(0,0,0,.06); }
+.area-header:hover { background: #f8fafc; }
+
+.area-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+}
+.area-name {
+    font-size: 15px; font-weight: 700; color: #1e293b;
+    flex-grow: 1;
+}
+.area-count {
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 99px; background: #f1f5f9; color: #64748b;
+}
+.area-chevron {
+    color: #94a3b8; font-size: 14px;
+    transition: transform .25s; flex-shrink: 0;
+}
+.area-header.open .area-chevron { transform: rotate(180deg); }
+
+/* Barra "seleccionar todo" del área */
+.area-select-all {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 20px; background: #f8fafc;
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.area-select-all label {
+    font-size: 12px; font-weight: 600; color: #64748b;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+
+/* Cabecera de columnas */
+.permisos-thead {
+    display: grid;
+    grid-template-columns: 1fr repeat(4, 88px);
+    gap: 0;
+    padding: 8px 20px 8px 20px;
+    background: #f8fafc;
+    border-bottom: 2px solid #e2e8f0;
+}
+.pth {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .6px; color: #64748b; text-align: center;
+}
+.pth:first-child { text-align: left; }
+
+/* Fila de proceso */
+.proceso-row {
+    display: grid;
+    grid-template-columns: 1fr repeat(4, 88px);
+    gap: 0;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: center;
+    transition: background .15s;
+}
+.proceso-row:last-child { border-bottom: none; }
+.proceso-row:hover { background: #fafcff; }
+
+/* Proceso padre (nivel 1) */
+.proceso-row.nivel-1 { background: #f8fafc; }
+.proceso-row.nivel-1:hover { background: #f0f4f8; }
+.proceso-row.nivel-1 .proceso-name { font-weight: 700; font-size: 13.5px; }
+
+/* Proceso hijo (nivel 2) */
+.proceso-row.nivel-2 { padding-left: 44px; }
+.proceso-row.nivel-2 .proceso-name { font-size: 13px; color: #475569; }
+
+.proceso-info { display: flex; align-items: center; gap: 10px; }
+.proceso-icon-wrap {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+}
+.proceso-name { font-size: 13px; font-weight: 600; color: #1e293b; }
+.proceso-url  { font-size: 11px; color: #94a3b8; font-family: monospace; }
+
+/* Checkbox personalizado */
+.perm-cell { display: flex; justify-content: center; align-items: center; }
+.perm-check {
+    position: relative; width: 40px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+}
+.perm-check input[type="checkbox"] {
+    width: 18px; height: 18px;
+    border-radius: 5px; cursor: pointer;
+    accent-color: var(--cp, #1a6fc4);
+    transition: all .15s;
+}
+.perm-check input[type="checkbox"]:checked + .perm-indicator { opacity: 1; }
+.perm-label {
+    font-size: 10px; font-weight: 600; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: .4px;
+    margin-top: 2px; display: block; text-align: center;
+}
+
+/* Indicador de permiso activo en la fila */
+.row-active-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #22c55e; flex-shrink: 0;
+    opacity: 0; transition: opacity .2s;
+}
+.proceso-row.has-perms .row-active-dot { opacity: 1; }
+
+/* ════════════════════════════════════════════════════════════
+   ESTADO SIN ROL
+════════════════════════════════════════════════════════════ */
+#emptyState {
+    background: #fff; border-radius: 14px; padding: 56px 24px;
+    text-align: center; border: 1px solid rgba(0,0,0,.05);
+    box-shadow: 0 1px 8px rgba(0,0,0,.06);
+}
+.empty-icon {
+    width: 72px; height: 72px; background: #f1f5f9;
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 30px; color: #94a3b8;
+    margin: 0 auto 20px;
+}
+
+.toast-permisos {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    background: #1e293b; color: #e2e8f0;
+    border-radius: 12px; padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    font-size: 14px; font-weight: 500;
+    transform: translateY(100px); opacity: 0;
+    transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+    min-width: 280px;
+}
+.toast-permisos.show { transform: translateY(0); opacity: 1; }
+.toast-permisos.ok   .toast-ico { color: #22c55e; }
+.toast-permisos.err  .toast-ico { color: #ef4444; }
+.toast-ico { font-size: 20px; flex-shrink: 0; }
+
+
+@@media (max-width: 700px) {
+    .permisos-thead, .proceso-row {
+        grid-template-columns: 1fr repeat(4, 60px);
+    }
+    .permisos-toolbar { flex-direction: column; align-items: stretch; }
+    .btn-toolbar { justify-content: center; }
+}
+@@media (max-width: 520px) {
+    .permisos-thead, .proceso-row {
+        grid-template-columns: 1fr repeat(4, 48px);
+    }
+    .pth, .perm-label { font-size: 9px; }
+    .proceso-row.nivel-2 { padding-left: 28px; }
+}
+</style>
+
+<div class="permisos-toolbar">
+    <div class="toolbar-rol-wrap">
+        <div class="row w-100">
+            <div class="col-sm-8">
+                <label class="form-label">Rol:</label>
+                <div class="w-100 position-relative">
+                    <input type="text" class="form-control" id="txtRol" list="rolesList" placeholder="Seleccione o escriba un nuevo rol">
+                    <datalist id="rolesList"></datalist>
+                    <input type="hidden" id="idRolSeleccionado" value="0" />
+                </div>
+            </div>
+            <div class="col-sm-4 d-flex align-items-end pb-2">
+                <div class="rol-badge" id="rolBadge">
+                    <i class="bi bi-shield-check"></i>
+                    <span id="rolBadgeName"></span>
+                </div>
+            </div>
+        </div>        
+    </div>
+    <div class="d-flex gap-2 flex-wrap" id="botonesAccion" style="display:none!important;">
+        <button type="button" class="btn btn-secondary rounded-3 px-4" onclick="seleccionarTodo(true)">
+            <i class="fa-solid fa-list-check"></i> Todo
+        </button>
+        <button type="button" class="btn btn-danger rounded-3 px-4" onclick="seleccionarTodo(false)">
+            <i class="fa-solid fa-xmark"></i> Ninguno
+        </button>
+        <button type="button" class="btn btn-success rounded-3 px-4" onclick="guardarPermisos()" id="btnGuardar">
+            <span class="spinner-border spinner-border-sm d-none me-1" id="spnGuardar"></span>
+            <i class="fa-solid fa-save" id="icoGuardar"></i> Guardar cambios
+        </button>
+        <button type="button" class="btn btn-primary rounded-3 px-4" onclick="guardarNuevoRol()" id="btnAgregar">
+            <span class="spinner-border spinner-border-sm d-none me-1" id="spnAgregar"></span>
+            <i class="fa-solid fa-plus" id="icoAgregar"></i> Agregar
+        </button>
+    </div>
+</div>
+<div class="permisos-stats" id="statsBar" style="display:none;">
+    <div class="pstat">
+        <div class="pstat-icon" style="background:#dbeafe;color:#1d4ed8;">
+            <i class="fa-solid fa-grip"></i>
+        </div>
+        <div>
+            <div class="pstat-val" id="statTotal">0</div>
+            <div class="pstat-lbl">Procesos totales</div>
+        </div>
+    </div>
+    <div class="pstat">
+        <div class="pstat-icon" style="background:#d1fae5;color:#065f46;">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <div>
+            <div class="pstat-val" id="statActivos">0</div>
+            <div class="pstat-lbl">Con algún permiso</div>
+        </div>
+    </div>
+    <div class="pstat">
+        <div class="pstat-icon" style="background:#fef3c7;color:#92400e;">
+            <i class="fa-solid fa-eye"></i>
+        </div>
+        <div>
+            <div class="pstat-val" id="statLectura">0</div>
+            <div class="pstat-lbl">Solo lectura</div>
+        </div>
+    </div>
+    <div class="pstat">
+        <div class="pstat-icon" style="background:#ede9fe;color:#6d28d9;">
+            <i class="fa-solid fa-shield"></i>
+        </div>
+        <div>
+            <div class="pstat-val" id="statCompletos">0</div>
+            <div class="pstat-lbl">Acceso completo</div>
+        </div>
+    </div>
+</div>
+<div id="emptyState">
+    <div class="empty-icon">    
+        <i class="fa-solid fa-user-shield"></i>
+    </div>
+    <h5 class="fw-semibold mb-2" style="color:#1e293b;">Seleccione un rol</h5>
+    <p class="text-muted small">
+        Escoja un rol en el selector de arriba para ver y editar sus permisos por módulo.
+    </p>
+</div>
+<div id="skeletonPermisos" style="display:none;flex-direction:row;flex-wrap:wrap; gap:15px;">
+    @for (int s = 0; s < 4; s++)
+    {
+        <div class="area-card" style="width:calc(50% -10px);">
+            <div style="padding:16px 20px;display:flex;align-items:center;gap:12px;">
+                <div class="sk" style="width:38px;height:38px;border-radius:10px;flex-shrink:0;"></div>
+                <div class="sk" style="height:16px;width:160px;"></div>
+                <div class="sk ms-auto" style="height:22px;width:50px;border-radius:99px;"></div>
+            </div>
+            <div style="padding:8px 20px 0;">
+                @for (int r = 0; r < 4; r++)
+                {
+                    <div style="display:grid;grid-template-columns:1fr repeat(4,88px);gap:0;padding:12px 0;border-bottom:1px solid #f1f5f9;">
+                        <div class="sk" style="height:14px;width:@(120 + r * 20)px;"></div>
+                        @for (int c = 0; c < 4; c++)
+                        { <div style="display:flex;justify-content:center;"><div class="sk" style="width:18px;height:18px;border-radius:4px;"></div></div> }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+<div id="permisosContent"></div>
+<div class="toast-permisos" id="toast">
+    <i class="toast-ico" id="toastIco"></i>
+    <span id="toastMsg"></span>
+</div>
+
+@section Scripts {
+<script>         
+var rolActual   = 0;
+var areasData   = [];
+var colores     = {
+    comercial:   {color:'#3b82f6',  bg:'rgba(59,130,246,.1)'},
+    operaciones: {color:'#0d9488',  bg:'rgba(13,148,136,.1)'},
+    rh:          {color:'#7c3aed',  bg:'rgba(124,58,237,.1)'},
+    contabilidad:{color:'#d97706',  bg:'rgba(217,119,6,.1)'},
+    admin:       {color:'#ef4444',  bg:'rgba(239,68,68,.1)'},
+};
+var iconosArea  = {
+    comercial:   'fa-solid fa-briefcase',
+    operaciones: 'fa-solid fa-truck',
+    rh:          'fa-solid fa-users-rectangle',
+    contabilidad:'fa-solid fa-calculator',
+    admin:       'fa-solid fa-user-shield',
+};
+
+function getAreaStyle(area) {
+    var k = (area || '').toLowerCase();
+    return colores[k] || {color:'#64748b', bg:'rgba(100,116,139,.1)'};
+}
+function getAreaIcon(area) {
+    var k = (area || '').toLowerCase();
+    return iconosArea[k] || 'bi-grid';
+}
+        function limpiarPermisos() {
+
+            $('input[data-perm]').prop('checked', false);
+
+            actualizarStats();
+
+            marcarFilasActivas();
+        }
+        $('#txtRol').on('change', function () {
+
+            let nombre = $(this).val().trim();
+
+            let option = $('#rolesList option').filter(function () {
+                return $(this).val() === nombre;
+            });
+
+            if (option.length > 0) {
+
+                let id = option.data('id');
+
+                $('#idRolSeleccionado').val(id);
+
+                rolActual = parseInt(id);
+
+                cargarPermisos(id);
+            }
+            else {
+
+                $('#idRolSeleccionado').val(0);
+
+                rolActual = 0;
+
+                limpiarPermisos();
+            }
+        });
+        function guardarNuevoRol() {
+
+            let nombreRol = $('#txtRol').val().trim();
+
+            if (!nombreRol) {
+
+                mostrarToast(
+                    'err',
+                    'fa-solid fa-triangle-exclamation',
+                    'Debe escribir un nombre de rol'
+                );
+
+                return;
+            }
+
+            let idRol = parseInt($('#idRolSeleccionado').val());
+
+            // Si ya existe → guardar normal
+            if (idRol > 0) {
+
+                rolActual = idRol;
+
+                guardarPermisos();
+
+                return;
+            }
+
+            // Crear rol nuevo
+            $.ajax({
+
+                url: '/Admin/Configuracion/CrearRol',
+
+                type: 'POST',
+
+                data: {
+                    nombre: nombreRol
+                },
+
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (resp) {
+
+                    if (!resp.success) {
+
+                        mostrarToast(
+                            'err',
+                            'fa-solid fa-circle-xmark',
+                            resp.message
+                        );
+
+                        return;
+                    }
+
+                    rolActual = resp.data.idRol;
+
+                    $('#idRolSeleccionado').val(resp.data.idRol);
+
+                    guardarPermisos();
+
+                    loadRoles();
+
+                    mostrarToast(
+                        'ok',
+                        'fa-solid fa-circle-check',
+                        'Rol creado correctamente'
+                    );
+                },
+
+                error: function () {
+
+                    mostrarToast(
+                        'err',
+                        'fa-solid fa-circle-xmark',
+                        'Error al crear el rol'
+                    );
+                },
+
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+        function loadRoles() {
+
+            $.ajax({
+                url: '/Admin/Configuracion/GetRoles',
+                type: 'GET',
+
+                beforeSend: function () {
+                    showLoader();
+                },
+
+                success: function (response) {
+
+                    if (!response.success)
+                        return;
+
+                    let html = '';
+
+                    response.data.forEach(r => {
+
+                        html += `
+                            <option
+                                data-id="${r.id}"
+                                value="${r.descripcion}">
+                            </option>
+                        `;
+                    });
+
+                    $('#rolesList').html(html);
+                },
+
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+                    function renderizarAreas(areas) {
+
+                        let html = '';
+
+                        areas.forEach((area, aIdx) => {
+
+                            const style = getAreaStyle(area.area);
+                            const icon = getAreaIcon(area.area);
+
+                            html += `
+                            <div class="area-card mb-3" id="areaCard_${aIdx}">
+                                <div class="area-header open" onclick="toggleArea(${aIdx})">
+                                    <div class="area-icon" style="background:${style.bg};color:${style.color};">
+                                        <i class="bi ${icon}"></i>
+                                    </div>
+                                    <span class="area-name">
+                                        ${area.area}
+                                    </span>
+                                    <span class="area-count" id="areaCount_${aIdx}">
+                                        ${contarProcesos(area.procesos)} procesos
+                                    </span>
+                                </div>
+                                <div class="area-body" id="areaBody_${aIdx}">
+                                    <div class="area-select-all">
+                                        <label>
+                                            <input type="checkbox" class="area-check-all" onchange="toggleAreaAll(${aIdx}, this.checked)" />
+                                            Seleccionar todos los permisos del área
+                                        </label>
+                                    </div>
+                                    <div class="permisos-thead">
+                                        <div class="pth">Proceso / Módulo</div>
+                                        <div class="pth">Lectura</div>
+                                        <div class="pth">Crear</div>
+                                        <div class="pth">Editar</div>
+                                        <div class="pth">Eliminar</div>
+                                    </div>
+                            `;
+
+                            area.procesos.forEach(p => {
+                                html += renderProceso(p, p.nivel || 0);
+                            });
+
+                            html += `
+                                </div>
+                            </div>
+                            `;
+                        });
+
+                        $('#permisosContent').html(html);
+                        $('#skeletonPermisos').hide();
+                        $('#permisosContent').show().addClass('visible');
+                        $('#statsBar').show();
+                        $('#botonesAccion').css('display', 'flex');
+
+                        marcarFilasActivas();
+                        actualizarStats();
+                    }
+
+                       function renderProceso(p, nivel = 0) {
+
+                        const nivelClass = `nivel-${nivel}`;
+
+                        let html = `
+                            <div class="proceso-row ${nivelClass}" id="row_${p.idProceso}" data-idproceso="${p.idProceso}">
+                                <div class="proceso-info">
+                                    <div class="row-active-dot"></div>
+                                    <div>
+                                        <div class="proceso-name">
+                                            ${p.proceso || 'Sin nombre'}
+                                        </div>
+                                        ${p.url 
+                                            ? `<div class="proceso-url">${p.url}</div>` 
+                                            : '' }
+                                    </div>
+                                </div>
+                                ${renderCheck(p, 'lectura')}
+                                ${renderCheck(p, 'crea')}
+                                ${renderCheck(p, 'edita')}
+                                ${renderCheck(p, 'elimina')}
+                            </div>
+                        `;
+
+                        if (p.hijos && p.hijos.length > 0) {
+
+                            p.hijos.forEach(hijo => {
+
+                                html += renderProceso(hijo, nivel + 1);
+
+                            });
+                        }
+
+                        return html;
+                    }
+
+                    function renderCheck(p, perm) {
+
+                        const checked = p[perm] ? 'checked' : '';
+
+                        return `
+                            <div class="perm-cell">
+                                <div class="perm-check">
+                                    <input type="checkbox" ${checked} data-idproceso="${p.idProceso}" data-perm="${perm}" onchange="onPermChange(this)" />
+                                </div>
+                            </div>
+                        `;
+                    }
+function cargarPermisos(idRol) {
+    if (!idRol) { mostrarEmpty(); return; }
+
+    rolActual = parseInt(idRol);
+
+    var nombreRol = $('#txtRol').val();
+    document.getElementById('rolBadgeName').textContent = nombreRol;
+    document.getElementById('rolBadge').classList.add('show');
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('permisosContent').classList.remove('visible');
+    document.getElementById('permisosContent').style.display = 'none';
+    document.getElementById('skeletonPermisos').style.display = 'block';
+    document.getElementById('statsBar').style.display = 'none';
+    document.getElementById('botonesAccion').style.display = 'none';
+
+    $.ajax({
+        url:  '@Url.Action("GetPermisosRol", "Configuracion", new{area="Admin"})',
+        type: 'GET',
+        beforeSend: function () {
+            showLoader();
+        },
+        data: { idRol: idRol },
+        success: function(response) {
+                    console.log(response);
+                    areasData = response;
+            if(response.success)
+                    renderizarAreas(response.data.areas);
+        },
+        error: function() {
+            mostrarEmpty();
+            mostrarToast('err', 'fa-solid circle-triangle-exclamation', 'Error al cargar los permisos.');
+        },
+        complete: function () {
+            hideLoader();
+        }
+    });
+}
+
+function toggleArea(aIdx) {
+    var header = document.querySelector(`#areaCard_${aIdx} .area-header`);
+    var body   = document.getElementById(`areaBody_${aIdx}`);
+    var isOpen = header.classList.contains('open');
+
+    if (isOpen) {
+        header.classList.remove('open');
+        body.style.display = 'none';
+    } else {
+        header.classList.add('open');
+        body.style.display = 'block';
+    }
+}
+
+function onPermChange(chk) {
+    var row = document.getElementById(`row_${chk.dataset.idproceso}`);
+    marcarFilaActiva(row);
+    actualizarStats();
+    actualizarCheckAllArea(chk);
+}
+
+function marcarFilasActivas() {
+    document.querySelectorAll('.proceso-row').forEach(function(row) {
+        marcarFilaActiva(row);
+    });
+}
+
+function marcarFilaActiva(row) {
+    var checks = row.querySelectorAll('input[type="checkbox"]');
+    var alguno = Array.from(checks).some(function(c) { return c.checked; });
+    row.classList.toggle('has-perms', alguno);
+}
+
+function toggleAreaAll(aIdx, checked) {
+    var body = document.getElementById(`areaBody_${aIdx}`);
+    body.querySelectorAll('input[type="checkbox"][data-perm]').forEach(function(chk) {
+        chk.checked = checked;
+        var row = document.getElementById(`row_${chk.dataset.idproceso}`);
+        if (row) marcarFilaActiva(row);
+    });
+    actualizarStats();
+}
+
+function actualizarCheckAllArea(chk) {
+    var row  = document.getElementById(`row_${chk.dataset.idproceso}`);
+    var body = row.closest('.area-body');
+    if (!body) return;
+    var allChks   = body.querySelectorAll('input[type="checkbox"][data-perm]');
+    var allChecked = Array.from(allChks).every(function(c) { return c.checked; });
+    var chkAll    = body.querySelector('.area-check-all');
+    if (chkAll) chkAll.checked = allChecked;
+}
+
+function seleccionarTodo(checked) {
+    document.querySelectorAll('input[type="checkbox"][data-perm]').forEach(function(c) {
+        c.checked = checked;
+    });
+    document.querySelectorAll('.area-check-all').forEach(function(c) { c.checked = checked; });
+    marcarFilasActivas();
+    actualizarStats();
+}
+
+function actualizarStats() {
+    var rows = document.querySelectorAll('.proceso-row');
+    var total = rows.length;
+    var activos = 0, soloLectura = 0, completos = 0;
+
+    rows.forEach(function(row) {
+        var chks = row.querySelectorAll('input[data-perm]');
+        var lec  = row.querySelector('input[data-perm="lectura"]')?.checked;
+        var crea = row.querySelector('input[data-perm="crea"]')?.checked;
+        var edit = row.querySelector('input[data-perm="edita"]')?.checked;
+        var eli  = row.querySelector('input[data-perm="elimina"]')?.checked;
+        var alguno = lec || crea || edit || eli;
+
+        if (alguno)           activos++;
+        if (lec && !crea && !edit && !eli) soloLectura++;
+        if (lec && crea && edit && eli)    completos++;
+    });
+
+    document.getElementById('statTotal').textContent    = total;
+    document.getElementById('statActivos').textContent  = activos;
+    document.getElementById('statLectura').textContent  = soloLectura;
+    document.getElementById('statCompletos').textContent= completos;
+}
+
+function contarProcesos(procesos) {
+    if (!procesos) return 0;
+    var total = procesos.length;
+    procesos.forEach(function(p) { if (p.hijos) total += p.hijos.length; });
+    return total;
+}
+
+function guardarPermisos() {
+    if (!rolActual) { mostrarToast('err','fa-solid fa-exclamation-triangle','Seleccione un rol primero.'); return; }
+
+    var permisos = [];
+    document.querySelectorAll('.proceso-row').forEach(function(row) {
+        var id = parseInt(row.dataset.idproceso);
+        permisos.push({
+            idProceso: id,
+            lectura:   row.querySelector(`input[data-idproceso="${id}"][data-perm="lectura"]`)?.checked  || false,
+            crea:      row.querySelector(`input[data-idproceso="${id}"][data-perm="crea"]`)?.checked     || false,
+            edita:     row.querySelector(`input[data-idproceso="${id}"][data-perm="edita"]`)?.checked    || false,
+            elimina:   row.querySelector(`input[data-idproceso="${id}"][data-perm="elimina"]`)?.checked  || false,
+        });
+    });
+
+    var btn  = document.getElementById('btnGuardar');
+    var spn  = document.getElementById('spnGuardar');
+    var ico  = document.getElementById('icoGuardar');
+    btn.disabled = true;
+    spn.classList.remove('d-none');
+    ico.classList.add('d-none');
+
+    var data = {
+        idRol: rolActual, 
+        permisos: permisos 
+    }
+    console.log("imprimiendo datos enviados",data);
+    $.ajax({
+        url:  '@Url.Action("SerPermisosRol", "Configuracion", new { area = "Admin" })',
+        type: 'POST',
+        beforeSend: function () {
+            showLoader();
+        },
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function(resp) {
+            mostrarToast('ok', 'fa-solid fa-circle-check', resp.message);
+            console.log(resp);
+        },
+        error: function(error) {
+            var msg = 'Error al guardar los permisos.';
+            console.log(error);
+            try { msg = JSON.parse(error.responseText).message || msg; } catch {}
+            mostrarToast('err', 'fa-solid fa-exclamation-triangle', msg);
+        },
+        complete: function() {
+            hideLoader();
+            btn.disabled = false;
+            spn.classList.add('d-none');
+            ico.classList.remove('d-none');
+        }
+    });
+}
+
+function clonarPermisos() {
+    var idOrigen = document.getElementById('selectClonar').value;
+    if (!idOrigen) { mostrarToast('err','bi-exclamation-triangle','Seleccione el rol de origen.'); return; }
+    if (parseInt(idOrigen) === rolActual) { mostrarToast('err','bi-exclamation-triangle','No puede clonar sobre el mismo rol.'); return; }
+
+    if (!confirm('¿Sobrescribir los permisos actuales con los del rol seleccionado?')) return;
+
+    $.ajax({
+        url:  '@Url.Action("ClonarPermisos", "Permisos", new{area="Admin"})',
+        type: 'POST',
+        headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
+        data: { idRolOrigen: idOrigen, idRolDestino: rolActual },
+        success: function() {
+            mostrarToast('ok','fa-solid fa-circle-check','Permisos clonados. Recargando…');
+            setTimeout(function() { cargarPermisos(rolActual); }, 900);
+        },
+        error: function() {
+            mostrarToast('err','fa-solid fa-exclamation-triangle','Error al clonar los permisos.');
+        }
+    });
+}
+
+function mostrarEmpty() {
+    document.getElementById('emptyState').style.display    = 'block';
+    document.getElementById('permisosContent').style.display = 'none';
+    document.getElementById('statsBar').style.display      = 'none';
+    document.getElementById('botonesAccion').style.display = 'none';
+    document.getElementById('rolBadge').classList.remove('show');
+}
+
+var toastTimer;
+function mostrarToast(tipo, icono, msg) {
+    var t   = document.getElementById('toast');
+    var ico = document.getElementById('toastIco');
+    var txt = document.getElementById('toastMsg');
+
+    t.className   = `toast-permisos ${tipo}`;
+    ico.className = `toast-ico ${icono}`;
+    txt.textContent = msg;
+
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
+}
+
+$(document).ready(function() {
+        loadRoles();
+        cargarPermisos(rolActual);
+});
+</script>
+}

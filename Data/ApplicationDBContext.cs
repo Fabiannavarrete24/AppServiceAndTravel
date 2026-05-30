@@ -1,6 +1,7 @@
 ﻿using AppServiceAndTravel.Models;
 using Microsoft.EntityFrameworkCore;
 using AppServiceAndTravel.Data.Seeds;
+using AppServiceAndTravel.Areas.Admin.Models;
 
 namespace AppServiceAndTravel.Data;
 

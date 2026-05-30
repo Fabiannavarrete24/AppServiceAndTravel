@@ -57,19 +57,6 @@ namespace AppServiceAndTravel.Controllers
             return View();
         }
 
-        public IActionResult Roles()
-        {
-            return View();
-        }
-
-        public IActionResult Usuarios()
-        {
-            return View();
-        }
-        public IActionResult Configuracion()
-        {
-            return View();
-        }
         public IActionResult Setup()
         {
             return View();

@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AppServiceAndTravel</title>
-    <link rel="stylesheet" href="~/css/root.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AppServiceAndTravel.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/lib/datatables/datatables.css" rel="stylesheet" />
     <link href="~/lib/datatables/datatables.min.css" rel="stylesheet" />
@@ -16,21 +13,25 @@
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
     <link href="~/lib/select2/css/select2-bootstrap.css" rel="stylesheet" />
     <link href="~/lib/select2/css/select2-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/root.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Dashboard.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
     <style>
-     
-    </style>    
+
+    </style>
 </head>
+
 <body>
-<div id="globalLoader" class="loader-overlay d-none">
-    <div class="loader-box">
-        <div class="spinner-border" role="status"></div>
-        <span class="ms-2">Cargando...</span>
+    <div id="globalLoader" class="loader-overlay d-none">
+        <div class="loader-box">
+            <div class="spinner-border" role="status"></div>
+            <span class="ms-2">Cargando...</span>
+        </div>
     </div>
-</div>
-@if (User.Identity?.IsAuthenticated == true)
-{
-        <partial name="_Sidebar" />
+    <partial name="_Sidebar" />
     <div id="main-wrapper">
 
         <div id="topbar">
@@ -38,53 +39,22 @@
                 <i class="fa-solid fa-bars fs-5"></i>
             </button>
             <div class="flex-grow-1">
-                <div class="topbar-title">@(ViewData["Title"] ?? "Dashboard")</div>
-                @if (ViewData["Breadcrumb"] != null)
-                {
-                    <div class="topbar-breadcrumb">@ViewData["Breadcrumb"]</div>
-                }
+                <div class="topbar-title">@(ViewData["Title"])</div>
             </div>
             <div class="d-flex align-items-center gap-3">
                 <span class="topbar-breadcrumb d-none d-md-block">@User.Identity?.Name</span>
-                <div class="user-avatar">@(User.Identity?.Name?.Substring(0,1).ToUpper() ?? "U")</div>
+                <div class="user-avatar">@(User.Identity?.Name?.Substring(0, 1).ToUpper() ?? "U")</div>
             </div>
         </div>
-
         <div id="page-content">
-            @if (TempData["Success"] != null)
-            {
-                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
-                    <i class="bi bi-check-circle-fill"></i>
-                    @TempData["Success"]
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            }
-            @if (TempData["Error"] != null)
-            {
-                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i>
-                    @TempData["Error"]
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            }
-            @if (TempData["Warning"] != null)
-            {
-                <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center gap-2 mb-4" Rol="alert">
-                    <i class="bi bi-exclamation-circle-fill"></i>
-                    @TempData["Warning"]
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-                </div>
-            }
+            <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center gap-2 mb-4"
+                 Rol="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+            </div>
             @RenderBody()
         </div>
     </div>
-}
-else
-{
-    <div class="min-vh-100 d-flex flex-column">
-        @RenderBody()
-    </div>
-}
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -98,48 +68,49 @@ else
     <script src="~/lib/fontawesome/js/all.js"></script>
     <script src="~/lib/fontawesome/js/all.min.js"></script>
     <script src="~/lib/moment/moment-with-locales.js"></script>
-    <script src="~/lib/moment/locale/es-us.js"></script>
+    <script src="~/lib/moment/locale/es-mx.js"></script>
     <script src="~/lib/Chart/chart.umd.min.js"></script>
     <script src="~/js/functions.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/table-manager.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
     <script>
-        function showLoader() {
-            $("#globalLoader").removeClass("d-none");
-        }
+        moment.locale('es');
+        $(document).ready(function () {
 
-        function hideLoader() {
-            $("#globalLoader").addClass("d-none");
-        }
-    </script>
-    <script>
-
-        $(document).ready(function (){
             let menu = sessionStorage.getItem("app_menu");
-
+            
             if (menu) {
                 renderMenu(JSON.parse(menu));
-                return;
+            } else {
+                loadMenu();
             }
 
-            loadMenu();
-        });
-        
-        $(".loadmenu").click(function(){
-        loadMenu();
+            LoadConfiguracion();
         });
 
+        function LoadSelect(selectId,data) {
+            var categoriaSelect = $(selectId);
+            categoriaSelect.empty();
+            categoriaSelect.append(
+                '<option value="">Seleccione una opción</option>',
+            );
+            $.each(data, function (i, item) {
+                categoriaSelect.append(
+                    '<option value="' + item.id + '">' + item.descripcion + "</option>",
+                );
+            });
+        }
         function loadMenu() {
 
             $.ajax({
-                url:'/Helps/MenuNavegacion',
+                url: '/Helps/MenuNavegacion',
                 type: "GET",
                 beforeSend: function () {
                     showLoader();
                 },
                 success: function (response) {
-                    sessionStorage.setItem("app_menu",JSON.stringify(response.data)
-                    );
+                    sessionStorage.setItem("app_menu", JSON.stringify(response.data));
                     renderMenu(response.data);
                 },
                 error: function (error) {
@@ -164,47 +135,77 @@ else
         function renderMenuItem(menu, level = 0) {
             const tieneHijos = menu.hijos && menu.hijos.length > 0;
             let url = "#";
-            if (menu.controlador && menu.url) {
-                if (menu.area) {
+
+            if (menu.controlador && menu.url) 
+            {
+                if (menu.area) 
+                {
                     url = `/${menu.area}/${menu.controlador}/${menu.url}`;
-                } else {
+                } 
+                else 
+                {
                     url = `/${menu.controlador}/${menu.url}`;
-                }
+                }            
             }
 
             const icono = menu.icono ? `<i class="fa ${menu.icono} me-2"></i>` : `<i class="fa fa-circle me-2 fs-6"></i>`;
+            
             if (tieneHijos) {
                 let subMenuHtml = "";
                 menu.hijos.forEach(hijo => {
-                    subMenuHtml += renderMenuItem(hijo, level + 1);
+                subMenuHtml += renderMenuItem(hijo, level + 1);
                 });
                 return `
-                    <div class="sidebar-group level-${level}">
-                        <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
-                            ${icono}
-                            <span>${menu.proceso}</span>
-                            <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
-                        </a>
-                        <div class="sidebar-submenu"
-                             id="menu-${menu.idProceso}">
-                            ${subMenuHtml}
-                        </div>
+                <div class="sidebar-group level-${level}">
+                    <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
+                        ${icono} <span>${menu.proceso}</span> <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
+                    </a>
+                    <div class="sidebar-submenu" id="menu-${menu.idProceso}">
+                        ${subMenuHtml}
                     </div>
-                `;
+                </div>`;
             }
 
             return `
-                <a href="${url}" class="sidebar-link level-${level}">
-                    ${icono}
-                    <span>${menu.proceso}</span>
-                </a>
-            `;
+            <a href="${url}" class="sidebar-link level-${level}">
+                ${icono} <span>${menu.proceso}</span>
+            </a>`;
         }
+
         $(document).on("click", ".sidebar-dropdown-toggle", function () {
             const id = $(this).data("id");
             $("#" + id).slideToggle(200);
             $(this).find(".dropdown-icon").toggleClass("rotate");
         });
+    
+        function LoadConfiguracion() {
+
+            const cfg = localStorage.getItem('app_configuracion');
+            const config = JSON.parse(cfg);
+
+            if (!cfg) {
+                console.warn("No existe configuración en localStorage");
+                return;
+            }
+    
+            document.documentElement.style.setProperty('--cp', config.colorPrimario || '#1a6fc4');
+            document.documentElement.style.setProperty('--cs', config.colorSecundario || '#0f1c2e');
+            document.documentElement.style.setProperty('--ca', config.colorAcento || '#16a34a');
+            document.documentElement.style.setProperty('--ct', config.colorTexto || '#1e293b');
+            document.documentElement.style.setProperty('--cbg', config.colorFondo || '#f8fafc');
+            document.documentElement.style.setProperty('--cd', config.colorPeligro || '#dc2626');
+            document.documentElement.style.setProperty('--cw', config.colorAdvertencia || '#f59e0b');
+            document.documentElement.style.setProperty('--font-family-base',`'${config.fuenteSistema || 'Segoe UI'}', sans-serif`);
+            document.documentElement.style.setProperty('--font-size-base',config.tamanoFuenteBase || '14px');
+            $('body').css({
+                'font-family': `'${config.fuenteSistema || 'Segoe UI'}', sans-serif`,
+                'font-size': config.tamanoFuenteBase || '14px',
+                'background-color': config.colorFondo || '#f8fafc',
+                'color': config.colorTexto || '#1e293b'
+            });
+        }
+
     </script>
 </body>
+
 </html>

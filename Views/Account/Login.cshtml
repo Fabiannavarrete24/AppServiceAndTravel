@@ -2,13 +2,14 @@
     Layout = null;
 }
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inicio de sesión — AppServiceAndTravel</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/root.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -22,7 +23,7 @@
     <div class="login-panel">
         <div class="login-logo">
             <img src="~/images/logos/logo_blue.jpg"
-                 onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';"
+                 onerror="this.src='/images/placeholder_img.png'"
                  class="login-logo-img" alt="Logo empresa" />
             <div class="login-logo-icon" id="logoFallback" style="display:none;">
                 <i class="fa-solid fa-truck"></i>
@@ -379,6 +380,32 @@ function mostrarAlerta(msg) {
     void $alert[0].offsetWidth;
     $alert.addClass("show");
 }
+                function LoadConfiguracion() {
+
+                    const cfg = localStorage.getItem('app_configuracion');
+                    const config = JSON.parse(cfg);
+
+                    if (!cfg) {
+                        console.warn("No existe configuración en localStorage");
+                        return;
+                    }
+
+                    document.documentElement.style.setProperty('--cp', config.colorPrimario || '#1a6fc4');
+                    document.documentElement.style.setProperty('--cs', config.colorSecundario || '#0f1c2e');
+                    document.documentElement.style.setProperty('--ca', config.colorAcento || '#16a34a');
+                    document.documentElement.style.setProperty('--ct', config.colorTexto || '#1e293b');
+                    document.documentElement.style.setProperty('--cbg', config.colorFondo || '#f8fafc');
+                    document.documentElement.style.setProperty('--cd', config.colorPeligro || '#dc2626');
+                    document.documentElement.style.setProperty('--cw', config.colorAdvertencia || '#f59e0b');
+                    document.documentElement.style.setProperty('--font-family-base',`'${config.fuenteSistema || 'Segoe UI'}', sans-serif`);
+                    document.documentElement.style.setProperty('--font-size-base',config.tamanoFuenteBase || '14px');
+                    $('body').css({
+                        'font-family': `'${config.fuenteSistema || 'Segoe UI'}', sans-serif`,
+                        'font-size': config.tamanoFuenteBase || '14px',
+                        'background-color': config.colorFondo || '#f8fafc',
+                        'color': config.colorTexto || '#1e293b'
+                    });
+                }
 </script>
 </body>
 </html>

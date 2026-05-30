@@ -78,6 +78,14 @@ namespace AppServiceAndTravel.Areas.Comercial.Controllers
             await CargarSelectListsAsync();
             return View();
         }
+        public IActionResult Clientes()
+        {
+            return View();
+        }
+        public IActionResult CrearClientes()
+        {
+            return View();
+        }
 
         // ── POST: Cotizacion/Create ───────────────────────────────────────
         [HttpPost, ValidateAntiForgeryToken]

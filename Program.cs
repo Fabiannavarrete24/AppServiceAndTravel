@@ -1,13 +1,14 @@
 ﻿
+using AppServiceAndTravel.Areas.Admin.Services;
+using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.Services;
-using AppServiceAndTravel.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
-using static Twilio.Rest.Intelligence.V3.ConfigurationResource;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,14 +42,16 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 //inyeccion de dependencias
 builder.Services.AddHttpClient();
 
+builder.Services.AddScoped<UtilitiesServices>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IConfiguracionService, ConfiguracionService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddScoped<UtilitiesServices>();
-builder.Services.AddScoped<WhatsAppService>();
-builder.Services.AddScoped<VehicleService>();
-builder.Services.AddScoped<ConfiguracionService>();
+builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
+builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddHttpClient("WhatsApp");
 builder.Services.AddHttpContextAccessor();
@@ -63,6 +66,10 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("CanAccessVentas", policy =>
         policy.RequireClaim("permission", "/ventas"));
+
+    options.AddPolicy("cotizacion.crear",
+        policy => policy.RequireClaim(
+            "permiso", "cotizacion.crear"));
 });
 builder.Services.AddAuthentication(options =>
 {

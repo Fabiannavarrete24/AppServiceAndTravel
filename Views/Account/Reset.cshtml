@@ -793,46 +793,6 @@
                 <p>© @DateTime.Now.Year Service And Travel SAS · Todos los derechos reservados</p>
             </div>
         </div>
-
-        <div class="reset-gallery">
-            <img src="~/images/carousel/2.jpg"
-                 onerror="this.src='/images/placeholder_img.png'" alt="Seguridad" />
-
-            <div class="reset-gallery-content">
-                <div class="security-chips">
-                    <div class="chip">
-                        <div class="chip-icon" style="background:rgba(37,99,235,.3);">
-                            <i class="fa-solid fa-shield-halved" style="color:#60a5fa;"></i>
-                        </div>
-                        <div>
-                            <div style="font-size:13px;font-weight:600;">Cifrado extremo a extremo</div>
-                            <div style="font-size:11px;color:rgba(255,255,255,.5);">Tu contraseña nunca se almacena en texto plano</div>
-                        </div>
-                    </div>
-                    <div class="chip">
-                        <div class="chip-icon" style="background:rgba(245,158,11,.2);">
-                            <i class="fa-solid fa-clock" style="color:#fbbf24;"></i>
-                        </div>
-                        <div>
-                            <div style="font-size:13px;font-weight:600;">Token de un solo uso</div>
-                            <div style="font-size:11px;color:rgba(255,255,255,.5);">El enlace expira después de usarse</div>
-                        </div>
-                    </div>
-                    <div class="chip">
-                        <div class="chip-icon" style="background:rgba(34,197,94,.2);">
-                            <i class="fa-solid fa-fingerprint" style="color:#4ade80;"></i>
-                        </div>
-                        <div>
-                            <div style="font-size:13px;font-weight:600;">Verificación de identidad</div>
-                            <div style="font-size:11px;color:rgba(255,255,255,.5);">Proceso validado por correo electrónico</div>
-                        </div>
-                    </div>
-                </div>
-                <h2>Tu seguridad,<br />nuestra prioridad</h2>
-                <p>Este proceso garantiza que solo tú puedes restablecer el acceso a tu cuenta.</p>
-            </div>
-        </div>
-
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -1011,6 +971,33 @@
             ico.className = inp.type === 'password'
                 ? 'fa-solid fa-eye-slash'
                 : 'fa-solid fa-eye';
+        }
+
+        function LoadConfiguracion() {
+
+            const cfg = localStorage.getItem('app_configuracion');
+            const config = JSON.parse(cfg);
+
+            if (!cfg) {
+                console.warn("No existe configuración en localStorage");
+                return;
+            }
+
+            document.documentElement.style.setProperty('--cp', config.colorPrimario || '#1a6fc4');
+            document.documentElement.style.setProperty('--cs', config.colorSecundario || '#0f1c2e');
+            document.documentElement.style.setProperty('--ca', config.colorAcento || '#16a34a');
+            document.documentElement.style.setProperty('--ct', config.colorTexto || '#1e293b');
+            document.documentElement.style.setProperty('--cbg', config.colorFondo || '#f8fafc');
+            document.documentElement.style.setProperty('--cd', config.colorPeligro || '#dc2626');
+            document.documentElement.style.setProperty('--cw', config.colorAdvertencia || '#f59e0b');
+            document.documentElement.style.setProperty('--font-family-base',`'${config.fuenteSistema || 'Segoe UI'}', sans-serif`);
+            document.documentElement.style.setProperty('--font-size-base',config.tamanoFuenteBase || '14px');
+            $('body').css({
+                'font-family': `'${config.fuenteSistema || 'Segoe UI'}', sans-serif`,
+                'font-size': config.tamanoFuenteBase || '14px',
+                'background-color': config.colorFondo || '#f8fafc',
+                'color': config.colorTexto || '#1e293b'
+            });
         }
     </script>
 </body>

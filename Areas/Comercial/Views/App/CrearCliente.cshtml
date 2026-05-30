@@ -1,0 +1,100 @@
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+          <i class="bi bi-person-plus"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-semibold">@ViewData["Title"]</h5>
+          <small class="text-muted">Complete el formulario para registrar un nuevo cliente</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form asp-area="Comercial" asp-controller="Cliente"
+              asp-action="Create" method="post">
+                    <input type="hidden" asp-for="idCliente" />
+          <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Información principal</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-8">
+              <label asp-for="NombreCompleto" class="form-label fw-semibold small">Razón social / Nombre *</label>
+              <input asp-for="NombreCompleto" class="form-control rounded-3" required />
+              <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+            </div>
+            <div class="col-md-4">
+              <label asp-for="NitCedula" class="form-label fw-semibold small">NIT / Cédula *</label>
+              <input asp-for="NitCedula" class="form-control rounded-3" required />
+              <span asp-validation-for="NitCedula" class="text-danger small"></span>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos de contacto</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                <input  type="email" class="form-control border-start-0 rounded-end-3" required />
+              </div>
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label asp-for="Telefono" class="form-label fw-semibold small">Teléfono *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone text-muted"></i></span>
+                <input asp-for="Telefono" class="form-control border-start-0 rounded-end-3" required />
+              </div>
+              <span asp-validation-for="Telefono" class="text-danger small"></span>
+            </div>
+          </div>
+
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Ubicación</h6>
+          <div class="row g-3 mb-4">
+            <div class="col-12">
+              <label asp-for="Direccion" class="form-label fw-semibold small">Dirección</label>
+              <input asp-for="Direccion" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+              <label asp-for="Ciudad" class="form-label fw-semibold small">Ciudad</label>
+              <input asp-for="Ciudad" class="form-control rounded-3" />
+            </div>
+          </div>
+                    <div class="mb-4">
+                        <div class="form-check form-switch">
+                            <input asp-for="Activo" class="form-check-input" type="checkbox" />
+                            <label asp-for="Activo" class="form-check-label fw-semibold small">Cliente activo</label>
+                        </div>
+                    </div>
+
+          <div class="d-flex gap-3 pt-2">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+            <i class="bi  bi-person-plus" me-2"></i>
+                Registrar cliente
+            </button>
+            <a asp-area="Comercial" asp-controller="Cliente" asp-action="Index"
+               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-lightbulb me-2 text-warning"></i>Información</h6>
+        <p class="text-muted small mb-0">
+          Una vez registrado el cliente podrá asociarle cotizaciones y hacer seguimiento
+          de sus servicios desde el historial.
+        </p>
+                <div class="alert alert-info rounded-3 small py-2 mt-3 mb-0">
+                    <i class="bi bi-bell me-1"></i>
+                    Al crear una cotización para este cliente recibirá notificaciones automáticas por email y WhatsApp.
+                </div>
+      </div>
+    </div>
+  </div>
+</div>

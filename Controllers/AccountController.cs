@@ -1,19 +1,21 @@
-﻿using Npgsql;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AppServiceAndTravel.Areas.Admin.Services;
+using AppServiceAndTravel.Areas.Admin.ViewModels;
 using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Services;
 using AppServiceAndTravel.ViewModels;
+using Dapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using Npgsql;
+using System.Data;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Data;
-using AppServiceAndTravel.Services;
-using Microsoft.AspNetCore.Identity;
-using Dapper;
-using MySql.Data.MySqlClient;
 
 
 namespace AppServiceAndTravel.Controllers
@@ -21,12 +23,14 @@ namespace AppServiceAndTravel.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IUsersService _usersService;
         public readonly IWebHostEnvironment _hostEnvironment;       
 
-        public AccountController(IAuthService authService,IWebHostEnvironment hostEnvironment)
+        public AccountController(IAuthService authService,IWebHostEnvironment hostEnvironment, IUsersService usersService)
         {
             _authService = authService;
             _hostEnvironment = hostEnvironment;
+            _usersService = usersService;
 
         }
         public IActionResult TokenInValid() { 
@@ -51,11 +55,11 @@ namespace AppServiceAndTravel.Controllers
 
                 if (roleClaim == "administrador")
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "App", new { area = "Admin" });
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Dashboard", "Home");
                 }
             }
 
@@ -76,8 +80,9 @@ namespace AppServiceAndTravel.Controllers
             {
                 return RedirectToAction("Error", "Shared");
             }
-            var usuario = _authService.UsuarioPorToken(token);
-            if (usuario == null || usuario.restaurada == false || usuario.tokenDateExpiration > DateTime.UtcNow || usuario.tokenDateExpiration is null)
+            var usuario = _usersService.UsuarioPorToken(token);
+            if(usuario.success)
+            if (usuario.data == null || usuario.data.restaurada == false || usuario.data.tokenDateExpiration > DateTime.UtcNow || usuario.data.tokenDateExpiration is null)
             {
                 return RedirectToAction("TokenInValid");
             }
@@ -163,7 +168,6 @@ namespace AppServiceAndTravel.Controllers
         [HttpPost]
         public IActionResult RestablecerContraseña(string token, string clave, string confirmarClave)
         {
-            var usuario = new UserVM();
             var icono = "";
             var message = "";
             if (clave != confirmarClave)

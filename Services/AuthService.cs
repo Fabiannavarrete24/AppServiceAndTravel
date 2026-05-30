@@ -1,4 +1,6 @@
-﻿using AppServiceAndTravel.Data;
+﻿using AppServiceAndTravel.Areas.Admin.Services;
+using AppServiceAndTravel.Areas.Admin.ViewModels;
+using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -23,8 +25,6 @@ namespace AppServiceAndTravel.Services
         Task<AuthResponse> ReturnToken(AuthRequest autorizacion);
         Task<AuthResponse> ReturnRefreshToken(RefreshTokenRequest refreshTokenRequest, int idUsuario);
         Task<LoginResponseVM> Login(string usuario, string clave);
-        UserVM UsuarioPorToken(string token);
-        UserVM ObtenerUsuarioPorCorreo(string correo);
         Task<(bool success, string message)> ConfirmaCuenta(string token);
         string GenerateToken(List<Claim> claims);
         string GenerateRefreshToken();
@@ -40,13 +40,15 @@ namespace AppServiceAndTravel.Services
     {
         private readonly ApplicationDBContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IUsersService _usersService;
         private readonly UtilitiesServices _utilities;
         private readonly IEmailService _emailService;
         private readonly IJwtService _jwtService;
-        public AuthService(ApplicationDBContext context, IConfiguration configuration, UtilitiesServices utilities, IEmailService emailService, IJwtService jwtService)
+        public AuthService(ApplicationDBContext context, IConfiguration configuration, IUsersService usersService, UtilitiesServices utilities, IEmailService emailService, IJwtService jwtService)
         {
             _context = context;
             _configuration = configuration;
+            _usersService = usersService;
             _utilities = utilities;
             _emailService = emailService;
             _jwtService = jwtService;
@@ -128,11 +130,7 @@ namespace AppServiceAndTravel.Services
             {
                 var message = "Error interno del servidor: " + ex.Message;
 
-                _utilities.RegistrarLog(
-                    ex.Message,
-                    "SaveHistRefreshToken",
-                    "AUTH"
-                );
+                _utilities.RegistrarLog(ex.Message,"SaveHistRefreshToken");
 
                 return new AuthResponse
                 {
@@ -223,7 +221,7 @@ namespace AppServiceAndTravel.Services
             {
                 var message = "Error interno del servidor: " + ex.Message;
 
-                _utilities.RegistrarLog(ex.Message, "ReturnRefreshToken", "AUTH");
+                _utilities.RegistrarLog(ex.Message, "ReturnRefreshToken");
 
                 return new AuthResponse
                 {
@@ -275,7 +273,7 @@ namespace AppServiceAndTravel.Services
                 .SelectMany(ru => ru.Rol!.Permisos!)
                 .Select(p => p.proceso)
                 .Distinct()
-                .OrderBy(p => p!.idProceso)
+                .OrderBy(p => p!.proceso)
                 .Select(p => new MenuVM
                 {
                     idProceso = p!.idProceso,
@@ -288,18 +286,28 @@ namespace AppServiceAndTravel.Services
                 })
                 .ToList();
 
-            var menuPadre = procesos
-                .Where(x => x.idProcesoPadre == 0 || x.idProcesoPadre == null)
+            return ConstruirMenu(procesos, null);
+        }
+        private List<MenuVM> ConstruirMenu(List<MenuVM> procesos,int? idPadre)
+        {
+            var hijos = procesos
+                .Where(x =>
+                    (idPadre == null && (x.idProcesoPadre == null || x.idProcesoPadre == 0))
+                    ||
+                    x.idProcesoPadre == idPadre
+                )
+                .OrderBy(x => x.proceso)
                 .ToList();
 
-            foreach (var padre in menuPadre)
+            foreach (var item in hijos)
             {
-                padre.hijos = procesos
-                    .Where(x => x.idProcesoPadre == padre.idProceso)
-                    .ToList();
+                item.hijos = ConstruirMenu(
+                    procesos,
+                    item.idProceso
+                );
             }
 
-            return menuPadre;
+            return hijos;
         }
         public async Task<LoginResponseVM> Login(string usuario, string clave)
         {
@@ -336,20 +344,26 @@ namespace AppServiceAndTravel.Services
 
             if (!isValid)
             {
-                RegisterHistLogin(user.idUsuario, user.userName!, false, "Usuario o contraseña incorrectos");
-                return Fail("Usuario o contraseña incorrectos");
+                RegisterHistLogin(user.idUsuario, user.userName!, false, "Usuario o contraseña incorrectos.");
+                return Fail("Usuario o contraseña incorrectos.");
             }
 
-            if (user.fechaCambioClave <= DateTime.UtcNow || user.restaurada == true)
+            if (user.fechaCambioClave <= DateTime.UtcNow)
             {
-                RegisterHistLogin(user.idUsuario, user.userName!, false, "Su contraseña se encuentra vencida, debe cambiarla");
-                return Fail("Su contraseña se encuentra vencida, debe cambiarla");
+                RegisterHistLogin(user.idUsuario, user.userName!, false, "Su contraseña se encuentra vencida, debe cambiarla.");
+                return Fail("Su contraseña se encuentra vencida, debe cambiarla.");
             }
+            
+            if (user.restaurada == true)
+            {
+                RegisterHistLogin(user.idUsuario, user.userName!, false, "Solicitaste un cambio de contraseña, revise su bandeja de entrada o genere una nueva solicitud.");
+                return Fail("Solicitaste un cambio de contraseña, revise su bandeja de entrada o genere una nueva solicitud.");
+            }            
 
             if (user.activo == false || user.fechaBaja != null)
             {
-                RegisterHistLogin(user.idUsuario, user.userName!, false, "El usuario se encuentra deshabilitado");
-                return Fail("El usuario se encuentra deshabilitado");
+                RegisterHistLogin(user.idUsuario, user.userName!, false, "El usuario se encuentra deshabilitado.");
+                return Fail("El usuario se encuentra deshabilitado.");
             }
 
             var UpdateHistLogin = await _context.HistLogin.FindAsync(user.idUsuario);
@@ -390,19 +404,15 @@ namespace AppServiceAndTravel.Services
             };
         }
         private List<Claim> BuildClaims(ApplicationUser user, List<MenuVM> menu)
-        {
-            var menuJson = JsonSerializer.Serialize(menu, new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles
-            });
-
+        {            
             var claims = new List<Claim>
              {
                  new Claim(ClaimTypes.NameIdentifier, user.idUsuario.ToString()),
                  new Claim(ClaimTypes.Name, string.IsNullOrEmpty(user.nombreCompleto) ? user.userName! : user.nombreCompleto),
                  new Claim(ClaimTypes.Email, user.correo ?? ""),
                  new Claim(ClaimTypes.Role, user.admin == true ? "administrador" : "usuario"),
-                 //new Claim("Menu", menuJson)
+                 new Claim("permiso", "cotizacion.crear"),
+                 new Claim("permiso", "proveedor.editar")
              };
 
             foreach (var item in menu)
@@ -438,77 +448,6 @@ namespace AppServiceAndTravel.Services
             {
                 return (false, $"Error al confirmar la cuenta: {ex.Message}");
             }
-        }
-        public UserVM UsuarioPorToken(string token)
-        {
-            if (string.IsNullOrEmpty(token))
-                throw new ArgumentException("El token no puede estar vacío.");
-            UserVM usuario = null!;
-            try
-            {
-
-                var userResponse = _context.Usuarios.FirstOrDefault(u => u.token == token);
-
-                if (userResponse!.fechaExpiracionToken <= DateTime.UtcNow) {
-                    throw new Exception("El token ya fue utilizado o ya expiro.");
-                }
-
-                if (userResponse != null)
-                {
-                    usuario = new UserVM
-                    {
-                        Valid = true,
-                        message = "Datos encontrados con exito",
-                        idUser = userResponse!.idUsuario,
-                        Username = userResponse.userName,
-                        nombreCompleto = userResponse.nombreCompleto,
-                        correo = userResponse.correo,
-                        restaurada = userResponse.restaurada,
-                        tokenDateExpiration = userResponse.fechaExpiracionToken
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al obtener el usuario por token: {ex.Message}");
-            }
-        
-            return usuario ?? throw new Exception("No se encontró ningún usuario.");
-        }
-        public UserVM ObtenerUsuarioPorCorreo(string correo)
-        {
-            if (string.IsNullOrEmpty(correo))
-                throw new ArgumentException("El correo esta en blanco.");
-            UserVM usuario = null!;
-            try
-            {
-
-                var userResponse = _context.Usuarios.FirstOrDefault(u => u.correo == correo);
-
-                if (userResponse != null)
-                {
-                    usuario = new UserVM
-                    {
-                        Valid = true,
-                        message = "Datos encontrados con exito",
-                        idUser = userResponse!.idUsuario,
-                        Username = userResponse.userName,
-                        nombreCompleto = userResponse.nombreCompleto,
-                        correo = userResponse.correo,
-                        restaurada = userResponse.restaurada,
-                        tokenDateExpiration = userResponse.fechaExpiracionToken
-                    };
-                }
-                else {
-                    throw new Exception("No se encontró ningún usuario con el correo especificado.");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al obtener el usuario: {ex.Message}");
-            }
-
-            return usuario;
         }
         public (bool success, string message) RestablecerContraseña(string token, string clave, string confirmarClave)
         {
@@ -577,19 +516,19 @@ namespace AppServiceAndTravel.Services
             if (string.IsNullOrEmpty(correo))
                 return (false, "El correo no puede estar vacío.");
 
-            var usuario = ObtenerUsuarioPorCorreo(correo);
+            var usuario = _usersService.ObtenerUsuarioPorCorreo(correo);
 
-            if (usuario == null)
+            if (usuario.data == null)
             {
                 return (false, "Correo no encontrado.");
             }
             var jwt =  _jwtService.ConfigJWT();
-            var token = _utilities.GenerateToken(usuario.Username!, jwt);
+            var token = _utilities.GenerateToken(usuario.data.Username!, jwt);
 
             if (string.IsNullOrEmpty(token))
                 return (false, "No se logro generar el Token.");
 
-            var restablcer = await RestablecerCuenta(token!, usuario.idUser);
+            var restablcer = await RestablecerCuenta(token!, usuario.data.idUsuario);
 
             if (!restablcer.success)
             {
@@ -603,11 +542,11 @@ namespace AppServiceAndTravel.Services
                 return (false, "No se encontró el formato del correo.");
             }
 
-            string htmlBody = formato.mensaje!.Replace("{nombreCompleto}", usuario.nombreCompleto).Replace("{URL}",$"{url}/account/reset?token={token}");
+            string htmlBody = formato.mensaje!.Replace("{nombreCompleto}", usuario.data.nombreCompleto).Replace("{URL}",$"{url}/account/reset?token={token}");
 
             try
             {
-                await _emailService.Enviarcorreo(usuario.correo!, null!, formato.titulo!, htmlBody, null!, null!);
+                await _emailService.Enviarcorreo(usuario.data.correo!, null!, formato.titulo!, htmlBody, null!, null!);
             }
             catch (Exception ex)
             {

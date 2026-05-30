@@ -1,18 +1,23 @@
 ﻿
+using AppServiceAndTravel.Areas.Admin.Models;
+using AppServiceAndTravel.Areas.Admin.ViewModels;
+using AppServiceAndTravel.Data;
+using AppServiceAndTravel.Models;
+using AppServiceAndTravel.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
+using Npgsql;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using AppServiceAndTravel.Data;
-using AppServiceAndTravel.Models;
-using System.Data;
-using MySql.Data.MySqlClient;
-using Npgsql;
 
 namespace AppServiceAndTravel.Services
 {
+
     public class UtilitiesServices
     {
         private readonly IConfiguration _configuration;
@@ -66,7 +71,7 @@ namespace AppServiceAndTravel.Services
             }
 
             return "";
-        }   
+        }
         public IDbConnection GenerateConnection()
         {
             var provider = _configuration["ConnectionStrings:DatabaseProvider"]?.ToLower();
@@ -99,27 +104,6 @@ namespace AppServiceAndTravel.Services
                 throw new Exception(ex.Message);
             }
         }
-        public void RegistrarLog(string message, string metodo, string prodimiento)
-        {
-            try
-            {
-                string ruta = Path.Combine(Directory.GetCurrentDirectory(), _configuration["RutaAdjuntos:RutaLog"]!, _configuration["RutaAdjuntos:ArchivoLog"]!);
-
-                Directory.CreateDirectory(Path.GetDirectoryName(ruta)!);
-
-                using (StreamWriter writer = new StreamWriter(ruta, true))
-                {
-                    writer.WriteLine("==========");
-                    writer.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - inicio de ejecucion del metodo {metodo} - {prodimiento}: {message}");
-                    writer.WriteLine("==========================");
-                    writer.WriteLine();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al escribir en log: {ex.Message}");
-            }
-        }
         public string ConvertToBase64(IFormFile file)
         {
             using var ms = new MemoryStream();
@@ -127,7 +111,7 @@ namespace AppServiceAndTravel.Services
             var base64 = Convert.ToBase64String(ms.ToArray());
             return base64;
         }
-        public string GenerateToken(string username, JwtSettings  settings)
+        public string GenerateToken(string username, JwtSettings settings)
         {
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SecretKey!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -146,5 +130,34 @@ namespace AppServiceAndTravel.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public void RegistrarLog(string mensaje, string metodo, string nivel = "INFO")
+        {
+            try
+            {
+                string ruta = Path.Combine(Directory.GetCurrentDirectory(), _configuration["LogsEjecuciones:Ruta"]!, _configuration["LogsEjecuciones:Archivo"]!);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(ruta)!);
+
+                string texto = $@"
+                    ==================================================
+                    Fecha   : {DateTime.Now:yyyy-MM-dd HH:mm:ss}
+                    Nivel   : {nivel}
+                    Metodo  : {metodo}
+                    Mensaje : {mensaje}
+                    ==================================================
+
+                    ";
+
+                File.AppendAllText(ruta, texto);
+
+                Console.WriteLine($"LOG OK: {ruta}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERROR LOG:");
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
     }
 }

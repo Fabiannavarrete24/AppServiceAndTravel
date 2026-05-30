@@ -1,0 +1,1325 @@
+@using AppServiceAndTravel.Areas.Admin.Models
+@model ConfiguracionGeneral
+@{
+    ViewData["Title"] = "Configuración del sistema";
+}
+
+<!-- Tabs -->
+<div class="card mb-0" style="border-radius:14px 14px 0 0;border-bottom:none;">
+    <div class="card-body p-0">
+        <div class="cfg-nav px-3 pt-2">
+            @foreach (var (id, label, icon) in new[]{
+                        ("empresa","Empresa","fa-solid fa-building"),
+                        ("apariencia","Apariencia","fa-solid fa-palette"),
+                        ("regional","Regional","fa-solid fa-globe"),
+                        ("correo","Correo SMTP","fa-solid fa-envelope"),
+                        ("whatsapp","WhatsApp","fa-brands fa-whatsapp"),
+                        ("bd","Base de datos","fa-solid fa-database"),
+                        ("api","API / JWT","fa-solid fa-key"),
+                        })
+            {
+                <button type="button" class="d-flex justify-content-center cfg-nav-btn @(id == "empresa" ? "active" : "")"
+                        onclick="showPane('@id',this)">
+                    <i class="@icon"></i>@label
+                </button>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- ══ EMPRESA ══════════════════════════════════════════════════════════════ -->
+<form class="cfg-pane active card rounded-0 border-top-0" id="pane-empresa">
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Datos generales</h6>
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold small">Nombre de la empresa *</label>
+                        <input id="NombreEmpresa" class="form-control rounded-3" required />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">NIT / RUC</label>
+                        <input id="NitEmpresa" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small">Eslogan</label>
+                        <input id="Eslogan" class="form-control rounded-3" placeholder="Transportando su confianza…" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small">Dirección</label>
+                        <input id="Direccion" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold small">Ciudad</label>
+                        <input id="Ciudad" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">Departamento</label>
+                        <input id="Departamento" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">País</label>
+                        <input id="Pais" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">Teléfono 1</label>
+                        <input id="Telefono" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">Teléfono 2</label>
+                        <input id="Telefono2" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">Email corporativo</label>
+                        <input id="Correo" type="email" class="form-control rounded-3" />
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small">Sitio web</label>
+                        <input id="SitioWeb" class="form-control rounded-3" placeholder="https://…" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Identidad visual</h6>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold small">Logo de la empresa</label>
+                    <div class="mb-2 p-3 rounded-3 text-center" style="background:#f8fafc;border:1px dashed #cbd5e1;">
+                        <img style="max-height:70px;max-width:100%;" onerror="this.src='~/images/placeholder_img.png'" />
+                        <div class="text-muted mt-1" style="font-size:11px;">Logo actual</div>
+                    </div>
+                    <div class="dropzone rounded-3 text-center p-4" style="border:2px dashed #cbd5e1;cursor:pointer;"
+                         onclick="$('#inputLogo').click()" ondragover="event.preventDefault();this.style.borderColor='var(--cp)'"
+                         ondragleave="this.style.borderColor='#cbd5e1'" ondrop="handleDrop(event,'inputLogo','previewLogo')">
+                        <i class="fa-solid fa-cloud-upload" style="font-size:28px;color:#94a3b8;"></i>
+                        <div class="small text-muted mt-1">Arrastra o haz clic para subir</div>
+                        <div style="font-size:11px;color:#94a3b8;">PNG, SVG, JPG · Máx. 2MB · Recomendado: 200×60px</div>
+                    </div>
+                    <input type="file" id="inputLogo" name="logo" accept=".png,.jpg,.jpeg,.svg,.webp" class="d-none"
+                           onchange="previewFile(this,'previewLogo')" />
+                    <img id="previewLogo" class="d-none mt-2 rounded-3 w-100"
+                         style="max-height:70px;object-fit:contain;border:1px solid #e2e8f0;" />
+                </div>
+                <div>
+                    <label class="form-label fw-semibold small">Favicon</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <img style="width:32px;height:32px;border-radius:6px;" onerror="this.src='~/favicon.ico'" />
+                        <div class="dropzone rounded-3 text-center flex-grow-1 p-3"
+                             style="border:2px dashed #cbd5e1;cursor:pointer;" onclick="$('#inputFavicon').click()">
+                            <i class="fa-solid fa-image text-muted"></i>
+                            <span class="small text-muted ms-2">.ico o .png (32×32)</span>
+                        </div>
+                    </div>
+                    <input type="file" id="inputFavicon" name="favicon" accept=".ico,.png" class="d-none" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionEmpresa"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <button type="reset" class="btn btn-outline-secondary rounded-3">
+                Descartar
+            </button>
+            <button type="submit" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ APARIENCIA ════════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-apariencia">
+    <div class="card-body p-4">
+
+        <!-- Temas predefinidos -->
+        <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Temas predefinidos</h6>
+        <div class="row g-3 mb-4">
+            @{
+                var temas = new[]{
+                        ("Azul corporativo","#1a6fc4","#0f1c2e","#16a34a"),
+                        ("Verde natura", "#16a34a","#1a2e1a","#0d9488"),
+                        ("Rojo ejecutivo", "#dc2626","#1c1c1c","#f59e0b"),
+                        ("Violeta moderno", "#7c3aed","#1e1a2e","#06b6d4"),
+                        ("Naranja dinámico","#ea580c","#1c1a14","#3b82f6"),
+                        ("Oscuro premium", "#6366f1","#0f0f13","#10b981"),
+                        };
+            }
+            @foreach (var (nombre, cp, cs, ca) in temas)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="theme-card selected" onclick="aplicarTema('@cp','@cs','@ca','@nombre', this)">
+                        <div class="theme-preview">
+                            <div class="theme-preview-sb" style="background:@cs;"></div>
+                            <div class="theme-preview-body" style="background:#f0f4f8;">
+                                <div class="theme-preview-bar" style="background:@cp;"></div>
+                                <div class="theme-preview-bar" style="background:@ca;width:60%;"></div>
+                            </div>
+                        </div>
+                        <div class="px-3 py-2 d-flex align-items-center justify-content-between">
+                            <span style="font-size:12px;font-weight:600;">@nombre</span>
+                            <i class="fa-solid fa-check-circle text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <input type="hidden" id="inputTema" />
+
+        <hr class="my-4" />
+
+        <!-- Paleta personalizada -->
+        <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Paleta personalizada</h6>
+        <div class="swatch-grid mb-4">
+            @foreach (var (field, label, desc) in new[]{
+                        ("ColorPrimario", "Color primario", "Botones, links, activos"),
+                        ("ColorSecundario", "Sidebar / Menú", "Fondo del menú lateral"),
+                        ("ColorAcento", "Color acento", "Éxito, badges positivos"),
+                        ("ColorTexto", "Color de texto", "Texto general"),
+                        ("ColorFondo", "Fondo general", "Fondo de la aplicación"),
+                        ("ColorPeligro", "Color peligro", "Errores, alertas críticas"),
+                        ("ColorAdvertencia","Color advertencia", "Avisos y advertencias"),
+                        })
+            {
+                var valor = "#000000";
+                <div class="color-row" id="row_@field">
+                    <input type="color" name="@field" value="@valor" id="color_@field" class="color-swatch"
+                           onchange="syncColor('@field',this.value)" />
+                    <div class="flex-grow-1">
+                        <div class="fw-semibold small">@label</div>
+                        <div class="text-muted" style="font-size:11px;">@desc</div>
+                    </div>
+                    <input type="text" id="hex_@field" value="@valor" class="form-control form-control-sm rounded-3"
+                           style="width:90px;font-family:monospace;font-size:12px;" oninput="syncHex('@field',this.value)" />
+                </div>
+            }
+        </div>
+
+        <!-- Tipografía -->
+        <h6 class="fw-semibold mb-3 text-muted small text-uppercase">Tipografía</h6>
+        <div class="row g-3 mb-4">
+            @{
+                var fuentes = new[]{
+                        ("Segoe UI","Sistema Windows — elegante"),
+                        ("Inter","Moderna y legible — web"),
+                        ("Roboto","Estilo Material Design"),
+                        ("Poppins","Geométrica y amigable"),
+                        ("Lato","Humanista y profesional"),
+                        ("Open Sans","Neutral y versátil"),
+                        };
+            }
+            @foreach (var (fuente, desc) in fuentes)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="font-card" onclick="seleccionarFuente('@fuente',this)" style="font-family:'@fuente',sans-serif;">
+                        <div class="fw-semibold" style="font-size:14px;">@fuente</div>
+                        <div class="text-muted" style="font-size:12px;">@desc</div>
+                        <div style="font-size:16px;margin-top:4px;">Aa Bb Cc 123</div>
+                    </div>
+                </div>
+            }
+            <input type="hidden" id="inputFuente" />
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Tamaño base de fuente</label>
+                <select class="form-select rounded-3" id="fontSizeBase">
+                    <option value="12px">Pequeño</option>
+                    <option value="14px" selected>Normal</option>
+                    <option value="16px">Grande</option>
+                    <option value="18px">Extra grande</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Preview live -->
+        <div class="mt-4 p-4 rounded-3" id="livePreview" style="background:var(--cbg);border:1px solid #e2e8f0;">
+            <div class="d-flex gap-3">
+                <div class="rounded-3 p-3 flex-shrink-0" style="background:var(--cs);width:130px;">
+                    <div class="rounded-2 mb-2 d-flex align-items-center gap-2 px-2 py-1" style="background:var(--cp);">
+                        <i class="fa-solid fa-truck text-white" style="font-size:13px;"></i>
+                        <span style="color:#fff;font-size:12px;font-weight:600;">App</span>
+                    </div>
+                    <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Dashboard</div>
+                    <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Cotizaciones</div>
+                    <div style="color:rgba(255,255,255,.6);font-size:11px;padding:4px 6px;">Servicios</div>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="mb-2 d-flex gap-2">
+                        <button type="button" class="btn btn-sm rounded-3 text-white" style="background:var(--cp);">
+                            Botón
+                            primario
+                        </button>
+                        <button type="button" class="btn btn-sm rounded-3 text-white" style="background:var(--ca);">Acento</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-3">Secundario</button>
+                    </div>
+                    <div class="p-2 rounded-3" style="background:#fff;">
+                        <div class="fw-semibold mb-1" style="font-size:14px;color:var(--ct);">Ejemplo de texto</div>
+                        <div class="text-muted" style="font-size:12px;">
+                            Este es el aspecto que tendrá la aplicación con la
+                            configuración actual.
+                        </div>
+                        <span class="badge rounded-pill px-3 mt-1" style="background:var(--cp);color:#fff;">Activo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionApariencia"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4" onclick="guardarApariencia()">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ REGIONAL ══════════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-regional">
+    <div class="card-body p-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Moneda</label>
+                <select id="Moneda" class="form-select rounded-3">
+                    <option value="COP">COP — Peso colombiano</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label fw-semibold small">Símbolo</label>
+                <input id="SimboloMoneda" class="form-control rounded-3" value="$" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Idioma</label>
+                <select id="Idioma" class="form-select rounded-3">
+                    <option value="es-CO">Español Colombia</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Zona horaria</label>
+                <select id="ZonaHoraria" class="form-select rounded-3">
+                    <option value="America/Bogota">Bogotá</option>
+                    <option value="UTC">UTC</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Formato fecha</label>
+                <select id="FormatoFecha" class="form-select rounded-3">
+                    <option value="dd/MM/yyyy">dd/MM/yyyy</option>
+                    <option value="MM/dd/yyyy">MM/dd/yyyy</option>
+                    <option value="yyyy-MM-dd">yyyy-MM-dd</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Separador decimal</label>
+                <select id="SeparadorDecimal" class="form-select rounded-3">
+                    <option value=",">,</option>
+                    <option value=".">.</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Separador miles</label>
+                <select id="SeparadorMiles" class="form-select rounded-3">
+                    <option value=".">.</option>
+                    <option value=",">,</option>
+                    <option value=" ">Espacio</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionRegional"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ CORREO SMTP ═══════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-correo">
+    <div class="card-body p-4">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Servidor SMTP</label>
+                <input id="SmtpHost" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Puerto</label>
+                <input id="SmtpPort" type="number" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Seguridad</label>
+                <div class="p-2 rounded-3 border">
+                    <div class="form-check">
+                        <input type="checkbox" id="SmtpSSL" class="form-check-input" />
+                        <label class="form-check-label small">SSL</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="SmtpStartTls" class="form-check-input" />
+                        <label class="form-check-label small">TLS</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Usuario SMTP</label>
+                <input id="SmtpUser" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Password SMTP</label>
+                <div class="input-group">
+                    <input id="SmtpPassword" type="password" class="form-control" />
+                    <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('SmtpPassword','icoSmtp')">
+                        <i class="fa-solid fa-eye" id="icoSmtp"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Email remitente</label>
+                <input id="EmailRemitente" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold small">Nombre remitente</label>
+                <input id="NombreRemitente" class="form-control rounded-3" />
+            </div>
+            <div class="col-12">
+                <div class="p-4 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+                    <h6 class="fw-semibold mb-3"><i class="bi bi-send me-2 text-primary"></i>Probar configuración</h6>
+                    <div class="row g-2">
+                        <div class="col-md-5">
+                            <input type="email" id="testEmail" class="form-control rounded-3"
+                                   placeholder="Email destino de la prueba" />
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-outline-primary rounded-3" onclick="testEmail()">
+                                <i class="bi bi-send me-2"></i>Enviar email de prueba
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div id="testEmailResult" class="d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionCorreo"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ WHATSAPP ══════════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-whatsapp">
+    <div class="card-body p-4">
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label fw-semibold small">Proveedor de WhatsApp</label>
+                        <div class="row g-2">
+                            @foreach (var (prov, desc, url) in new[]{
+                                                        ("CallMeBot","Gratuito — ideal para notificaciones personales","https://www.callmebot.com"),
+                                                        ("Twilio","Profesional — requiere cuenta de pago","https://www.twilio.com"),
+                                                        ("MetaCloudAPI","Oficial Meta — requiere app aprobada","https://developers.facebook.com"),
+                                                        })
+                            {
+                                <div class="col-12">
+                                    <label class="d-flex align-items-start gap-3 p-3 rounded-3" style="border:1.5px solid #e2e8f0; cursor:pointer;">
+                                        <input id="ProveedorWhatsApp" type="radio" value="@prov" class="form-check-input" />
+                                        @* @(Model.ProveedorWhatsApp==prov?"checked":"") class="form-check-input mt-1" *@
+                                        <div>
+                                            <div class="fw-semibold small">@prov</div>
+                                            <div class="text-muted" style="font-size:12px;">@desc</div>
+                                            <a href="@url" target="_blank" class="text-decoration-none" style="font-size:11px;">
+                                                @url <i class="fa-solid fa-arrow-up-right"></i>
+                                            </a>
+                                        </div>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="p-4 rounded-3 mb-3 alert alert-warning" role="alert">
+                    <div id="whatsappValidado" class="d-flex align-items-center gap-3">
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-3" style="background:#f0f9ff;border:1px solid #bae6fd;">
+                    <div class="fw-semibold small mb-2 text-primary">
+                        <i class="fa-solid fa-info-circle me-1"></i>Activar CallMeBot (gratis)
+                    </div>
+                    @foreach (var (n, paso) in new[]{
+                                        ("1","Guarda el contacto: <strong>+34 644 60 75 31</strong>"),
+                                        ("2","Envía desde WhatsApp: <code>I allow callmebot to send me messages</code>"),
+                                        ("3","Recibirás tu API Key por WhatsApp (en segundos)"),
+                                        ("4","Pega la API Key en el campo de arriba"),
+                                        })
+                    {
+                        <div class="d-flex gap-2 mb-2 small align-items-center">
+                            <span class="badge rounded-circle fw-bold align-items-center text-light d-flex justify-content-center"
+                                  style="background:var(--cp);width:20px;height:20px;flex-shrink:0;">@n</span>
+                            <span style="align-self:center;">@Html.Raw(paso)</span>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label fw-semibold small">API URL</label>
+                <input id="WhatsAppApiUrl" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">API Key</label>
+                <div class="input-group">
+                    <input id="WhatsAppApiKey" type="password" class="form-control" />
+                    <button type="button" class="btn btn-outline-secondary rounded-end-3"
+                            onclick="toggleViz('WhatsAppApiKey','icoWa')">
+                        <i class="fa-solid fa-eye" id="icoWa"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-semibold small">Número empresa (con código país)</label>
+                <div class="input-group">
+                    <span class="input-group-text">+</span>
+                    <input id="WhatsAppNumeroEmpresa" class="form-control rounded-3" placeholder="3003123031" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="p-4 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+                    <h6 class="fw-semibold mb-3"><i class="bi bi-send me-2 text-primary"></i>Probar configuración</h6>
+                    <div class="row g-2">
+                        <div class="col-md-5">
+                            <input type="tel" id="testWaNumero" class="form-control rounded-3" placeholder="3001234567" />
+                            <input id="ValidadoWS" type="checkbox" class="form-check-input d-none" />
+                        </div>
+                        <div class="col-md-auto">
+                            <button type="button" class="btn btn-outline-success rounded-3 flex-shrink-0" onclick="testWA()">
+                                <i class="fa-brands fa-whatsapp me-2" style="font-size:18px;"></i>Enviar Mensaje
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div id="testWaResult" class="d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionWhatsapp"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ BASE DE DATOS ══════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-bd">
+    <div class="card-body p-4">
+        <div class="alert alert-warning rounded-3 mb-4">
+            <i class="fa-solid fa-exclamation-triangle me-2"></i>
+            <strong>Importante:</strong> cambiar la cadena de conexión requiere reiniciar la aplicación. Guarde una copia de
+            la configuración actual antes de modificarla.
+        </div>
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Motor de base de datos</label>
+                <select id="MotorBD" class="form-select rounded-3">
+                    <option value="MySQL">MySQL</option>
+                    <option value="PostgreSQL">PostgreSQL</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-3">Constructor de cadena de conexión</h6>
+                <div class="row g-2 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold">Servidor</label>
+                        <input type="text" id="bdHost" class="form-control rounded-3" placeholder="localhost"
+                               oninput="buildConnStr()" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label small fw-semibold">Puerto</label>
+                        <input type="number" id="bdPort" class="form-control rounded-3" value="3306" oninput="buildConnStr()" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold">Base de datos</label>
+                        <input type="text" id="bdName" class="form-control rounded-3" placeholder="transporte_db"
+                               oninput="buildConnStr()" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold">Usuario</label>
+                        <input type="text" id="bdUser" class="form-control rounded-3" placeholder="root" oninput="buildConnStr()" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold">Contraseña</label>
+                        <div class="input-group">
+                            <input type="password" id="bdPwd" class="form-control" placeholder="Contraseña"
+                                   oninput="buildConnStr()" />
+                            <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('bdPwd','icoBd')">
+                                <i class="fa-solid fa-eye" id="icoBd"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold small">Cadena de conexión resultante</label>
+                        <div class="">
+                            <textarea id="txtConnStr" class="form-control rounded-3" rows="4"></textarea>
+                        </div>
+                        <div id="bdTestResult" class="d-none mt-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 d-flex align-content-end flex-wrap gap-2">
+                <div class="w-40">
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-3 w-100"
+                            onclick="navigator.clipboard.writeText($('#txtConnStr').value)">
+                        <i class="fa-solid fa-copy me-1"></i>Copiar
+                    </button>
+                </div>
+                <div class="w-40">
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-3 w-100" onclick="probarConexion()">
+                        <i class="fa-solid fa-plug me-1"></i>Probar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionbd"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- ══ API / JWT ══════════════════════════════════════════════════════════════ -->
+<form class="cfg-pane card rounded-0 border-top-0" id="pane-api">
+    <div class="card-body p-4">
+        <div class="alert alert-info rounded-3 mb-4 small">
+            <i class="fa-solid fa-info-circle me-2"></i>
+            Estos valores configuran la autenticación JWT de la API REST. Los cambios requieren reiniciar la aplicación.
+        </div>
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label fw-semibold small">JWT Secret Key (mín. 32 caracteres) *</label>
+                <div class="input-group">
+                    <input id="JwtSecretKey" type="password" class="form-control rounded-start-3"
+                           placeholder="Mínimo 32 caracteres alfanuméricos…" />
+                    <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('JwtSecretKey','icoJwt')">
+                        <i class="fa-solid fa-eye" id="icoJwt"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-primary rounded-end-3" onclick="generarSecret()">
+                        <i class="fa-solid fa-arrow-clockwise me-1"></i>Generar
+                    </button>
+                </div>
+                <div id="jwtStrength" class="mt-1"></div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Expiración del token</label>
+                <div class="input-group">
+                    <input id="JwtExpirationMinutes" type="number" class="form-control rounded-start-3" min="15" max="360" />
+                    <span class="input-group-text rounded-end-3">minutos</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Issuer</label>
+                <input id="JwtIssuer" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold small">Audience</label>
+                <input id="JwtAudience" class="form-control rounded-3" />
+            </div>
+            <div class="col-12">
+                <div class="p-3 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+                    <div class="fw-semibold small mb-2">Endpoints disponibles de la API:</div>
+                    @foreach (var ep in new[]{
+                                        ("POST","api/auth/login","Autenticar usuario, devuelve accessToken + refreshToken"),
+                                        ("POST","api/auth/refresh","Renovar token usando refreshToken"),
+                                        ("POST","api/auth/logout","Invalidar sesión"),
+                                        ("GET", "api/auth/me","Obtener perfil del usuario autenticado"),
+                                        })
+                    {
+                        <div class="d-flex align-items-center gap-2 mb-1 small">
+                            <span class="badge rounded-2"
+                                  style="background:#dbeafe;color:#1e40af;width:46px;text-align:center;">@ep.Item1</span>
+                            <code>/@ep.Item2</code>
+                            <span class="text-muted">— @ep.Item3</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer py-3 px-4 d-flex align-items-center justify-content-between">
+        <div class="text-muted small">
+            <i class="fa-solid fa-clock me-1"></i>
+            <span class="me-1">Última modificación:</span><span id="UltimaModificacionApi"></span>
+        </div>
+        <div class="d-flex gap-3">
+            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <button type="button" class="btn btn-primary rounded-3 px-4">
+                <i class="fa-solid fa-save me-2"></i>Guardar configuración
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        async function testWA() {
+          const numero = document.getElementById('testWaNumero').value;
+          if (!numero) { alert('Ingresa un número'); return; }
+          const res = document.getElementById('testWaResult');
+          res.className = 'mt-2 small rounded-3 p-2';
+          res.style.background = '#fef3c7'; res.textContent = 'Enviando…';
+          res.classList.remove('d-none');
+          const token = document.querySelector('[name="__RequestVerificationToken"]').value;
+          const r = await fetch('@Url.Action("TestWhatsApp", "Notificaciones", new { area = "Admin" })', {
+            method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'RequestVerificationToken': token },
+            body: `numero=${encodeURIComponent(numero)}&mensaje=Prueba+de+configuraci%C3%B3n+TransporteApp&__RequestVerificationToken=${encodeURIComponent(token)}`
+          });
+          const data = await r.json();
+          res.style.background = data.ok ? '#d1fae5' : '#fee2e2';
+          res.style.color = data.ok ? '#065f46' : '#991b1b';
+          res.innerHTML = `<i class="fa-solid fa-${data.ok ? 'check' : 'x'}-circle-fill me-2"></i>${data.mensaje}`;
+        }
+
+        async function testEmail() {
+          const email = document.getElementById('testEmail').value;
+          if (!email) { alert('Ingresa un email destino'); return; }
+          const res = document.getElementById('testEmailResult');
+          res.className = 'rounded-3 p-2 small'; res.style.background = '#fef3c7'; res.textContent = 'Enviando…';
+          res.classList.remove('d-none');
+          await new Promise(r => setTimeout(r, 1000));
+          res.style.background = '#d1fae5'; res.style.color = '#065f46';
+          res.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Email de prueba enviado a ' + email;
+        }
+
+        function generarSecret() {
+          const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@@#$%^&*';
+          const secret = Array.from({ length: 48 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+          const inp = document.getElementById('jwtSec');
+          inp.value = secret; inp.type = 'text';
+          document.getElementById('icoJwt').className = 'bi bi-eye-slash';
+          // Mostrar fortaleza
+          const str = document.getElementById('jwtStrength');
+          str.innerHTML = '<span class="badge bg-success">Clave segura generada — guárdela en un lugar seguro</span>';
+        }
+
+        $(document).ready(function () {
+
+          validarJWT();
+          updateRegionalPreview();
+          buildConnStr();
+          cargarConfiguracion();
+
+          $('#JwtSecretKey').on('keyup', validarJWT);
+          $('#Moneda, #SimboloMoneda, #FormatoFecha, #SeparadorDecimal, #SeparadorMiles').on('change keyup', updateRegionalPreview);
+          $('#fontSizeBase').on('change', function () {
+            document.documentElement.style.setProperty('--font-size-base', $(this).val());
+          });
+
+        });
+
+        let configuracionActual = {};
+
+        function showPane(id, btn) {
+
+          $('.cfg-pane').removeClass('active');
+          $('.cfg-nav-btn').removeClass('active');
+          $('#pane-' + id).addClass('active');
+          $(btn).addClass('active');
+        }
+
+        function aplicarTema(cp, cs, ca, nombre, el) {
+
+          syncColor('ColorPrimario', cp);
+          syncColor('ColorSecundario', cs);
+          syncColor('ColorAcento', ca);
+
+          $('#inputTema').val(nombre);
+          $('.theme-card').removeClass('selected');
+
+          if (el) {
+            $(el).addClass('selected');
+          }
+
+          actualizarPreview();
+        }
+
+        function syncColor(field, value) {
+
+          $('#color_' + field).val(value);
+          $('#hex_' + field).val(value);
+
+          const map = {
+            ColorPrimario: '--cp',
+            ColorSecundario: '--cs',
+            ColorAcento: '--ca',
+            ColorTexto: '--ct',
+            ColorFondo: '--cbg',
+            ColorPeligro: '--cd',
+            ColorAdvertencia: '--cw'
+          };
+
+          if (map[field]) {
+
+            document.documentElement.style
+              .setProperty(map[field], value);
+          }
+
+          actualizarPreview();
+        }
+
+        function syncHex(field, value) {
+
+          if (/^#[0-9A-F]{6}$/i.test(value)) {
+            $('#color_' + field).val(value);
+            syncColor(field, value);
+          }
+        }
+
+        function seleccionarFuente(fuente, el) {
+
+          $('.font-card').removeClass('selected');
+
+          if (el) {
+            $(el).addClass('selected');
+          }
+
+          $('#inputFuente').val(fuente);
+
+          document.documentElement.style
+            .setProperty('--font-family-base', `'${fuente}', sans-serif`);
+        }
+
+        function toggleViz(inputId, iconId) {
+
+          const input = $('#' + inputId);
+          const icon = $('#' + iconId);
+
+          if (input.attr('type') === 'password') {
+
+            input.attr('type', 'text');
+            icon.removeClass('fa-eye').addClass('fa-eye-slash');
+          }
+          else {
+            input.attr('type', 'password');
+            icon.removeClass('fa-eye-slash').addClass('fa-eye');
+          }
+        }
+
+        function validarJWT() {
+
+          const val = $('#JwtSecretKey').val() || '';
+          const div = $('#jwtStrength');
+
+          if (val.length < 32) {
+
+            div.html(`
+                            <span class="text-danger small">
+                                Muy corta
+                            </span>
+                        `);
+
+            return false;
+          }
+
+          div.html(`
+                        <span class="text-success small">
+                            Segura
+                        </span>
+                    `);
+
+          return true;
+        }
+
+        function updateRegionalPreview() {
+
+          const fecha = new Date().toLocaleDateString();
+
+          const valor = 1250000;
+
+          $('#prevFecha').text(fecha);
+
+          $('#prevValor').text(
+            valor.toLocaleString()
+          );
+        }
+
+        function buildConnStr() {
+
+          const h = $('#bdHost').val() || 'localhost';
+          const p = $('#bdPort').val() || '3306';
+          const d = $('#bdName').val() || 'appdb';
+          const u = $('#bdUser').val() || 'root';
+          const pw = $('#bdPwd').val() || '';
+          const mDB = $('#MotorBD').val().toLowerCase() || 'mysql';
+
+          if (mDB == "PostgreSql") {
+            $('#txtConnStr').val(
+              `User Id=${u};Password=${pw};Server=${h};Port=${p};Database=${d}`
+            );
+          } else {
+            $('#txtConnStr').val(
+              `Server=${h};Port=${p};Database=${d};User=${u};Password=${pw};`
+            );
+          }
+        }
+
+        function llenarApariencia(cfg) {
+
+          const campos = [
+            'ColorPrimario',
+            'ColorSecundario',
+            'ColorAcento',
+            'ColorTexto',
+            'ColorFondo',
+            'ColorPeligro',
+            'ColorAdvertencia'
+          ];
+
+          campos.forEach(campo => {
+
+            const prop = campo.charAt(0).toLowerCase() + campo.slice(1);
+            const valor = cfg[prop];
+
+            if (!valor) return;
+            $('#color_' + campo).val(valor);
+            $('#hex_' + campo).val(valor);
+            syncColor(campo, valor);
+          });
+
+          $('#inputTema').val(cfg.tema);
+          $('#inputFuente').val(cfg.fuente);
+          $('#fontSizeBase').val(cfg.fontSizeBase);
+
+          if (cfg.fuente) {
+            document.documentElement.style.setProperty('--font-family-base', `'${cfg.fuente}', sans-serif`);
+          }
+
+          if (cfg.fontSizeBase) {
+            document.documentElement.style.setProperty('--font-size-base', cfg.fontSizeBase);
+          }
+        }
+
+        function aplicarApariencia(cfg) {
+
+          if (cfg.colorPrimario)
+            document.documentElement.style.setProperty('--cp', cfg.colorPrimario);
+
+          if (cfg.colorSecundario)
+            document.documentElement.style.setProperty('--cs', cfg.colorSecundario);
+
+          if (cfg.colorAcento)
+            document.documentElement.style.setProperty('--ca', cfg.colorAcento);
+
+          if (cfg.colorTexto)
+            document.documentElement.style.setProperty('--ct', cfg.colorTexto);
+
+          if (cfg.colorFondo)
+            document.documentElement.style.setProperty('--cbg', cfg.colorFondo);
+
+          if (cfg.colorPeligro)
+            document.documentElement.style.setProperty('--cd', cfg.colorPeligro);
+
+          if (cfg.colorAdvertencia)
+            document.documentElement.style.setProperty('--cw', cfg.colorAdvertencia);
+
+          if (cfg.fuente)
+            document.documentElement.style.setProperty('--font-family-base', `'${cfg.fuente}', sans-serif`);
+
+          if (cfg.fontSizeBase)
+            document.documentElement.style.setProperty('--font-size-base', cfg.fontSizeBase);
+        }
+
+        function actualizarPreview() {
+          obtenerApariencia();
+        }
+
+        function cargarConfiguracion() {
+          $.ajax({
+            url: '/Admin/Configuracion/GetConfiguracion',
+            type: 'GET',
+            success: function (response) {
+              configuracionActual = response.dataConfig;
+              
+              localStorage.setItem('app_configuracion', JSON.stringify(response.dataConfig));
+              
+              llenarApariencia(response.dataConfig);
+              aplicarApariencia(response.dataConfig);
+              
+              @* datos empresa *@
+              $("#NombreEmpresa").val(response.dataConfig.nombreEmpresa);
+              $("#NitEmpresa").val(response.dataConfig.nitEmpresa);
+              $("#Eslogan").val(response.dataConfig.eslogan);
+              $("#Direccion").val(response.dataConfig.direccion);
+              $("#Departamento").val(response.dataConfig.departamento);
+              $("#Ciudad").val(response.dataConfig.ciudad);
+              $("#Pais").val(response.dataConfig.pais);
+              $("#Telefono").val(response.dataConfig.telefono);
+              $("#Telefono2").val(response.dataConfig.telefono2);
+              $("#Correo").val(response.dataConfig.correo);
+              $("#SitioWeb").val(response.dataConfig.sitioWeb);
+                @*imagen logo y favicon
+              $("#inputLogo").val(response.dataConfig.);
+              $("#inputFavicon").val(response.dataConfig.); 
+                @* datos region *@
+              $("#Moneda").val(response.dataConfig.moneda);
+              $("#SimboloMoneda").val(response.dataConfig.simboloMoneda);
+              $("#Idioma").val(response.dataConfig.idioma);
+              $("#ZonaHoraria").val(response.dataConfig.zonaHoraria);
+              $("#FormatoFecha").val(response.dataConfig.formatoFecha);
+              $("#SeparadorDecimal").val(response.dataConfig.separadorDecimal);
+              $("#SeparadorMiles").val(response.dataConfig.separadorMiles);
+              @* datos notificaciones *@
+               $("#SmtpHost").val(response.datanotif.smtpServer);
+              $("#SmtpPort").val(response.datanotif.smtpPort);
+              $("#SmtpUser").val(response.datanotif.smtpUserName);
+              $("#SmtpPassword").val(response.datanotif.smtpPassword);
+
+              var ssl = false;
+              (response.datanotif.requiereSSL = true)
+              ssl = true;
+
+              $("#SmtpSSL").prop("checked", ssl);
+
+              var tls = false;
+              (response.datanotif.requiereTSL = true)
+              tls = true;
+              $("#SmtpStartTls").prop("checked", tls);
+
+              $("#EmailRemitente").val(response.datanotif.correoRemitente);
+              $("#NombreRemitente").val(response.datanotif.nombreRemitente);
+              $("#ProveedorWhatsApp").val(response.datanotif.proveedorWhatsApp);
+              $("#WhatsAppApiUrl").val(response.datanotif.whatsAppApiUrl);
+              $("#WhatsAppApiKey").val(response.datanotif.whatsAppApiKey);
+              $("#WhatsAppNumeroEmpresa").val(response.datanotif.whatsAppNumeroEmpresa);
+              $("#ValidadoWS").val(response.datanotif.whatsAppValidado);
+
+              if(response.datanotif.whatsAppValidado ){
+              $("#whatsappValidado").html(`<i class="fa-solid fa-check-circle text-success" style="font-size:24px;"></i><div class="fw-semibold small aling-self-center">WhatsApp validado</div>`);
+              }
+              else{
+              $("#whatsappValidado").html(`<i class="fa-solid fa-circle-exclamation text-warning" style="font-size:24px;"></i><div class="fw-semibold small aling-self-center">WhatsApp no validado</div>`);
+              }
+            },
+            error: function (error) {
+              console.error(error);
+            }
+          });
+        }
+
+        function obtenerApariencia() {
+          return {
+            TemaSeleccionado: $('#inputTema').val(),
+            FuenteSistema: $('#inputFuente').val(),
+            TamanoFuenteBase: $('#fontSizeBase').val(),
+            ColorPrimario: $('#hex_ColorPrimario').val(),
+            ColorSecundario: $('#hex_ColorSecundario').val(),
+            ColorAcento: $('#hex_ColorAcento').val(),
+            ColorTexto: $('#hex_ColorTexto').val(),
+            ColorFondo: $('#hex_ColorFondo').val(),
+            ColorPeligro: $('#hex_ColorPeligro').val(),
+            ColorAdvertencia: $('#hex_ColorAdvertencia').val()
+          };
+        }
+
+        function guardarEmpresa() {
+
+          const data = {
+            NitEmpresa: $("#NitEmpresa").val(),
+            Eslogan: $("#Eslogan").val(),
+            Direccion: $("#Direccion").val(),
+            Departamento: $("#Departamento").val(),
+            Ciudad: $("#Ciudad").val(),
+            Pais: $("#Pais").val(),
+            Telefono: $("#Telefono").val(),
+            Telefono2: $("#Telefono2").val(),
+            Correo: $("#Correo").val(),
+            SitioWeb: $("#SitioWeb").val(),
+            RutaLogo: $("#inputLogo").val(),
+            RutaFavicon: $("#inputFavicon").val(),
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetEmpresa',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              cargarConfiguracion();
+              if (response.success) {
+                console.log("imprimiendo guardarEmpresa", response);
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarApariencia() {
+
+          const data = obtenerApariencia();
+          console.log(data);
+          $.ajax({
+            url: '/Admin/Configuracion/SetApariencia',
+            type: 'POST',            
+            beforeSend: function () {
+              showLoader();
+            },
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            success: function (response) {
+              if (response.success) {
+                console.log("imprimiendo guardarApariencia", response);
+                //localStorage.setItem('app_configuracion',JSON.stringify(config));
+                cargarConfiguracion();
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: `No fue posible guardar: ${error.status} - ${error.statusText}` });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarRegional() {
+
+          const data = {
+            Moneda: $("#Moneda").val(),
+            SimboloMoneda: $("#SimboloMoneda").val(),
+            Idioma: $("#Idioma").val(),
+            ZonaHoraria: $("#ZonaHoraria").val(),
+            FormatoFecha: $("#FormatoFecha").val(),
+            SeparadorDecimal: $("#SeparadorDecimal").val(),
+            SeparadorMiles: $("#SeparadorMiles").val(),
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetRegional',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              console.log("imprimiendo guardarRegional", response);
+              if (response.success) {
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarSMTP() {
+
+          const data = {
+            smtpServer: $("#SmtpHost").val(),
+            smtpPort: $("#SmtpPort").val(),
+            smtpUserName: $("#SmtpUser").val(),
+            smtpPassword: $("#SmtpPassword").val(),
+            requiereSSL: $("#SmtpSSL").val(),
+            requiereTSL: $("#SmtpStartTls").val(),
+            correoRemitente: $("#EmailRemitente").val(),
+            NombreRemitente: $("#NombreRemitente").val(),
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetSMTP',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              if (response.success) {
+                console.log("imprimiendo guardarSMTP", response);
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarWhatsapp() {
+
+          const data = {
+            ProveedorWhatsApp: $("#ProveedorWhatsApp").val(),
+            WhatsAppApiUrl: $("#WhatsAppApiUrl").val(),
+            WhatsAppApiKey: $("#WhatsAppApiKey").val(),
+            WhatsAppNumeroEmpresa: $("#WhatsAppNumeroEmpresa").val(),
+            WhatsAppValidado: $("#ValidadoWS").is(":checked") ? 1 : 0
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetWhatsapp',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              if (response.success) {
+                console.log("imprimiendo guardarWhatsapp", response);
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarDataBase() {
+
+          const data = {
+            Proveedor: $("#MotorBD").val(),
+            Cadena: $("#txtConnStr").val()
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetBD',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              if (response.success) {
+                console.log("imprimiendo guardarDatabase", response);
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+        function guardarJWT() {
+
+          const data = {
+            JwtSecretKey: $("#JwtSecretKey").val(),
+            JwtIssuer: $("#JwtIssuer").val(),
+            JwtAudience: $("#JwtAudience").val(),
+            JwtExpirationMinutes: $("#JwtExpirationMinutes").val(),
+          };
+
+          $.ajax({
+            url: '/Admin/Configuracion/SetJWT',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data),
+            beforeSend: function () {
+              showLoader();
+            },
+            success: function (response) {
+              if (response.success) {
+                console.log("imprimiendo guardarJWT", response);
+                Swal.fire({ icon: 'success', title: 'Configuración guardada', text: response.message });
+              } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: response.message });
+              }
+            },
+            error: function (error) {
+              console.error(error);
+              Swal.fire({ icon: 'error', title: 'Error', text: 'No fue posible guardar' });
+            },
+            complete: function () {
+              hideLoader();
+            }
+          });
+        }
+
+    </script>
+}

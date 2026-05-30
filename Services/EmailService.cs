@@ -58,7 +58,7 @@ namespace AppServiceAndTravel.Services
                 email.Body = builder.ToMessageBody();
 
                 using var smtp = new SmtpClient();
-                await smtp.ConnectAsync(configSMTP.smtpServer!, int.Parse(configSMTP.smtpPort!), true);
+                await smtp.ConnectAsync(configSMTP.smtpServer!, configSMTP.smtpPort!, true);
                 await smtp.AuthenticateAsync(configSMTP.smtpUserName!, configSMTP.smtpPassword!);
                 await smtp.SendAsync(email);
                 await smtp.DisconnectAsync(true);
@@ -71,11 +71,10 @@ namespace AppServiceAndTravel.Services
             }
         }
 
-        // ?? Cotizaci�n creada ?????????????????????????????????????????????
         public async Task EnviarCotizacionCreadaAsync(string destinatario, string nombreCliente, Cotizaciones cotizacion)
         {
             var html = GenerarPlantillaBase(
-                titulo: "Cotizaci�n Recibida",
+                titulo: "Cotización Recibida",
                 colorHeader: "#1e3a5f",
                 icono: "??",
                 contenido: $@"

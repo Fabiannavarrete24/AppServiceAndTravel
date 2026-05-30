@@ -1,3 +1,4 @@
+using AppServiceAndTravel.Areas.Admin.ViewModels;
 using System.ComponentModel.DataAnnotations;
 namespace AppServiceAndTravel.ViewModels
 {

@@ -1,7 +1,13 @@
-﻿function showLoader() {
-    $("#globalLoader").removeClass("d-none");
+﻿function togglePwd(id, iconId) {
+    const i = document.getElementById(id);
+    const ic = document.getElementById(iconId);
+    i.type = i.type === 'password' ? 'text' : 'password';
+    ic.className = i.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
 }
 
+function showLoader() {
+    $("#globalLoader").removeClass("d-none");
+}
 function hideLoader() {
     $("#globalLoader").addClass("d-none");
 }

@@ -1,0 +1,467 @@
+@section Styles {
+    <style>
+        .admin-action-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            border-radius: 14px;
+            background: #f8fafc;
+            margin-bottom: 12px;
+            transition: .2s ease;
+            cursor: pointer;
+        }
+
+        .admin-action-card:hover {
+            background: #eff6ff;
+            transform: translateY(-2px);
+        }
+
+        .admin-action-card i {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #dbeafe;
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .admin-action-card strong {
+            display: block;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .admin-action-card small {
+            color: #64748b;
+            font-size: 12px;
+        }
+    </style>
+}
+<h2 class="sr-only">Panel administrativo</h2>
+
+<!-- ─── ROW 1: KPIs ADMIN ─────────────────────────────────────────────── -->
+<div class="kpi-grid">
+
+    <!-- Usuarios -->
+    <div class="kpi blue">
+        <div class="kpi-icon blue">
+            <i class="bi bi-people"></i>
+        </div>
+
+        <div class="kpi-label">Usuarios registrados</div>
+
+        <div class="kpi-value" id="kpiUsuarios">
+            0
+        </div>
+
+        <div class="kpi-sub d-flex align-items-center gap-1 mt-1">
+            <span class="kpi-delta delta-up">
+                <i class="fa-solid fa-arrow-up-right"></i>
+            </span>
+            <span class="text-muted">
+                usuarios activos
+            </span>
+        </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="kpi purple">
+        <div class="kpi-icon purple">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+
+        <div class="kpi-label">Roles & permisos</div>
+
+        <div class="kpi-value" id="kpiRoles">
+            0
+        </div>
+
+        <div class="kpi-sub">
+            <span class="badge" style="background:#ede9fe;color:#6d28d9;font-size:11px;">
+                Seguridad del sistema
+            </span>
+        </div>
+    </div>
+
+    <!-- SMTP -->
+    <div class="kpi amber">
+        <div class="kpi-icon amber">
+            <i class="bi bi-envelope-paper"></i>
+        </div>
+
+        <div class="kpi-label">Correos enviados</div>
+
+        <div class="kpi-value" id="kpiCorreos">
+            0
+        </div>
+
+        <div class="kpi-sub">
+            <span class="badge" style="background:#fef3c7;color:#92400e;font-size:11px;" id="smtpEstado">
+                SMTP operativo
+            </span>
+        </div>
+    </div>
+
+    <!-- Base de datos -->
+    <div class="kpi green">
+        <div class="kpi-icon green">
+            <i class="bi bi-database"></i>
+        </div>
+
+        <div class="kpi-label">Estado BD</div>
+
+        <div class="kpi-value" id="kpiDB">
+            Online
+        </div>
+
+        <div class="kpi-sub">
+            <span class="text-muted">
+                Último backup:
+            </span>
+            <span id="ultimoBackup">
+                Hoy
+            </span>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div class="kpi teal">
+        <div class="kpi-icon teal">
+            <i class="bi bi-bell"></i>
+        </div>
+
+        <div class="kpi-label">Notificaciones</div>
+
+        <div class="kpi-value" id="kpiNotificaciones">
+            0
+        </div>
+
+        <div class="kpi-sub">
+            <span class="badge" style="background:#ccfbf1;color:#0f766e;font-size:11px;">
+                Enviadas hoy
+            </span>
+        </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="kpi red">
+        <div class="kpi-icon red">
+            <i class="bi bi-exclamation-triangle"></i>
+        </div>
+
+        <div class="kpi-label">Alertas del sistema</div>
+
+        <div class="kpi-value" id="kpiErrores">
+            0
+        </div>
+
+        <div class="kpi-sub">
+            <span class="text-muted">
+                errores críticos registrados
+            </span>
+        </div>
+    </div>
+
+</div>
+
+<!-- ─── ROW 2: ESTADO GENERAL ─────────────────────────────────────────── -->
+<div class="row g-4 mb-4">
+
+    <!-- Actividad sistema -->
+    <div class="col-lg-8">
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div>
+                    <div class="section-title">
+                        <i class="bi bi-activity me-2 text-primary"></i>
+                        Actividad del sistema
+                    </div>
+
+                    <small class="text-muted">
+                        Últimos 30 días
+                    </small>
+                </div>
+
+                <div class="legend-row mb-0">
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:#1a6fc4;"></span>
+                        Usuarios
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:#16a34a;"></span>
+                        Inicios sesión
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-dot" style="background:#ef4444;"></span>
+                        Errores
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-body">
+                <div style="position:relative;height:300px;">
+                    <canvas id="chartAdminActivity"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Estado servicios -->
+    <div class="col-lg-4">
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bi bi-hdd-network me-2 text-primary"></i>
+                    Estado servicios
+                </div>
+            </div>
+
+            <div class="section-body">
+
+                <div class="progress-row">
+                    <span class="progress-label">Base de datos</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:100%;background:#16a34a;"></div>
+                    </div>
+
+                    <span class="progress-count">100%</span>
+                </div>
+
+                <div class="progress-row">
+                    <span class="progress-label">SMTP</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:95%;background:#3b82f6;"></div>
+                    </div>
+
+                    <span class="progress-count">95%</span>
+                </div>
+
+                <div class="progress-row">
+                    <span class="progress-label">API</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:98%;background:#f59e0b;"></div>
+                    </div>
+
+                    <span class="progress-count">98%</span>
+                </div>
+
+                <div class="progress-row">
+                    <span class="progress-label">Cache</span>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" style="width:87%;background:#8b5cf6;"></div>
+                    </div>
+
+                    <span class="progress-count">87%</span>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="row g-2 text-center">
+
+                    <div class="col-6">
+                        <div style="background:#f0fdf4;border-radius:10px;padding:12px;">
+                            <div style="font-size:20px;font-weight:700;color:#15803d;">
+                                99.9%
+                            </div>
+
+                            <div style="font-size:11px;color:#64748b;">
+                                Uptime
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div style="background:#eff6ff;border-radius:10px;padding:12px;">
+                            <div style="font-size:20px;font-weight:700;color:#1d4ed8;">
+                                23ms
+                            </div>
+
+                            <div style="font-size:11px;color:#64748b;">
+                                Respuesta API
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ─── ROW 3 ─────────────────────────────────────────────────────────── -->
+<div class="row g-4 mb-4">
+
+    <!-- Configuración -->
+    <div class="col-lg-4">
+
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bi bi-sliders me-2 text-primary"></i>
+                    Configuración general
+                </div>
+            </div>
+
+            <div class="section-body">
+
+                <div class="admin-action-card">
+                    <i class="bi bi-building"></i>
+                    <div>
+                        <strong>Empresa</strong>
+                        <small>Datos corporativos</small>
+                    </div>
+                </div>
+
+                <div class="admin-action-card">
+                    <i class="bi bi-envelope"></i>
+                    <div>
+                        <strong>SMTP</strong>
+                        <small>Correos y plantillas</small>
+                    </div>
+                </div>
+
+                <div class="admin-action-card">
+                    <i class="bi bi-database"></i>
+                    <div>
+                        <strong>Base de datos</strong>
+                        <small>Conexiones y backups</small>
+                    </div>
+                </div>
+
+                <div class="admin-action-card">
+                    <i class="bi bi-bell"></i>
+                    <div>
+                        <strong>Notificaciones</strong>
+                        <small>Alertas automáticas</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Usuarios -->
+    <div class="col-lg-4">
+
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bi bi-person-gear me-2 text-primary"></i>
+                    Gestión de usuarios
+                </div>
+            </div>
+
+            <div class="section-body">
+
+                <div style="position:relative;height:250px;">
+                    <canvas id="chartUsuarios"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Logs -->
+    <div class="col-lg-4">
+
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bi bi-journal-code me-2 text-primary"></i>
+                    Actividad reciente
+                </div>
+            </div>
+
+            <div class="section-body" id="adminLogs" style="padding:12px 20px;">
+
+                <!-- Logs dinámicos -->
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ─── ROW 4 ─────────────────────────────────────────────────────────── -->
+<div class="row g-4">
+
+    <!-- Seguridad -->
+    <div class="col-lg-8">
+
+        <div class="section-card">
+
+            <div class="section-header">
+                <div>
+                    <div class="section-title">
+                        <i class="bi bi-shield-check me-2 text-primary"></i>
+                        Seguridad y accesos
+                    </div>
+
+                    <small class="text-muted">
+                        Últimos accesos al sistema
+                    </small>
+                </div>
+            </div>
+
+            <div class="section-body">
+
+                <div style="position:relative;height:240px;">
+                    <canvas id="chartSecurity"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Distribución -->
+    <div class="col-lg-4">
+
+        <div class="section-card h-100">
+
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="bi bi-diagram-3 me-2 text-primary"></i>
+                    Distribución de usuarios
+                </div>
+            </div>
+
+            <div class="section-body">
+
+                <div style="position:relative;height:220px;">
+                    <canvas id="chartRoles"></canvas>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

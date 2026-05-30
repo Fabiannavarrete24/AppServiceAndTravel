@@ -3,16 +3,16 @@ namespace AppServiceAndTravel.ViewModels
 {
     public class LoginVM
     {
-        public int Id { get; set; }
-        [StringLength(200)] public string? UserName { get; set; }
-        [StringLength(200)] public string? Password { get; set; }
-        [StringLength(200)] public string? correo { get; set; }
-        public int Admin { get; set; }
-        public DateTime? dateChangePassword { get; set; }
-        public int valid { get; set; }
+        public int idUsuario { get; set; }
+        public string? userName { get; set; }
+        public string? password { get; set; }
+        public string? nombreCompleto { get; set; }        
+        public string? correo { get; set; }
+        public int admin { get; set; }
+        public DateTime? dateChangePassword { get; set; } = DateTime.UtcNow.AddMonths(3);
+        public int valido { get; set; }
         public int restaurada { get; set; }
-        public int confirmadaed { get; set; }
-        [StringLength(200)] public string? message { get; set; }
+        public int confirmada { get; set; }
     }
 }
 

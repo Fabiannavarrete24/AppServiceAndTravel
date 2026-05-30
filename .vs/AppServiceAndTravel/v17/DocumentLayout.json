@@ -1,57 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "I:\\app\\AppServiceAndTravel\\",
+  "WorkspaceRootPath": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\views\\account\\tokeninvalid.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\account\\tokeninvalid.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\views\\app\\usuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\views\\app\\usuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\services\\usersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:models\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\viewmodels\\uservm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\viewmodels\\uservm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\viewmodels\\usuariosdashboardvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\viewmodels\\usuariosdashboardvm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\views\\account\\reset.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\account\\reset.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\views\\app\\createusuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\views\\app\\createusuarios.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\viewmodels\\restorevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:viewmodels\\restorevm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\controllers\\appcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\controllers\\appcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\wwwroot\\js\\functions.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:wwwroot\\js\\functions.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|i:\\app\\appserviceandtravel\\wwwroot\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\wwwroot\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:wwwroot\\css\\style.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Migrations\\20260522142450_seed permisos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\wwwroot\\js\\functions.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:wwwroot\\js\\functions.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -61,173 +46,123 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AccountController.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Controllers\\AccountController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Controllers\\AccountController.cs",
-              "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAnwE8AAACXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T15:47:32.477Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Style.css",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\wwwroot\\css\\Style.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\Style.css",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\wwwroot\\css\\Style.css",
-              "RelativeToolTip": "wwwroot\\css\\Style.css",
-              "ViewState": "AgIAABUAAAAAAAAAAIBJwCsAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2026-05-22T16:49:47.177Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TokenInValid.cshtml",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Views\\Account\\TokenInValid.cshtml",
-              "RelativeDocumentMoniker": "Views\\Account\\TokenInValid.cshtml",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Views\\Account\\TokenInValid.cshtml",
-              "RelativeToolTip": "Views\\Account\\TokenInValid.cshtml",
-              "ViewState": "AgIAANsAAAAAAAAAAAAAAPAAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-22T20:32:45.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ApplicationUser.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Models\\ApplicationUser.cs",
-              "RelativeDocumentMoniker": "Models\\ApplicationUser.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Models\\ApplicationUser.cs",
-              "RelativeToolTip": "Models\\ApplicationUser.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAswBkAAAA5AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-22T20:30:59.347Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Reset.cshtml",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Views\\Account\\Reset.cshtml",
-              "RelativeDocumentMoniker": "Views\\Account\\Reset.cshtml",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Views\\Account\\Reset.cshtml",
-              "RelativeToolTip": "Views\\Account\\Reset.cshtml",
-              "ViewState": "AgIAAJIDAAAAAAAAAIBJwAAAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-22T20:14:06.425Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "RestoreVM.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\ViewModels\\RestoreVM.cs",
-              "RelativeDocumentMoniker": "ViewModels\\RestoreVM.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\ViewModels\\RestoreVM.cs",
-              "RelativeToolTip": "ViewModels\\RestoreVM.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABCAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-22T20:01:18.685Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "20260522142450_seed permisos.cs",
-              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Migrations\\20260522142450_seed permisos.cs",
-              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Migrations\\20260522142450_seed permisos.cs",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-22T19:54:04.574Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "Views\\Account\\Login.cshtml",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAQwJAAAABJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-22T18:00:04.393Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Functions.js",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\wwwroot\\js\\Functions.js",
-              "RelativeDocumentMoniker": "wwwroot\\js\\Functions.js",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\wwwroot\\js\\Functions.js",
-              "RelativeToolTip": "wwwroot\\js\\Functions.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAA8wAYAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-22T17:38:29.834Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAPAAAAAAAAAA==",
+              "Title": "UsuariosDashboardVM.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\ViewModels\\UsuariosDashboardVM.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\ViewModels\\UsuariosDashboardVM.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\ViewModels\\UsuariosDashboardVM.cs",
+              "RelativeToolTip": "Areas\\Admin\\ViewModels\\UsuariosDashboardVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-22T15:38:27.537Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AuthService.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Services\\AuthService.cs",
-              "RelativeDocumentMoniker": "Services\\AuthService.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Services\\AuthService.cs",
-              "RelativeToolTip": "Services\\AuthService.cs",
-              "ViewState": "AgIAAOsAAAAAAAAAAAAYwOsAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-22T15:22:20.636Z",
+              "WhenOpened": "2026-05-29T20:26:46.725Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAABkCAAAAAAAAAAAQwDICAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-05-22T14:28:58.739Z",
+              "Title": "Style.css",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\wwwroot\\css\\Style.css",
+              "RelativeDocumentMoniker": "wwwroot\\css\\Style.css",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\wwwroot\\css\\Style.css",
+              "RelativeToolTip": "wwwroot\\css\\Style.css",
+              "ViewState": "AgIAAFUBAAAAAAAAAAAswGkBAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2026-05-29T19:48:28.174Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Program.cs",
-              "DocumentMoniker": "I:\\app\\AppServiceAndTravel\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "I:\\app\\AppServiceAndTravel\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAcwJkAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "UsersService.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Services\\UsersService.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Services\\UsersService.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Services\\UsersService.cs",
+              "RelativeToolTip": "Areas\\Admin\\Services\\UsersService.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAYwBcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-21T19:42:52.01Z",
+              "WhenOpened": "2026-05-29T17:18:11.16Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UserVM.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\ViewModels\\UserVM.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\ViewModels\\UserVM.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\ViewModels\\UserVM.cs",
+              "RelativeToolTip": "Areas\\Admin\\ViewModels\\UserVM.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T17:17:08.287Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuariosController.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Controllers\\UsuariosController.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Controllers\\UsuariosController.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Controllers\\UsuariosController.cs",
+              "RelativeToolTip": "Areas\\Admin\\Controllers\\UsuariosController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAcwFkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-29T12:50:58.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Usuarios.cshtml",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\Usuarios.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Views\\App\\Usuarios.cshtml",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\Usuarios.cshtml",
+              "RelativeToolTip": "Areas\\Admin\\Views\\App\\Usuarios.cshtml",
+              "ViewState": "AgIAAPUAAAAAAAAAAAAQwAsBAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-28T20:39:43.741Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CreateUsuarios.cshtml",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\CreateUsuarios.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Views\\App\\CreateUsuarios.cshtml",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\CreateUsuarios.cshtml",
+              "RelativeToolTip": "Areas\\Admin\\Views\\App\\CreateUsuarios.cshtml",
+              "ViewState": "AgIAAGMAAAAAAAAAAAAAAIYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-05-28T18:55:04.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppController.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Controllers\\AppController.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Controllers\\AppController.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Controllers\\AppController.cs",
+              "RelativeToolTip": "Areas\\Admin\\Controllers\\AppController.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwCEAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-27T14:38:22.933Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "functions.js",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\wwwroot\\js\\functions.js",
+              "RelativeDocumentMoniker": "wwwroot\\js\\functions.js",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\wwwroot\\js\\functions.js",
+              "RelativeToolTip": "wwwroot\\js\\functions.js",
+              "ViewState": "AgIAAH8AAAAAAAAAAADwv78AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-05-28T19:29:35.72Z",
               "EditorCaption": ""
             }
           ]

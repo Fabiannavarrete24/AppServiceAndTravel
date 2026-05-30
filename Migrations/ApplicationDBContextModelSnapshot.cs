@@ -174,14 +174,14 @@ namespace AppServiceAndTravel.Migrations
                             confirmada = true,
                             correo = "admin@correo.com",
                             crypt = true,
-                            fechaCambioClave = new DateTime(2026, 8, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5216),
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5216),
-                            fechaModificacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5217),
+                            fechaCambioClave = new DateTime(2026, 8, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9613),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9613),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9614),
                             hast = true,
                             nombreCompleto = "Administrador",
                             password = "admin",
                             restaurada = false,
-                            ultimoAcceso = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5200),
+                            ultimoAcceso = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9590),
                             userName = "admin"
                         });
                 });
@@ -311,14 +311,53 @@ namespace AppServiceAndTravel.Migrations
 
             modelBuilder.Entity("AppServiceAndTravel.Models.ConfigNotificaciones", b =>
                 {
-                    b.Property<string>("smtpServer")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("idConfigNotificacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idConfigNotificacion"));
 
                     b.Property<DateTime>("FechaActualizacion")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("FechaRegistro")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("ModificadoPorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NombreRemitente")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("ProveedorWhatsApp")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("UltimaModificacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("WhatsAppApiKey")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("WhatsAppApiUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("WhatsAppFechaValidacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("WhatsAppNumeroEmpresa")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<bool>("WhatsAppValidado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("correoRemitente")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("requiereSSL")
                         .HasColumnType("tinyint(1)");
@@ -327,15 +366,24 @@ namespace AppServiceAndTravel.Migrations
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("smtpPassword")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<string>("smtpPort")
-                        .HasColumnType("longtext");
+                    b.Property<int>("smtpPort")
+                        .HasColumnType("int");
+
+                    b.Property<string>("smtpServer")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("smtpUserName")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.HasKey("smtpServer");
+                    b.HasKey("idConfigNotificacion");
 
                     b.ToTable("ConfiguracionNotificaciones");
                 });
@@ -357,7 +405,17 @@ namespace AppServiceAndTravel.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("varchar(7)");
 
+                    b.Property<string>("ColorAdvertencia")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("varchar(7)");
+
                     b.Property<string>("ColorFondo")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("varchar(7)");
+
+                    b.Property<string>("ColorPeligro")
                         .IsRequired()
                         .HasMaxLength(7)
                         .HasColumnType("varchar(7)");
@@ -377,6 +435,10 @@ namespace AppServiceAndTravel.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("varchar(7)");
 
+                    b.Property<string>("Departamento")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<int>("DiasAlertaVencimiento")
                         .HasColumnType("int");
 
@@ -392,6 +454,11 @@ namespace AppServiceAndTravel.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
+
+                    b.Property<string>("FuenteSistema")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Idioma")
                         .IsRequired()
@@ -468,6 +535,11 @@ namespace AppServiceAndTravel.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("TamanoFuenteBase")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
                     b.Property<string>("Telefono")
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
@@ -475,6 +547,11 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<string>("Telefono2")
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
+
+                    b.Property<string>("TemaSeleccionado")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<DateTime>("UltimaModificacion")
                         .HasColumnType("datetime(6)");
@@ -497,12 +574,15 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idConfiguracionGeneral = 1,
                             ColorAcento = "#16a34a",
+                            ColorAdvertencia = "#f59e0b",
                             ColorFondo = "#f0f4f8",
-                            ColorPrimario = "#1a6fc4",
-                            ColorSecundario = "#0f1c2e",
+                            ColorPeligro = "#dc2626",
+                            ColorPrimario = "#0080ff",
+                            ColorSecundario = "#52e5ff",
                             ColorTexto = "#1e293b",
                             DiasAlertaVencimiento = 30,
                             FormatoFecha = "dd/MM/yyyy",
+                            FuenteSistema = "Inter",
                             Idioma = "es-CO",
                             JwtAudience = "AppServiceAndTravelApp",
                             JwtExpirationMinutes = 60,
@@ -516,7 +596,9 @@ namespace AppServiceAndTravel.Migrations
                             SeparadorDecimal = ",",
                             SeparadorMiles = ".",
                             SimboloMoneda = "$",
-                            UltimaModificacion = new DateTime(2026, 5, 23, 23, 2, 44, 458, DateTimeKind.Local).AddTicks(928),
+                            TamanoFuenteBase = "14px",
+                            TemaSeleccionado = "Azul corporativo",
+                            UltimaModificacion = new DateTime(2026, 5, 27, 15, 40, 38, 978, DateTimeKind.Local).AddTicks(6114),
                             ZonaHoraria = "America/Bogota"
                         });
                 });
@@ -785,7 +867,19 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<int>("idRol")
                         .HasColumnType("int");
 
+                    b.Property<bool>("apiAccess")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("claims")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("controllerAction")
+                        .HasColumnType("longtext");
+
                     b.Property<bool>("crea")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("deny")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("edita")
@@ -794,11 +888,26 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<bool>("elimina")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("endpoint")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("fechaCreacion")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("fechaModificacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("hereda")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("idPermiso")
+                        .HasColumnType("int");
+
                     b.Property<bool>("lectura")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("modificadoPorId")
+                        .HasColumnType("int");
 
                     b.HasKey("idProceso", "idRol");
 
@@ -811,170 +920,360 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idProceso = 1,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5008),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9440),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9440),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 2,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5013),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9444),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9444),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 3,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5014),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9445),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9445),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 4,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5016),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9446),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9446),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 5,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5017),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9447),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9447),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 6,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5018),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9448),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9448),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 7,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5018),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9449),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9450),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 8,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5019),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9450),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 9,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5020),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 10,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5021),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9452),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9452),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 11,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5022),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9453),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9453),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 12,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5023),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9454),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9454),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 13,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5024),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9455),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9455),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 14,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5025),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9457),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9457),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 15,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5026),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9458),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9458),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 16,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5027),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9459),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9459),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         },
                         new
                         {
                             idProceso = 17,
                             idRol = 1,
+                            apiAccess = false,
                             crea = false,
+                            deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(5028),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9460),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9460),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 18,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9461),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9461),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 19,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9462),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9462),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 20,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9463),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9463),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 21,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9464),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9464),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 22,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9465),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9465),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 23,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9466),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9466),
+                            hereda = true,
+                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 24,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9467),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9467),
+                            hereda = true,
+                            idPermiso = 0,
                             lectura = true
                         });
                 });
@@ -1020,156 +1319,219 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 1,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4540),
-                            icono = "fa-gear",
-                            proceso = "Configuracion"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8686),
+                            icono = "fa-user-shield",
+                            proceso = "Seguridad"
                         },
                         new
                         {
                             idProceso = 2,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4548),
-                            icono = "fa-shop",
-                            proceso = "Productos"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8692),
+                            icono = "fa-gear",
+                            idProcesoPadre = 1,
+                            proceso = "Configuracion"
                         },
                         new
                         {
                             idProceso = 3,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4550),
-                            icono = "fa-user",
-                            idProcesoPadre = 1,
-                            proceso = "Usuarios"
+                            area = "Admin",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8694),
+                            idProcesoPadre = 2,
+                            proceso = "Configuracion General",
+                            url = "ConfiguracionGeneral"
                         },
                         new
                         {
                             idProceso = 4,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4552),
-                            idProcesoPadre = 3,
-                            proceso = "Users",
-                            url = "AdminManagement"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8695),
+                            idProcesoPadre = 2,
+                            proceso = "Usuarios",
+                            url = "Usuarios"
                         },
                         new
                         {
                             idProceso = 5,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4553),
-                            idProcesoPadre = 1,
-                            proceso = "Apariencia",
-                            url = "Appearance"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8697),
+                            idProcesoPadre = 2,
+                            proceso = "Roles",
+                            url = "Roles"
                         },
                         new
                         {
                             idProceso = 6,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4555),
-                            idProcesoPadre = 1,
-                            proceso = "Base de datos",
-                            url = "DatabaseConnections"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8698),
+                            idProcesoPadre = 2,
+                            proceso = "Permisos",
+                            url = "Permisos"
                         },
                         new
                         {
                             idProceso = 7,
-                            area = "Admin",
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4557),
-                            idProcesoPadre = 2,
-                            proceso = "Gestion de productos",
-                            url = "ProductsManagement"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8699),
+                            icono = "fa-users-rectangle",
+                            proceso = "Proveedores"
                         },
                         new
                         {
                             idProceso = 8,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4558),
-                            idProcesoPadre = 3,
-                            proceso = "notification",
-                            url = "RolPermissions"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8755),
+                            idProcesoPadre = 7,
+                            proceso = "Listado de Proveedores",
+                            url = "Proveedores"
                         },
                         new
                         {
                             idProceso = 9,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4560),
-                            idProcesoPadre = 1,
-                            proceso = "Provedores",
-                            url = "SupplierManagement"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8757),
+                            idProcesoPadre = 7,
+                            proceso = "Nuevo Proveedor",
+                            url = "CrearProveedor"
                         },
                         new
                         {
                             idProceso = 10,
-                            area = "Admin",
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4561),
-                            idProcesoPadre = 1,
-                            proceso = "Sistema",
-                            url = "SystemConfiguration"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8759),
+                            icono = "fa-address-card",
+                            proceso = "Conductores"
                         },
                         new
                         {
                             idProceso = 11,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4563),
-                            icono = "fa-store",
-                            proceso = "Ventas",
-                            url = "Ventas"
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8760),
+                            idProcesoPadre = 10,
+                            proceso = "Listado de Conductores",
+                            url = "Conductores"
                         },
                         new
                         {
                             idProceso = 12,
-                            controlador = "Home",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4564),
-                            proceso = "Dashboard",
-                            url = "index"
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8761),
+                            idProcesoPadre = 10,
+                            proceso = "Nuevo Conductor",
+                            url = "CrearConductor"
                         },
                         new
                         {
                             idProceso = 13,
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4565),
-                            icono = "fa-cart-shopping",
-                            idProcesoPadre = 11,
-                            proceso = "Venta",
-                            url = "Sales"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8762),
+                            icono = "fa-car",
+                            proceso = "Vehiculos"
                         },
                         new
                         {
                             idProceso = 14,
+                            area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4567),
-                            icono = "fa-shop",
-                            proceso = "Productos",
-                            url = "Products"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8764),
+                            idProcesoPadre = 13,
+                            proceso = "Listado de Vehiculos",
+                            url = "Vehiculos"
                         },
                         new
                         {
                             idProceso = 15,
+                            area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4568),
-                            idProcesoPadre = 14,
-                            proceso = "Gestion de Productos",
-                            url = "ProductsManagement"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8765),
+                            idProcesoPadre = 13,
+                            proceso = "Nuevo Vehiculo",
+                            url = "CrearVehiculo"
                         },
                         new
                         {
                             idProceso = 16,
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4570),
-                            idProcesoPadre = 14,
-                            proceso = "Pedidos",
-                            url = "Orders"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8766),
+                            icono = "fa-handshake",
+                            proceso = "Cotizaciones"
                         },
                         new
                         {
                             idProceso = 17,
+                            area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4571),
-                            idProcesoPadre = 14,
-                            proceso = "Gestion de Pedidos",
-                            url = "OrdersManagement"
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8767),
+                            idProcesoPadre = 16,
+                            proceso = "Historial",
+                            url = "Cotizaciones"
+                        },
+                        new
+                        {
+                            idProceso = 18,
+                            area = "Comercial",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8769),
+                            idProcesoPadre = 16,
+                            proceso = "Nueva Cotización",
+                            url = "CrearCotizacion"
+                        },
+                        new
+                        {
+                            idProceso = 19,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8770),
+                            icono = "fa-handshake",
+                            proceso = "Clientes"
+                        },
+                        new
+                        {
+                            idProceso = 20,
+                            area = "Comercial",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8771),
+                            idProcesoPadre = 19,
+                            proceso = "Listado de Clientes",
+                            url = "Clientes"
+                        },
+                        new
+                        {
+                            idProceso = 21,
+                            area = "Comercial",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8772),
+                            idProcesoPadre = 19,
+                            proceso = "Nuevo Cliente",
+                            url = "CrearCliente"
+                        },
+                        new
+                        {
+                            idProceso = 22,
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8774),
+                            icono = "fa-car-side",
+                            proceso = "Servicios"
+                        },
+                        new
+                        {
+                            idProceso = 23,
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8775),
+                            idProcesoPadre = 22,
+                            proceso = "Historial",
+                            url = "Servicios"
+                        },
+                        new
+                        {
+                            idProceso = 24,
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8776),
+                            idProcesoPadre = 22,
+                            proceso = "Nuevo Servicio",
+                            url = "CrearServicio"
                         });
                 });
 
@@ -1275,15 +1637,15 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idRol = 1,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4783),
-                            fechaModificacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4783),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9268),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9268),
                             nombre = "Administrador"
                         },
                         new
                         {
                             idRol = 2,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4787),
-                            fechaModificacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4788),
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9273),
+                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9274),
                             nombre = "Usuarios"
                         });
                 });
@@ -1313,7 +1675,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idUsuario = 1,
                             idRol = 1,
-                            fechaCreacion = new DateTime(2026, 5, 24, 4, 2, 44, 455, DateTimeKind.Utc).AddTicks(4908)
+                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9360)
                         });
                 });
 

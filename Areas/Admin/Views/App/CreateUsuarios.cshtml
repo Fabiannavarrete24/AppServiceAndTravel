@@ -1,0 +1,153 @@
+@{ ViewData["Title"] = "Nuevo Usuario"; }
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header bg-white py-3 px-4 d-flex align-items-center gap-2">
+        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div>
+          <h5 class="mb-0 fw-semibold">Nuevo usuario</h5>
+          <small class="text-muted">Complete los datos de acceso y asigne el rol correspondiente</small>
+        </div>
+      </div>
+      <div class="card-body px-4 py-4">
+        <form id="formCreateUser">
+          <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos personales</h6>
+          <div class="row gy-3 mb-4">
+            <div class="col-sm-4">
+                <label class="form-label fw-semibold small">UserName</label>
+                <input class="form-control rounded-3" required disabled id="userName"/>
+                <span class="text-danger small"></span>
+            </div>
+            <div class="col-sm-4">
+              <label class="form-label fw-semibold small">Nombre completo *</label>
+              <input class="form-control rounded-3" required id="nombreUser"/>
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-sm-4">
+              <label class="form-label fw-semibold small">Cargo</label>
+              <input class="form-control rounded-3" placeholder="Ej: Coordinador operativo"  id="cargoUser"/>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label fw-semibold small">Teléfono</label>
+                <input class="form-control rounded-3" id="telefonoUser"/>
+            </div>
+            <div class="col-sm-4">
+              <label class="form-label fw-semibold small">Correo *</label>
+              <input type="email" class="form-control rounded-3" required id="correoUser"/>
+              <span lass="text-danger small"></span>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Contraseña *</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="pwUser">
+                    <button type="button" class="btn btn-outline-secondary" onclick="togglePwd('pwUser','icoPW')">
+                        <i class="fa-solid fa-eye" id="icoPW"></i>
+                    </button>
+                </div>              
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Roles y Permisos</label>
+                <select id="selectRol" class="form-select" id="idRolUser">
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <label class="form-label">Administrador</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="adminUser">
+                </div>
+            </div>
+          </div>          
+          <div class="d-flex gap-3 pt-2">
+            <button type="submit" class="btn btn-primary px-4 rounded-3">
+              <i class="fa-solid fa-user-plus me-2"></i>Crear usuario
+            </button>
+            <a class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-body p-4">
+        <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Guía de roles</h6>
+        @foreach(var (r,desc) in new[]{
+          ("Administrador",       "Acceso total al sistema."),
+          ("Aprobador",           "Aprueba o rechaza cotizaciones."),
+          ("Coordinador",         "Crea servicios y gestiona flota."),
+          ("Operador",            "Crea cotizaciones y clientes."),
+          ("ComercialManager",    "Gestión comercial completa."),
+          ("OperacionesManager",  "Gestión operativa completa."),
+          ("ContabilidadManager", "Acceso a reportes financieros."),
+          ("RHManager",           "Gestión de personal y proveedores."),
+          ("Consulta",            "Solo lectura en todo el sistema."),
+        })
+        {
+          <div class="d-flex align-items-start gap-2 mb-2">
+            <i class="bi bi-shield-check text-primary mt-1" style="font-size:13px;flex-shrink:0;"></i>
+            <div>
+              <div class="fw-semibold" style="font-size:12px;">@r</div>
+              <div class="text-muted" style="font-size:11px;">@desc</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+$(document).ready(function (){
+    loadRoles();
+});
+
+function loadRoles() {
+    $.ajax({
+        url: '/Admin/Configuracion/GetRoles',
+        type: 'GET',
+        beforeSend: function () {
+            showLoader();
+        },
+        success: function (response) {
+            LoadSelect("#selectRol",response.data);
+        },
+        complete: function () {
+            hideLoader();
+        }
+    });
+}
+
+function CrearUsuario() {
+    data = {
+        Username: $("#userName").val(),
+        nombreCompleto: $("#nombreUser").val(),
+        correo: $("#correoUser").val(),
+        cargo: $("#cargoUser").val(),
+        telefono: $("#telefonoUser").val(),
+        admin: $("#adminUser").val(),
+        password: $("#pwUser").val(),
+        idRol: $("#idRolUser").val(),
+    };
+
+    $.ajax({
+        url: '/Admin/Configuracion/UpdateUsuario',
+        type: 'GET',
+        beforeSend: function () {
+            showLoader();
+        },
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        success: function (response) {
+            console.log(response);
+        },
+        complete: function () {
+            hideLoader();
+        }
+    });
+}
+</script>
+}

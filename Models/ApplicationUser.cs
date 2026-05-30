@@ -1,4 +1,5 @@
-﻿using Microsoft.Graph.Models;
+﻿using AppServiceAndTravel.Areas.Admin.Models;
+using Microsoft.Graph.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace AppServiceAndTravel.Models

@@ -43,7 +43,33 @@
                 timerProgressBar: true,
                 showconfirmadaButton: false
             }).then(() => {
-                window.location.href = '/Acceso/login';
+                window.location.href = '/Account/login';
+            });
+        }
+        function LoadConfiguracion() {
+
+            const cfg = localStorage.getItem('app_configuracion');
+            const config = JSON.parse(cfg);
+
+            if (!cfg) {
+                console.warn("No existe configuración en localStorage");
+                return;
+            }
+
+            document.documentElement.style.setProperty('--cp', config.colorPrimario || '#1a6fc4');
+            document.documentElement.style.setProperty('--cs', config.colorSecundario || '#0f1c2e');
+            document.documentElement.style.setProperty('--ca', config.colorAcento || '#16a34a');
+            document.documentElement.style.setProperty('--ct', config.colorTexto || '#1e293b');
+            document.documentElement.style.setProperty('--cbg', config.colorFondo || '#f8fafc');
+            document.documentElement.style.setProperty('--cd', config.colorPeligro || '#dc2626');
+            document.documentElement.style.setProperty('--cw', config.colorAdvertencia || '#f59e0b');
+            document.documentElement.style.setProperty('--font-family-base',`'${config.fuenteSistema || 'Segoe UI'}', sans-serif`);
+            document.documentElement.style.setProperty('--font-size-base',config.tamanoFuenteBase || '14px');
+            $('body').css({
+                'font-family': `'${config.fuenteSistema || 'Segoe UI'}', sans-serif`,
+                'font-size': config.tamanoFuenteBase || '14px',
+                'background-color': config.colorFondo || '#f8fafc',
+                'color': config.colorTexto || '#1e293b'
             });
         }
     </script>
