@@ -52,4 +52,4 @@ jobs:
           app-name: 'AppServiceAndTravel'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A1756F6AA8A8466CB546366B9FDB2B0D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7EEFA71539B44CC1916B58E5C22F2AA1 }}
