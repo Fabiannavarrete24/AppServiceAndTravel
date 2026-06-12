@@ -377,7 +377,7 @@ namespace AppServiceAndTravel.Areas.Admin.Services
 
                 user.password = hasher.HashPassword(
                     user.userName!,
-                    model.Password);
+                    model.Password!);
 
                 user.fechaCambioClave = DateTime.UtcNow.AddMonths(3);
 

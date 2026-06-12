@@ -450,8 +450,6 @@ body{background:linear-gradient(135deg,#0f1c2e 0%,#1a3a5c 60%,#0d4d8a 100%);
                 <div class="col-md-3">
                     <label class="form-label">País</label>
                     <select id="empPais" class="form-select">
-                        @foreach(var p in new[]{"Colombia","México","Perú","Chile","Argentina","Ecuador","Venezuela","España"})
-                        { <option value="@p" @@(p=="Colombia"?"selected":"")>@p</option> }
                     </select>
                 </div>
                 <div class="col-md-3">
