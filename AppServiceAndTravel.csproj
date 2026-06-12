@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Configuracion\**" />
+    <Compile Remove="Areas\Operaciones\Views\Vehiculo\**" />
+    <Content Remove="Areas\Configuracion\**" />
+    <Content Remove="Areas\Operaciones\Views\Vehiculo\**" />
+    <EmbeddedResource Remove="Areas\Configuracion\**" />
+    <EmbeddedResource Remove="Areas\Operaciones\Views\Vehiculo\**" />
+    <None Remove="Areas\Configuracion\**" />
+    <None Remove="Areas\Operaciones\Views\Vehiculo\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.72" />
     <PackageReference Include="MailKit" Version="4.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.27" />
@@ -32,12 +43,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.7" />
     <PackageReference Include="Twilio" Version="7.14.9" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Areas\Configuracion\Data\" />
-    <Folder Include="Areas\Configuracion\Models\" />
-    <Folder Include="Areas\Operaciones\Views\Vehiculo\" />
   </ItemGroup>
 
 </Project>

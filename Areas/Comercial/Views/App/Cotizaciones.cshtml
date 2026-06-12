@@ -1,0 +1,626 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#fef3c7;color:#92400e;font-size:22px;">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:16px;">Pendientes</div>
+                    <div id="totalPendientes" style="font-size:24px;font-weight:700;">
+                        0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#d1fae5;color:#065f46;font-size:22px;">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:16px;">Aprobadas</div>
+                    <div id="totalAprobadas" style="font-size:24px;font-weight:700;">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#fee2e2;color:#991b1b;font-size:22px;">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:16px;">Rechazadas</div>
+                    <div id="totalRechazadas" style="font-size:24px;font-weight:700;">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card h-100">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                     style="width:48px;height:48px;background:#dbeafe;color:#1e40af;font-size:22px;">
+                    <i class="fa-solid fa-file"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:16px;">Total</div>
+                    <div id="totalRegistros" style="font-size:24px;font-weight:700;">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-white py-3 d-flex flex-wrap align-items-center gap-3">
+        <span class="fw-semibold flex-grow-1">Historial de Cotizaciones</span>
+        <div class="btn-group btn-group-sm" Rol="group">
+            <input type="search" id="searchCotizacion" class="form-control" placeholder="Buscar..." />
+            <select id="estadoCotizacion" class="form-select form-select-sm">
+                <option value="">Todos</option>
+                <option value="0">Pendiente</option>
+                <option value="1">Aprobada</option>
+                <option value="2">Rechazada</option>
+            </select>
+        </div>
+        <a href="/Comercial/App/CrearCotizacion" class="btn btn-primary">
+            <i class="fa-solid fa-plus me-1"></i>Nueva Cotizacion
+        </a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table id="tableCotizaciones" class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">N°</th>
+                        <th>Cliente</th>
+                        <th>Ruta</th>
+                        <th>Fecha Servicio</th>
+                        <th>Valor</th>
+                        <th>Estado</th>
+                        <th>Creada</th>
+                        <th class="text-end pe-4">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="emptyCotizaciones" class="text-center py-5 text-muted d-none">
+                <i class="bi bi-inbox" style="font-size:40px;opacity:.3;">
+                </i>
+                <p class="mt-2 mb-0">
+                    No hay cotizaciones que mostrar.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer bg-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <div id="infoCotizaciones" class="text-muted">
+            </div>
+            <div id="paginationCotizaciones" class="btn-group">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Detalle -->
+<div class="modal fade" id="modalDetalle" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+
+            <form id="formDetalleCotizacion">
+
+                <input type="hidden" id="idCotizacionDetalle" />
+
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Cotización #
+                        <span id="numeroCotizacion"></span>
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- DATOS GENERALES -->
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Información General
+                        </div>
+
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">
+                                        Cliente
+                                    </label>
+
+                                    <input type="text"
+                                           id="cliente"
+                                           class="form-control"
+                                           readonly />
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">
+                                        Estado
+                                    </label>
+
+                                    <input type="text"
+                                           id="estado"
+                                           class="form-control"
+                                           readonly />
+                                </div>
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">
+                                        Fecha creación
+                                    </label>
+
+                                    <input type="text"
+                                           id="fechaCreacion"
+                                           class="form-control"
+                                           readonly />
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Valor Cotizado
+                                    </label>
+
+                                    <input type="text"
+                                           id="valorCotizado"
+                                           class="form-control"
+                                           readonly />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Observaciones
+                                    </label>
+
+                                    <textarea id="observaciones"
+                                              class="form-control"
+                                              rows="2"></textarea>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- DETALLES -->
+
+                    <div class="card">
+
+                        <div class="card-header d-flex justify-content-between">
+
+                            <span>Detalles de la cotización</span>
+
+                            <button type="button"
+                                    class="btn btn-primary btn-sm"
+                                    id="btnAgregarDetalle">
+                                <i class="fa fa-plus"></i>
+                                Agregar detalle
+                            </button>
+
+                        </div>
+
+                        <div class="card-body p-0">
+
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered table-hover mb-0">
+
+                                    <thead>
+
+                                        <tr>
+                                            <th>Origen</th>
+                                            <th>Destino</th>
+                                            <th>Servicio</th>
+                                            <th>Vehículo</th>
+                                            <th>Inicio</th>
+                                            <th>Fin</th>
+                                            <th>Pax</th>
+                                            <th>Cantidad</th>
+                                            <th>V.Unitario</th>
+                                            <th>Total</th>
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="detalleCotizacionBody">
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-success">
+                        Guardar cambios
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Aprobar -->
+<div class="modal fade" id="modalAprobar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form id="formAprobar">
+                <input type="hidden" id="aprobarId" />
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title"><i class="bi bi-check-circle text-success me-2"></i>Aprobar Cotización</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Valor Aprobado</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="aprobarValor" name="valorAprobado" class="form-control" step="0.01"
+                                   min="0" placeholder="Dejar vacío para usar valor cotizado" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Observaciones</label>
+                        <textarea name="observaciones" class="form-control" rows="3" id="aprobarObservaciones"
+                                  placeholder="Observaciones sobre la aprobación…"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-1"></i>Aprobar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Rechazar -->
+<div class="modal fade" id="modalRechazar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <form id="formRechazar">
+                <input type="hidden" id="rechazarId" name="id" />
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title"><i class="bi bi-x-circle text-danger me-2"></i>Rechazar Cotización</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Motivo del rechazo <span
+                            class="text-danger">*</span></label>
+                            <textarea name="motivo" class="form-control" rows="3" required
+                                      placeholder="Explique por qué se rechaza la cotización…"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-x-lg me-1"></i>Rechazar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            $(function () {
+                cargarDashboard();
+                cotizacionesTable.load();
+            });
+
+            function cargarDashboard() {
+                $.ajax({
+                    url: '/Comercial/Cotizacion/ObtenerDashboard',
+                    type: 'GET',
+                    beforeSend: function(){
+                        showLoader();
+                    },
+                    success: function (response) {
+                        if (!response.success)
+                            return;
+
+                        $("#totalPendientes").text(response.data.totalPendientes);
+                        $("#totalAprobadas").text(response.data.totalAprobadas);
+                        $("#totalRechazadas").text(response.data.totalRechazadas);
+                        $("#totalRegistros").text(response.data.totalRegistros);
+                    },
+                    complete:function (){
+                        hideLoader();
+                    },
+                });
+            }
+
+            function loadCotizacion(idCotizacion) {
+
+                $.ajax({
+                    url: '/Comercial/Cotizacion/GetCotizacion',
+                    data: {
+                        id: idCotizacion
+                    },
+                    success: function (response) {
+
+                        let cot = response.data;
+
+                        $("#numeroCotizacion").text(cot.idCotizacion);
+                        $("#idCotizacionDetalle").val(cot.idCotizacion);
+                        $("#cliente").val(cot.cliente);
+                        $("#estado").val(cot.estado);
+                        $("#fechaCreacion").val(moment(cot.fechaCreacion).format("DD/MM/YYYY"));
+                        $("#valorCotizado").val(new Intl.NumberFormat("es-CO").format(cot.valorCotizado));
+                        $("#observaciones").val(cot.observaciones ?? "");
+
+                        let html = "";
+
+                        cot.detalles.forEach(d => {
+
+                            html += `
+                            <tr>
+                                <td>${d.origen}</td>
+                                <td>${d.destino}</td>
+                                <td>${d.tipoServicio}</td>
+                                <td>${d.tipoVehiculo}</td>
+                                <td>${moment(d.fechaServicioInicio).format("DD/MM/YYYY")}</td>
+                                <td>${moment(d.fechaServicioFin).format("DD/MM/YYYY")}</td>
+                                <td>${d.numPasajeros}</td>
+                                <td>${d.cantidad}</td>
+                                <td>${new Intl.NumberFormat('es-CO').format(d.valorUnitario)}</td>
+                                <td>${new Intl.NumberFormat('es-CO').format(d.valorTotal)}</td>
+                            </tr>
+                            `;
+                        });
+                        $("#detalleCotizacionBody").html(html);
+                        $("#modalDetalle").modal("show");
+                    }
+                });
+            }
+
+            const cotizacionesTable = new TableManager({
+                url: '/Comercial/Cotizacion/ObtenerCotizaciones',
+                tableId: '#tableCotizaciones',
+                paginationId: '#paginationCotizaciones',
+                infoId: '#infoCotizaciones',
+                pageSize: 10,
+                filters: {
+                    search: '#searchCotizacion',
+                    estado: '#estadoCotizacion'
+                },
+                beforeSend: () => showLoader(),
+                onComplete: () => hideLoader(),
+                renderTable: (data) => {
+
+                    let tbody = $("#tableCotizaciones tbody");
+                    tbody.empty();
+
+                    if (!data || data.length === 0) {
+                        $("#emptyCotizaciones").removeClass("d-none");
+                        $("#tableCotizaciones").addClass("d-none");
+                        return;
+                    }
+
+                    $("#emptyCotizaciones").addClass("d-none");
+                    $("#tableCotizaciones").removeClass("d-none");
+
+                    data.forEach(item => {
+                        let badge = "secondary";
+
+                        switch (item.estado) {
+
+                            case "Pendiente":
+                                badge = "warning";
+                                break;
+
+                            case "Aprobada":
+                                badge = "success";
+                                break;
+
+                            case "Rechazada":
+                                badge = "danger";
+                                break;
+                        }
+
+                        let acciones = `
+                        <button class="btn btn-sm btn-outline-secondary btn-ver"
+                                data-id="${item.idCotizacion}">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        `;
+
+                        if(item.estado === 'Pendiente')
+                        {
+                            acciones += `
+                                <button class="btn btn-sm btn-outline-primary btn-editar"
+                                        data-id="${item.idCotizacion}">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-success btn-aprobar"
+                                        data-id="${item.idCotizacion}"
+                                        data-valor="${item.valorCotizado}">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-outline-danger btn-rechazar"
+                                        data-id="${item.idCotizacion}">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            `;
+                        }
+
+                        if(item.estado === 'Aprobada' && !item.tieneServicio)
+                        {
+                            acciones += `
+                                <a href="/Operaciones/Servicio/Create?cotizacionId=${item.idCotizacion}"
+                                class="btn btn-sm btn-primary">
+                                Servicio
+                                </a>
+                            `;
+                        }
+
+                        tbody.append(`
+                            <tr>
+                                <td class="ps-4 fw-semibold">
+                                    #${item.idCotizacion}
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">
+                                        ${item.cliente}
+                                    </div>
+                                    <small class="text-muted">
+                                        ${item.correo ?? ''}
+                                    </small>
+                                </td>
+                                <td>
+                                    <small>
+                                        ${item.origen}
+                                        <i class="bi bi-arrow-right mx-1"></i>
+                                        ${item.destino}
+                                    </small>
+                                </td>
+                                <td>
+                                    ${moment(item.fechaServicio).format("DD/MM/YYYY")}
+                                </td>
+                                <td class="fw-semibold">
+                                    $ ${parseFloat(item.valorCotizado).toLocaleString('es-CO')}
+                                </td>
+                                <td>
+                                    <span class="badge bg-${badge}">
+                                        ${item.estado}
+                                    </span>
+                                </td>
+                                <td>
+                                    ${moment(item.fechaCreacion).format("DD/MM/YYYY")}
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="d-flex justify-content-end gap-1">
+                                        ${acciones}
+                                    </div>
+                                </td>
+                            </tr>
+                            `);
+                    });
+                }
+
+            });
+            
+            $(document).on("click", ".btn-ver", function () {
+                loadCotizacion($(this).data("id"));
+                $("#modalDetalle").modal("show");                
+            });
+
+            $(document).on("click", ".btn-editar", function () {
+                $("#rechazarId").val($(this).data("id"));
+                $("#modalDetalle").modal("show");
+            });
+
+            $(document).on("click", ".btn-aprobar", function () {
+                $("#aprobarId").val($(this).data("id"));
+                $("#aprobarValor").val($(this).data("valor"));
+                $("#modalAprobar").modal("show");
+            });
+
+            $(document).on("click", ".btn-rechazar", function () {
+                $("#rechazarId").val($(this).data("id"));
+                $("#modalRechazar").modal("show");
+            });
+
+            $("#formAprobar").submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '/Comercial/Cotizacion/AprobarCotizacion',
+                    type: 'POST',
+                    beforeSend: function(){
+                        showLoader();
+                    },                    
+                    data:{
+                        idCotizacion: $("#aprobarId").val(),
+                        valorAprobado: $("#aprobarValor").val(),
+                        observaciones: $("#aprobarObservaciones").val()
+                    },
+                    success: function () {
+                        $("#modalAprobar").modal('hide');
+                        cotizacionesTable.load();
+                        cargarDashboard();
+                    },
+                    complete:function (){
+                        hideLoader();
+                    },
+                    error: function(error){
+                        console.log(error);
+                        showAlert("error","",error.responseJSON.Message);
+                    }                    
+                });
+            });
+
+            $("#formRechazar").submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/Comercial/Cotizacion/RechazarCotizacion',
+                    type: 'POST',
+                    beforeSend: function(){
+                        showLoader();
+                    },                      
+                    data:{
+                        idCotizacion: $("#rechazarId").val(),
+                        motivo: $("#motivoRechazo").val()
+                    },
+                    success: function () {
+                        $("#modalRechazar").modal('hide');
+                        cotizacionesTable.load();
+                        cargarDashboard();
+                    },
+                    complete:function (){
+                        hideLoader();
+                    },
+                    error: function(){
+                        showAlert("error","",error.Message);
+                    }                     
+                });
+            });   
+        </script>
+
+    }

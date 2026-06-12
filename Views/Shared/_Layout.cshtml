@@ -6,14 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AppServiceAndTravel</title>
     <link rel="stylesheet" href="~/AppServiceAndTravel.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/datatables/datatables.css" rel="stylesheet" />
     <link href="~/lib/datatables/datatables.min.css" rel="stylesheet" />
     <link href="~/lib/fontawesome/css/all.css" rel="stylesheet" />
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
     <link href="~/lib/select2/css/select2-bootstrap.css" rel="stylesheet" />
     <link href="~/lib/select2/css/select2-bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/jqueryui/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.min.css" rel="stylesheet" />
+    <link href="~/lib/toastr/toastr.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/root.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -46,18 +54,19 @@
                 <div class="user-avatar">@(User.Identity?.Name?.Substring(0, 1).ToUpper() ?? "U")</div>
             </div>
         </div>
+
         <div id="page-content">
-            <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center gap-2 mb-4"
-                 Rol="alert">
-                <i class="bi bi-exclamation-circle-fill"></i>
-                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
-            </div>
             @RenderBody()
         </div>
     </div>
+    <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999; width:350px;">
+    </div>    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>  
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
+    <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/lib/datatables/datatables.js"></script>
     <script src="~/lib/datatables/datatables.min.js"></script>
     <script src="~/lib/sweetalert2/sweetalert.js"></script>
@@ -76,33 +85,90 @@
     @await RenderSectionAsync("Scripts", required: false)
     <script>
         moment.locale('es');
+        const tooltipTriggerList = $('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        
         $(document).ready(function () {
 
             let menu = sessionStorage.getItem("app_menu");
-            
+
             if (menu) {
                 renderMenu(JSON.parse(menu));
-            } else {
-                loadMenu();
+            } 
+            else {
+                 loadMenu();
             }
-
-            LoadConfiguracion();
+             LoadConfiguracion();
         });
 
-        function LoadSelect(selectId,data) {
+        function calcularDiasVigencia(fechaInicioId, fechaFinId, resultadoId) {
+
+            const inicio = $(fechaInicioId).val();
+            const fin = $(fechaFinId).val();
+
+            if (!inicio || !fin) {
+                $(resultadoId).val('');
+                return;
+            }
+
+            const fechaInicio = new Date(inicio);
+            const fechaFin = new Date(fin);
+
+            const diferenciaMs = fechaFin - fechaInicio;
+
+            if (diferenciaMs < 0) {
+                $(resultadoId).val(0);
+                return;
+            }
+
+            const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)) + 1;
+
+            $(resultadoId).val(dias);
+        }
+
+        function actualizarBadgeVigencia(inputId, badgeId) {
+
+            const dias = parseInt($(inputId).val()) || 0;
+            const badge = $(badgeId);
+
+            badge.removeClass('text-bg-success text-bg-warning text-bg-danger text-bg-secondary');
+
+            if (dias > 15) {
+                badge.addClass('text-bg-success').removeClass('d-none').text('Vigente');
+            }
+            else if (dias > 5) {
+                badge.addClass('text-bg-warning').removeClass('d-none').text('Vence pronto');
+            }
+            else {
+                badge.addClass('text-bg-danger').removeClass('d-none').text('Vencido');
+            }
+        }
+
+        function LoadSelect(selectId, data) {
             var categoriaSelect = $(selectId);
             categoriaSelect.empty();
-            categoriaSelect.append(
-                '<option value="">Seleccione una opción</option>',
-            );
+            categoriaSelect.append('<option value="">Seleccione una opción</option>');
             $.each(data, function (i, item) {
-                categoriaSelect.append(
-                    '<option value="' + item.id + '">' + item.descripcion + "</option>",
-                );
+                categoriaSelect.append('<option value="' + item.id + '">' + item.descripcion + "</option>");
             });
         }
-        function loadMenu() {
+        
+        function showToast(message, type = "success", time = 2500) {
 
+            let id = "toast_" + Date.now();
+            let toast = `<div id="${id}" class="alert alert-${type} shadow toast-animate mb-2" role="alert">${message}</div>`;
+            $("#toastContainer").append(toast);
+
+            setTimeout(() => {
+
+                $("#" + id).fadeOut(300, function () {
+                    $(this).remove();
+                });
+
+            }, time);
+        }
+
+        function loadMenu() {
             $.ajax({
                 url: '/Helps/MenuNavegacion',
                 type: "GET",
@@ -136,40 +202,39 @@
             const tieneHijos = menu.hijos && menu.hijos.length > 0;
             let url = "#";
 
-            if (menu.controlador && menu.url) 
-            {
-                if (menu.area) 
-                {
+            if (menu.controlador && menu.url) {
+                if (menu.area) {
                     url = `/${menu.area}/${menu.controlador}/${menu.url}`;
-                } 
-                else 
-                {
+                }
+                else {
                     url = `/${menu.controlador}/${menu.url}`;
-                }            
+                }
             }
 
             const icono = menu.icono ? `<i class="fa ${menu.icono} me-2"></i>` : `<i class="fa fa-circle me-2 fs-6"></i>`;
-            
+
             if (tieneHijos) {
+       
                 let subMenuHtml = "";
-                menu.hijos.forEach(hijo => {
+            menu.hijos.forEach(hijo => {
                 subMenuHtml += renderMenuItem(hijo, level + 1);
-                });
-                return `
+            });
+
+            return `
                 <div class="sidebar-group level-${level}">
-                    <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
-                        ${icono} <span>${menu.proceso}</span> <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
-                    </a>
-                    <div class="sidebar-submenu" id="menu-${menu.idProceso}">
-                        ${subMenuHtml}
-                    </div>
+                <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
+                ${icono} <span>${menu.proceso}</span> <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
+                </a>
+                <div class="sidebar-submenu" id="menu-${menu.idProceso}">
+                ${subMenuHtml}
+                </div>
                 </div>`;
             }
 
             return `
-            <a href="${url}" class="sidebar-link level-${level}">
+                <a href="${url}" class="sidebar-link level-${level}">
                 ${icono} <span>${menu.proceso}</span>
-            </a>`;
+                </a>`;
         }
 
         $(document).on("click", ".sidebar-dropdown-toggle", function () {
@@ -177,32 +242,91 @@
             $("#" + id).slideToggle(200);
             $(this).find(".dropdown-icon").toggleClass("rotate");
         });
-    
+
         function LoadConfiguracion() {
 
             const cfg = localStorage.getItem('app_configuracion');
-            const config = JSON.parse(cfg);
 
-            if (!cfg) {
-                console.warn("No existe configuración en localStorage");
+            if (cfg) {
+
+                const config = JSON.parse(cfg);
+                AplicarConfiguracion(config);
+
                 return;
             }
-    
-            document.documentElement.style.setProperty('--cp', config.colorPrimario || '#1a6fc4');
-            document.documentElement.style.setProperty('--cs', config.colorSecundario || '#0f1c2e');
-            document.documentElement.style.setProperty('--ca', config.colorAcento || '#16a34a');
-            document.documentElement.style.setProperty('--ct', config.colorTexto || '#1e293b');
-            document.documentElement.style.setProperty('--cbg', config.colorFondo || '#f8fafc');
-            document.documentElement.style.setProperty('--cd', config.colorPeligro || '#dc2626');
-            document.documentElement.style.setProperty('--cw', config.colorAdvertencia || '#f59e0b');
-            document.documentElement.style.setProperty('--font-family-base',`'${config.fuenteSistema || 'Segoe UI'}', sans-serif`);
-            document.documentElement.style.setProperty('--font-size-base',config.tamanoFuenteBase || '14px');
+
+            $.ajax({
+                url: '/Admin/Configuracion/GetConfiguracion',
+                type: 'GET',
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (response) {
+                    if (!response.success)
+                        return;
+
+                        const config = response.dataConfig;
+                        localStorage.setItem('app_configuracion',JSON.stringify(config)
+                    );
+                    AplicarConfiguracion(config);
+                },
+                error: function (xhr) {
+                    console.error('Error cargando configuración',xhr);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+        
+        function syncColor(field, value) {
+
+          $('#color_' + field).val(value);
+          $('#hex_' + field).val(value);
+
+          const map = {
+            ColorPrimario: '--cp',
+            ColorSecundario: '--cs',
+            ColorAcento: '--ca',
+            ColorTexto: '--ct',
+            ColorFondo: '--cbg',
+            ColorPeligro: '--cd',
+            ColorAdvertencia: '--cw'
+          };
+
+          if (map[field]) {
+
+            document.documentElement.style.setProperty(map[field], value);
+          }
+
+        }
+
+        function AplicarConfiguracion(config) {
+
+            syncColor('ColorPrimario', config.colorPrimario || '#1d4ed8');
+            syncColor('ColorSecundario', config.colorSecundario || '#475569');
+            syncColor('ColorAcento', config.colorAcento || '#0ea5e9');
+            syncColor('ColorTexto', config.colorTexto || '#1e293b');
+            syncColor('ColorFondo', config.colorFondo || '#f8fafc');
+            syncColor('ColorPeligro', config.colorPeligro || '#dc2626');
+            syncColor('ColorAdvertencia', config.colorAdvertencia || '#f59e0b');
+
+            const fuente = config.fuenteSistema || 'Segoe UI';
+
+            $('#inputFuente').val(fuente);
+            document.documentElement.style.setProperty('--font-family-base',`'${fuente}', sans-serif`);
+            document.documentElement.style.setProperty('--font-size-base', config.tamanoFuenteBase || '14px');
             $('body').css({
-                'font-family': `'${config.fuenteSistema || 'Segoe UI'}', sans-serif`,
+                'font-family': `'${fuente}', sans-serif`,
                 'font-size': config.tamanoFuenteBase || '14px',
                 'background-color': config.colorFondo || '#f8fafc',
                 'color': config.colorTexto || '#1e293b'
             });
+
+            if (config.nombreTema) {
+                $('#inputTema').val(config.nombreTema);
+            }
+
         }
 
     </script>

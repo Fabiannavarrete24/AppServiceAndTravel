@@ -1,4 +1,5 @@
-﻿@model AppServiceAndTravel.Models.Clientes
+﻿@using AppServiceAndTravel.Areas.Comercial.Models
+@model Clientes
 
 @{
     ViewData["Title"] = "Detalle Cliente";
@@ -18,7 +19,7 @@
 
                 </div>
 
-                <h4 class="fw-semibold">@Model.NombreCompleto</h4>
+                <h4 class="fw-semibold">@Model.RazonSocial</h4>
 
                 <p class="text-muted mb-3">@Model.NitCedula</p>
 
@@ -56,7 +57,7 @@
 
                     <div class="col-md-6">
                         <small class="text-muted">correo</small>
-                        <div class="fw-semibold">@Model.correo</div>
+                        <div class="fw-semibold">@Model.Correo</div>
                     </div>
 
                     <div class="col-12">
@@ -125,7 +126,7 @@
                                         </td>
 
                                         <td>
-                                            @c.FechaServicio.ToString("dd/MM/yyyy")
+                                            @c.FechaInicioServicio.ToString("dd/MM/yyyy")
                                         </td>
 
                                         <td class="fw-semibold">

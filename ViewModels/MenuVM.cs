@@ -17,6 +17,7 @@ namespace AppServiceAndTravel.ViewModels
         public string? icono { get; set; }
 
         public int? idProcesoPadre { get; set; }
+        public int? orden { get; set; }
 
         public List<MenuVM> hijos { get; set; } = new();
     }

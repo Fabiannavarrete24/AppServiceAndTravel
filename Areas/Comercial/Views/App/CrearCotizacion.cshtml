@@ -1,0 +1,421 @@
+@{
+  ViewData["Title"] = "Nueva Cotización";
+  ViewData["Breadcrumb"] = "Cotizaciones / Nueva";
+}
+@section Styles {
+  <style>
+    .custom-tooltip {
+      --bs-tooltip-bg: var(--cp);
+      --bs-tooltip-color: var(--bs-white);
+    }
+  </style>
+}
+<div class="row mb-2">
+    <div class="col-sm-9 mb-3">
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-white border-0 pt-4 px-4 pb-0 d-flex align-items-center gap-2">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:36px;height:36px;background:#dbeafe;">
+                    <i class="bi bi-file-earmark-plus text-primary fs-5"></i>
+                </div>
+                <div>
+                    <h5 class="mb-0 fw-semibold">Datos de la cotización</h5>
+                    <small class="text-muted">Complete todos los campos requeridos</small>
+                </div>
+            </div>
+            <div class="card-body px-4 pb-4 pt-3">
+                <form id="formAddCotizacion" class="row">
+                    <div class="col-12">
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-2">Cliente</h6>
+                        <label class="form-label fw-semibold small">
+                            Cliente *
+                            <i class="fa-solid fa-circle-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                               data-bs-custom-class="custom-tooltip"
+                               data-bs-title="Si el cliente no aparece en la lista, regístrelo primero."></i>
+                        </label>
+                        <div class="position-relative">
+                            <div class="input-group mb-3">
+                                <input type="text" id="clienteBuscar" class="form-control" placeholder="Escriba razon social o NIT" />
+                                <input type="hidden" id="idCliente" name="idCliente" />
+                                <button class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                        data-bs-custom-class="custom-tooltip" data-bs-title='¿Cliente nuevo?'>
+                                    <i class="fa-solid fa-user-plus me-2"></i> Registrar cliente
+                                </button>
+                            </div>
+                            <div class="valid-feedback">
+                            </div>
+                            <div class="invalid-feedback">
+                                Debe seleccionar un cliente.
+                            </div>
+                        </div>
+                        <small id="clienteInfo" class="text-muted"></small>
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-2">Ruta</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="Origen" class="form-label fw-semibold small">Origen *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-muted"></i></span>
+                                    <input id="origen" class="form-control border-start-0 rounded-end-3"
+                                           placeholder="Ciudad o dirección de origen" required />
+                                </div>
+                                <span id="Origen" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Destino" class="form-label fw-semibold small">Destino *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-geo-alt-fill text-primary"></i>
+                                    </span>
+                                    <input id="destino" class="form-control border-start-0 rounded-end-3"
+                                           placeholder="Ciudad o dirección de destino" required />
+                                </div>
+                                <span id="destino" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-2">Detalle</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-3">
+                                <label class="form-label fw-semibold small">Inicio del servicio *</label>
+                                <input id="fechaInicioServicio" type="date" class="form-control rounded-3"
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       value="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+                                <span asp-validation-for="fechaInicioServicio" class="text-danger small"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="form-label fw-semibold small">Finalización del servicio *</label>
+                                <input id="fechaFinalServicio" type="date" class="form-control rounded-3"
+                                       min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       value="@DateTime.Today.ToString("yyyy-MM-dd")"
+                                       oninput="restarFechas()" required />
+                                <span asp-validation-for="fechaFinalServicio" class="text-danger small"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="diasServicio" class="form-label fw-semibold small">Dias de Servicio</label>
+                                <input id="diasServicio" type="text" class="form-control rounded-3" value="1" disabled />
+                            </div>
+                            <div class="col-sm-2">
+                                <label for="numPasajeros" class="form-label fw-semibold small">N° de pasajeros</label>
+                                <input id="numPasajeros" type="number" class="form-control rounded-3" min="1" max="99" value="1" />
+                            </div>
+                            <div class="col-sm-2 d-flex flex-column justify-content-between">
+                                <label for="disponibilidad" class="form-label fw-semibold small">Disponibilidad</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="disponibidad">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tipoServicio" class="form-label fw-semibold small">Tipo de Servicio</label>
+                                <select id="tipoServicio" class="form-select">
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tipoVehiculo" class="form-label fw-semibold small">Tipo de Vehiculo</label>
+                                <select id="tipoVehiculo" class="form-select">
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="ValorCotizado" class="form-label fw-semibold small">Valor *</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light fw-semibold">$</span>
+                                    <input id="valorUnitario" type="text" class="form-control" step="1000" min="0" placeholder="0"
+                                           oninput="formatearMiles(this)" required />
+                                    <span class="input-group-text rounded-end-3 bg-light">COP</span>
+                                </div>
+                                <span asp-validation-for="valorUnitario" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="observaciones" class="form-label fw-semibold small">Observaciones</label>
+                                <textarea id="observaciones" class="form-control rounded-3" rows="3" cols="6"
+                                          placeholder="Condiciones, Requisitos especiales…"></textarea>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline-primary mb-3" id="btnAgregarDetalle">
+                            <i class="fa fa-plus me-2"></i>Agregar
+                        </button>
+                    </div>
+                    <div class="col-12 p-0">
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-3">
+                            Detalle de servicios
+                        </h6>
+                        <div class="table-responsive p-0">
+                            <table class="table table-bordered table-hover" id="tblDetalles">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo Servicio</th>
+                                        <th>Tipo Vehículo</th>
+                                        <th>Origen</th>
+                                        <th>Destino</th>
+                                        <th>Inicio</th>
+                                        <th>Fin</th>
+                                        <th>Pasajeros</th>
+                                        <th>Cantidad</th>
+                                        <th>Valor Unitario</th>
+                                        <th>Total</th>
+                                        <th><i class="fa-regular fa-trash-can"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex w-100 gap-1">
+                            <h4 class="w-80 text-end">Total Cotización</h4>
+                            <h4 class="w-20 text-start" id="totalCotizacion">$ 0.00</h4>
+                        </div>
+                        <div class="d-flex gap-3">
+                            <button type="submit" class="btn btn-primary px-4 rounded-3 me-2">
+                                <i class="fa-solid fa-save me-2"></i>Guardar cambios
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary px-4 rounded-3 ms-2">
+                                <i class="fa-solid fa-xmark me-2"></i>restablecer
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-2"><i class="fa-solid fa-circle-info me-2 text-primary"></i>¿Qué sucede al crear?
+          </h6>
+          <div class="d-flex gap-3 mb-2">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:32px;height:32px;background:#dbeafe;font-size:14px;color:#1d4ed8;">1</div>
+            <div>
+              <div class="fw-semibold small">La cotización queda en estado Pendiente</div>
+              <div class="text-muted" style="font-size:12px;">Queda lista para revisión del aprobador.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3 mb-2">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:32px;height:32px;background:#d1fae5;font-size:14px;color:#065f46;">2</div>
+            <div>
+              <div class="fw-semibold small">Notificación al cliente</div>
+              <div class="text-muted" style="font-size:12px;">Se envía correo de confirmadaación automáticamente.</div>
+            </div>
+          </div>
+          <div class="d-flex gap-3">
+            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                 style="width:32px;height:32px;background:#ede9fe;font-size:14px;color:#6d28d9;">3</div>
+            <div>
+              <div class="fw-semibold small">Revisión y aprobación</div>
+              <div class="text-muted" style="font-size:12px;">El aprobador puede aceptar, modificar el valor o rechazar.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </div>
+
+  @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+      let detallesCotizacion = [];
+      $(document).ready(function () {
+        calcularDiasVigencia('#fechaInicioServicio','#fechaFinalServicio','#diasServicio');
+        loadTiposServicios();
+        loadTiposVehiculos();
+        
+      });
+
+      $("#fechaFinalServicio").on("change",function(){
+        calcularDiasVigencia('#fechaInicioServicio','#fechaFinalServicio','#diasServicio');
+       });
+      
+      function loadTiposServicios() {
+          $.ajax({
+              url: '/Helps/ObtenerListadoSelect',
+              type: 'GET',
+              beforeSend: function () {
+                  showLoader();
+              },
+              success: function (response) {
+                  LoadSelect("#tipoServicio",response.data.tiposServicio);
+              },
+              complete: function () {
+                  hideLoader();
+              }
+          });
+      }
+      
+      function loadTiposVehiculos() {
+          $.ajax({
+              url: '/Helps/ObtenerListadoSelect',
+              type: 'GET',
+              beforeSend: function () {
+                  showLoader();
+              },
+              success: function (response) {
+                  LoadSelect("#tipoVehiculo",response.data.tiposVehiculo);
+              },
+              complete: function () {
+                  hideLoader();
+              }
+          });
+      }                    
+
+      function limpiarCliente() {
+        $("#idCliente").val("");
+        $("#clienteBuscar").removeClass("is-valid is-invalid");
+        $("#clienteInfo").html("");
+      }
+
+      function seleccionarCliente(cliente) {
+        $("#idCliente").val(cliente.idCliente);
+        $("#clienteBuscar").val(cliente.razonSocial).removeClass("is-invalid").addClass("is-valid");
+        $("#clienteInfo").html(`
+          <i class="bi bi-check-circle-fill text-success me-1"></i>        
+          ${cliente.nitCedula}
+          ${cliente.personaContacto ? ' | ' + cliente.personaContacto : ''}
+          ${cliente.telefono ? ' | ' + cliente.telefono : ''}
+        `);
+      }
+
+      $("#clienteBuscar").autocomplete({
+          minLength: 2,
+          source: function (request, response) {
+          $.ajax({
+              url: '/Comercial/Cliente/BuscarClientes',
+              data: {
+              term: request.term
+              },
+              success: function (data) {
+                  if (data.length === 1) {
+                      seleccionarCliente(data[0]);
+                      response([]);
+                      return;
+                  }
+                  response($.map(data, function (item) {
+                      return {
+                          label: item.nombre + " - " + item.nit,
+                          value: item.nombre,
+                          cliente: item
+                          };
+                    }));
+              }
+          });
+      },
+      select: function (event, ui) {
+          seleccionarCliente(ui.item.cliente);
+          return false;
+          }
+      });
+
+      $("#clienteBuscar").on("input", function () {
+       limpiarCliente();
+      });
+
+      $("#clienteBuscar").on("blur", function () {
+        if (!$("#idCliente").val()) {
+          $(this).removeClass("is-valid").addClass("is-invalid");
+        }
+      });
+
+      $("#btnAgregarDetalle").click(function () {
+        let cantidad = 1;
+        let valorUnitario = parseFloat($("#valorUnitario").val().replace(/\./g, ""));
+        let detalle = {
+        idTipoServicio: parseInt($("#tipoServicio").val()),
+        idTipoVehiculo: parseInt($("#tipoVehiculo").val()),
+        origen: $("#origen").val(),
+        destino: $("#destino").val(),
+        fechaServicioInicio: $("#fechaInicioServicio").val(),
+        fechaServicioFin: $("#fechaFinalServicio").val(),
+        numPasajeros: $("#numPasajeros").val() ?? 1,
+        cantidad: 1,
+        valorUnitario: valorUnitario,
+        valorTotal: cantidad * valorUnitario,
+        observaciones: $("#observaciones").val()
+        };
+
+        detallesCotizacion.push(detalle);
+        renderDetalles();
+      });
+
+      function renderDetalles() {
+
+      let html = "";
+
+      let total = 0;
+      detallesCotizacion.forEach((d, index) => {
+
+      total += d.valorTotal;
+
+      html += `
+      <tr>
+          <td>${$("#tipoServicio option:selected").text()}</td>
+          <td>${$("#tipoVehiculo option:selected").text()}</td>
+          <td>${d.origen}</td>
+          <td>${d.destino}</td>
+          <td>${d.fechaServicioInicio}</td>
+          <td>${d.fechaServicioFin}</td>
+          <td>${d.numPasajeros}</td>
+          <td><input type="number" class="form-control" value="1" min="1"/></td>
+          <td>$ ${parseFloat(d.valorUnitario).toLocaleString('es-CO')}</td>
+          <td>$ ${parseFloat(d.valorTotal).toLocaleString('es-CO')}</td>
+          <td>
+          <button class="btn btn-sm btn-danger" onclick="eliminarDetalle(${index})">
+          <i class="fa fa-trash"></i>
+          </button>
+          </td>
+      </tr>
+      `;
+      });
+
+      $("#tblDetalles tbody").html(html);
+
+      $("#totalCotizacion").text(
+
+      "$ " + parseFloat(total).toLocaleString('es-CO')
+      );
+      }
+
+      function eliminarDetalle(index) {
+
+      detallesCotizacion.splice(index, 1);
+
+      renderDetalles();
+      }
+
+      $("#formAddCotizacion").on("submit", function (e) {
+
+      e.preventDefault();
+
+      if (!$("#idCliente").val()) {
+      e.preventDefault();
+      $("#clienteBuscar").addClass("is-invalid");
+      showAlert("warning", "", "Debe seleccionar un cliente válido");
+      return false;
+      }
+      let model = {
+          diasServicio: parseInt($("#diasServicio").val()),
+          disponbilidad: $("#disponbilidad").val(),
+          idCliente: parseInt($("#idCliente").val()),
+          observaciones: $("#observaciones").val(),
+          detalles: detallesCotizacion
+      };
+      if (detallesCotizacion.length === 0) {
+      Swal.fire("warning", "Atención", "Debe agregar al menos un item");
+      return;
+      }
+
+      console.log("imprimiendo datos cotizacion", model);
+
+        $.ajax({
+          url: "/Comercial/Cotizacion/SetCotizacion",
+          type: "POST",
+          contentType: "application/json",
+          data: JSON.stringify(model),
+          success: function (response) {
+          Swal.fire({ icon: "success", title: "Correcto", text: response.message }).then(() => { window.location.href = "/Comercial/App/Cotizaciones"; });
+          },
+          error: function (xhr) {
+            Swal.fire({ icon: "error", title: "Error", text: xhr.responseJSON?.message ?? xhr.responseText ?? "No fue posible guardar la cotización" });
+          }
+        });
+      });
+
+    </script>
+  }

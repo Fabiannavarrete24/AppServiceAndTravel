@@ -44,7 +44,7 @@
   --bg-card: #ffffff;
   --bg-muted: color-mix(in srgb, var(--cbg) 80%, white);
   --bg-hover: color-mix(in srgb, var(--cp) 8%, white);
-  --text-main: var(--ct);
+  --text-main: #989999;
   --text-muted: #64748b;
   --text-light: #94a3b8;
   --input-bg: #ffffff;
@@ -107,7 +107,6 @@ body {
 .form-select {
   color: var(--text-main);
   border: 1px solid var(--input-border);
-  min-height: 42px;
   transition: all var(--transition-fast);
 }
 

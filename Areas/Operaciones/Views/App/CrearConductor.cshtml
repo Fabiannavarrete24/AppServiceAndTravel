@@ -1,76 +1,293 @@
-﻿@* @model AppServiceAndTravel.Models.Conductor
-
+﻿
 @{
     ViewData["Title"] = "Nuevo Conductor";
     ViewData["Breadcrumb"] = "Conductores / Nuevo";
-} *@
-<form asp-action="Create" method="post">
+}
+<style>
+    #tabsConductor .nav-link{
+    border:none;
+    color:#64748b;
+    font-weight:500;
+    padding:.65rem 1rem;
+}
 
-    @Html.AntiForgeryToken()
+#tabsConductor .nav-link.active{
+    background:#0d6efd;
+    color:white;
+}
 
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+#tabsConductor .nav-link:hover{
+    background:#eff6ff;
+}
 
-    <div class="row g-3">
+.form-label.small{
+    font-size:.78rem;
+    letter-spacing:.3px;
+    margin-bottom:.35rem;
+}
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input class="form-control" />
-            <span class="text-danger"></span>
-        </div>
+.card{
+    border-radius:1rem;
+}
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input class="form-control" />
-            <span class="text-danger"></span>
-        </div>
+.input-group-text{
+    background:#f8fafc;
+}
+</style>
+<div class="card border-0 shadow-sm rounded-4">
+    <div class="card-header bg-white border-0 py-3">
+        <ul class="nav nav-pills gap-2" id="tabsConductor" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active rounded-3"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tabGeneral"
+                        type="button">
+                    <i class="bi bi-person me-2"></i>
+                    Información General
+                </button>
+            </li>
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input class="form-control" />
-        </div>
+            <li class="nav-item">
+                <button class="nav-link rounded-3"
+                        data-bs-toggle="tab"
+                        data-bs-target="#tabLicencia"
+                        type="button">
+                    <i class="bi bi-card-heading me-2"></i>
+                    Licencia de Conducción
+                </button>
+            </li>
+        </ul>
+    </div>
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input class="form-control" />
-        </div>
+    <div class="card-body">
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input class="form-control" />
-        </div>
+        <input type="hidden" id="idConductor" />
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <input type="date" class="form-control" />
-        </div>
+        <div class="tab-content">
 
-        <div class="col-md-6">
-            <label class="form-label"></label>
-            <select asp-items="Html.GetEnumSelectList<TipoProveedor>()" class="form-select">
-            </select>
-        </div>
+            <!-- GENERAL -->
+            <div class="tab-pane fade show active" id="tabGeneral">
 
-        <div class="col-md-6 d-flex align-items-center">
-            <div class="form-check mt-4">
-                <input class="form-check-input" />
-                <label class="form-check-label"></label>
+                <h6 class="fw-semibold small text-uppercase text-muted mb-3">
+                    Datos Personales
+                </h6>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small">
+                            Nombre Completo
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input id="NombreCompleto"
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">
+                            Documento
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-card-text"></i>
+                            </span>
+                            <input id="Cedula"
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">
+                            Teléfono
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-telephone"></i>
+                            </span>
+                            <input id="Telefono"
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small">
+                            Correo Electrónico
+                        </label>
+
+                        <div class="input-group">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-envelope"></i>
+                            </span>
+                            <input id="Correo"
+                                   type="email"
+                                   class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">
+                            Estado Persona
+                        </label>
+
+                        <select id="EstadoPersona"
+                                class="form-select">
+                            <option value="">Seleccione</option>
+                            <option>Activa</option>
+                            <option>Inactiva</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">
+                            Estado Conductor
+                        </label>
+
+                        <select id="EstadoConductor"
+                                class="form-select">
+                            <option value="">Seleccione</option>
+                            <option>Activo</option>
+                            <option>Suspendido</option>
+                            <option>Cancelado</option>
+                        </select>
+                    </div>
+
+                </div>
+
             </div>
+
+            <!-- LICENCIA -->
+            <div class="tab-pane fade" id="tabLicencia">
+
+                <h6 class="fw-semibold small text-uppercase text-muted mb-3">
+                    Información de la Licencia
+                </h6>
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">
+                            Número Licencia
+                        </label>
+
+                        <input id="NumeroLicencia"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold small">
+                            Categoría
+                        </label>
+
+                        <input id="CategoriaLicencia"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold small">
+                            Categoría Anterior
+                        </label>
+
+                        <input id="CategoriaAnterior"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">
+                            Estado Licencia
+                        </label>
+
+                        <input id="EstadoLicencia"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">
+                            Organismo Expide
+                        </label>
+
+                        <input id="OrganismoExpideLicencia"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">
+                            Fecha Expedición
+                        </label>
+
+                        <input id="FechaExpedicionLicencia"
+                               type="date"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">
+                            Fecha Vencimiento
+                        </label>
+
+                        <input id="FechaVencimientoLicencia"
+                               type="date"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small">
+                            Restricciones
+                        </label>
+
+                        <textarea id="RestriccionesLicencia"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small">
+                            Retención
+                        </label>
+
+                        <textarea id="RetencionLicencia"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold small">
+                            Organismo que Cancela o Suspende
+                        </label>
+
+                        <input id="OrganismoCancelaLicencia"
+                               class="form-control" />
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
 
-    <div class="mt-4 d-flex gap-2">
-        <button class="btn btn-primary">
-            <i class="bi bi-save me-1"></i>Guardar
+    <div class="card-footer bg-white border-0 text-end">
+        <button type="button" class="btn btn-outline-secondary rounded-3">
+            Cancelar
         </button>
 
-        <a asp-action="Index" class="btn btn-outline-secondary">
-            Cancelar
-        </a>
+        <button type="submit" class="btn btn-primary rounded-3">
+            <i class="bi bi-save me-2"></i>
+            Guardar Conductor
+        </button>
     </div>
-
-</form>
+</div>
 
 @section Scripts {
+    <script>
+
+    </script>
     <partial name="_ValidationScriptsPartial" />
 }

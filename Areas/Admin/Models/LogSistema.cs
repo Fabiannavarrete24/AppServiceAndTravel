@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppServiceAndTravel.Areas.Admin.Models
 {
-    public enum EstadoLogSistema { INFO, WARNING, ERROR, CRITICAL }
-    public enum EventosSistemas { CREA, EDITA, ELIMINA, LECTURA }
+
     public class LogSistema
     {
         [Key]

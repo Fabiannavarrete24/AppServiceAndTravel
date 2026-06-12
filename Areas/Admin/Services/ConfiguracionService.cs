@@ -1,6 +1,7 @@
 ﻿using AppServiceAndTravel.Areas.Admin.Models;
 using AppServiceAndTravel.Areas.Admin.ViewModels;
 using AppServiceAndTravel.Data;
+using AppServiceAndTravel.Models;
 using AppServiceAndTravel.Services;
 using AppServiceAndTravel.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -43,7 +44,7 @@ namespace AppServiceAndTravel.Areas.Admin.Services
 
         public async Task<ConfiguracionGeneral> ObtenerConfiguracion()
         {
-            if (_cache != null) return _cache;
+            //if (_cache != null) return _cache;
             _cache = await _context.ConfiguracionGeneral.FirstOrDefaultAsync()
                      ?? new ConfiguracionGeneral { idConfiguracionGeneral = 1 };
             return _cache;

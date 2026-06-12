@@ -15,8 +15,7 @@
                     <div class="text-muted" style="font-size:12px;">
                         Total usuarios
                     </div>
-                    <div class="fw-bold fs-4 text-primary"
-                         id="cardTotalUsuarios">
+                    <div class="fw-bold fs-4 text-primary" id="cardTotalUsuarios">
                         0
                     </div>
                 </div>
@@ -35,9 +34,7 @@
                     <div class="text-muted" style="font-size:12px;">
                         Activos
                     </div>
-                    <div class="fw-bold fs-4"
-                         style="color:#065f46;"
-                         id="cardUsuariosActivos">
+                    <div class="fw-bold fs-4" style="color:#065f46;" id="cardUsuariosActivos">
                         0
                     </div>
                 </div>
@@ -56,9 +53,7 @@
                     <div class="text-muted" style="font-size:12px;">
                         Inactivos
                     </div>
-                    <div class="fw-bold fs-4"
-                         style="color:#991b1b;"
-                         id="cardUsuariosInactivos">
+                    <div class="fw-bold fs-4" style="color:#991b1b;" id="cardUsuariosInactivos">
                         0
                     </div>
                 </div>
@@ -77,9 +72,7 @@
                     <div class="text-muted" style="font-size:12px;">
                         Roles definidos
                     </div>
-                    <div class="fw-bold fs-4"
-                         style="color:#6d28d9;"
-                         id="cardRolesDefinidos">
+                    <div class="fw-bold fs-4" style="color:#6d28d9;" id="cardRolesDefinidos">
                         0
                     </div>
                 </div>
@@ -112,6 +105,7 @@
                 <tr>
                     <th class="ps-4">Usuario</th>
                     <th>Cargo</th>
+                    <th>Correo</th>
                     <th>Roles</th>
                     <th>Último acceso</th>
                     <th>Estado</th>
@@ -133,7 +127,8 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
                     <i class="fa-solid fa-user-pen"></i>
                 </div>
                 <div class="ms-2">
@@ -172,16 +167,6 @@
                             <span lass="text-danger small"></span>
                         </div>
                         <div class="col-sm-4">
-                            <label class="form-label">Contraseña *</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="pwUser">
-                                <button type="button" class="btn btn-outline-secondary"
-                                        onclick="togglePwd('pwUser','icoPW')">
-                                    <i class="fa-solid fa-eye" id="icoPW"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
                             <label class="form-label">Roles y Permisos</label>
                             <select id="selectRol" class="form-select" id="idRolUser">
                             </select>
@@ -217,7 +202,8 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
                     <i class="fa-solid fa-user-pen"></i>
                 </div>
                 <div>
@@ -240,6 +226,7 @@
                             <label class="form-label">Contraseña</label>
                             <div class="input-group">
                                 <input type="password" class="form-control" id="pwUserReset">
+                                <input class="form-control d-none" id="pwidUserReset">
                                 <button type="button" class="btn btn-outline-secondary"
                                         onclick="togglePwd('pwUserReset','icoResetPW')">
                                     <i class="fa-solid fa-eye" id="icoResetPW"></i>
@@ -265,7 +252,7 @@
     <script>
         $(document).ready(function () {
             loadRoles();
-             cargarDashboardUsuarios();
+            cargarDashboardUsuarios();
         });
 
         function loadRoles() {
@@ -306,99 +293,131 @@
                 if (!data || data.length === 0) {
 
                     tbody.append(`
-                            <tr>
-                                <td colspan="6" class="text-center text-muted py-4">
-                                    No se encontraron registros
-                                </td>
-                            </tr>
-                        `);
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted py-4">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            `);
                     return;
                 }
                 data.forEach(item => {
-                    var estado = item.activo ? `<div class="alert alert-danger p-1 text-center" role="alert">Deshabilidado</div>` : `<div class="alert alert-success p-1 text-center" role="alert">Activo</div>`
+                    var estado = item.activo ? `<div class="alert alert-success p-1 text-center" role="alert">Activo</div>` : `<div class="alert alert-danger p-1 text-center" role="alert">Deshabilidado</div>`
                     const ultimoAcceso = item.fechaUltimoAcceso ? moment(item.fechaUltimoAcceso).startOf('day').fromNow() : 'Nunca';
                     tbody.append(`
-                            <tr>
-                                <td class="ps-4">${item.username ?? ''}</td>
-                                <td>${item.cargo ?? ''}</td>
-                                <td>${item.rol ?? ''}</td>
-                                <td>${ultimoAcceso ?? ''}</td>
-                                <td style="display:flex;">${estado ?? ''}</td>
-                                <td class="text-end pe-4">
-                                    <button type="button" class="btn btn-sm btn-light" data-id="${item.idUsuario}" data-bs-toggle="modal" data-bs-target="#EditUserModal">
-                                        <i class="fa-solid fa-pencil"></i>
-                                    </button>
-                                    <button type="button"  class="btn btn-sm btn-light" data-id="${item.idUsuario}" data-bs-toggle="modal" data-bs-target="#ResetUserModel">
-                                        <i class="fa-solid fa-key"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" data-id="${item.idUsuario}" id="DisabledUser">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        `);
+                                <tr>
+                                    <td class="ps-4">${item.username ?? ''}</td>
+                                    <td>${item.cargo ?? ''}</td>
+                                    <td>${item.correo ?? ''}</td>
+                                    <td>${item.rol ?? ''}</td>
+                                    <td>${ultimoAcceso ?? ''}</td>
+                                    <td class="d-flex justify-content-center">${estado ?? ''}</td>
+                                    <td class="text-end pe-4">
+                                        <button type="button" class="btn btn-sm btn-light" data-id="${item.idUsuario}" id="btnEditUserModal">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </button>
+                                        <button type="button"  class="btn btn-sm btn-light" data-id="${item.idUsuario}" id="btnResetUserModel">
+                                            <i class="fa-solid fa-key"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-danger" data-id="${item.idUsuario}" id="btnDisabledUser">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
                 });
             }
         });
         usuariosTable.load();
 
-        function editarUsuario(id) {
-            data = {
+        function loadUsuario(id) {
+
+            $.ajax({
+                url: '/Admin/Usuarios/GetUsuario',
+                type: 'GET',
+                data: {
+                    idUsuario: id
+                },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (response) {
+                    var user = response.data;
+                    console.log(user);
+                    $("#userName").val(user.username);
+                    $("#nombreUser").val(user.nombreCompleto);
+                    $("#correoUser").val(user.correo);
+                    $("#cargoUser").val(user.cargo);
+                    $("#telefonoUser").val(user.telefonoUser);
+                    $("#adminUser").val(user.admin);
+                    $("#activoUser").prop("checked",user.activo);
+                    $("#idRolUser").prop("checked",user.idRol);
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+        }
+
+        function editarUsuario() {
+
+            let data = {
                 idUsuario: $("#id").val(),
                 Username: $("#userName").val(),
                 nombreCompleto: $("#nombreUser").val(),
                 correo: $("#correoUser").val(),
                 cargo: $("#cargoUser").val(),
                 telefono: $("#telefonoUser").val(),
-                admin: $("#adminUser").val(),
-                activo: $("#activoUser").val(),
-                password: $("#pwUser").val(),
-                idRol: $("#idRolUser").val(),
+                admin: $("#adminUser").is(":checked"),
+                activo: $("#activoUser").is(":checked"),
+                idRol: $("#idRolUser").val()
             };
+
             $.ajax({
-                url: '/Admin/Configuracion/UpdateUsuario',
+                url: '/Admin/Usuarios/UpdateUsuario',
                 type: 'POST',
-                beforeSend: function () {
-                    showLoader();
-                },
-                contentType: 'application/json; charset=utf-8',
+                contentType: 'application/json',
                 data: JSON.stringify(data),
-                success: function (response) {
-                    console.log(response);
+                beforeSend: showLoader,
+                success: function (resp) {
+                    showAlert('success','fa-solid fa-circle-check',resp.message);
                 },
-                complete: function () {
-                    hideLoader();
-                }
+                error: function (err) {
+                    showAlert('error','fa-solid fa-circle-xmark',err.responseJSON?.message || 'Error');
+                },
+                complete: hideLoader
             });
         }
 
-        function resetPassword(id) {
-            data = {
-                idUsuario: $("#idUserReset").val(),
-                password: $("#pwUserReset").val(),
+        function resetPassword() {
+
+            let data = {
+                idUsuario: $("#pwidUserReset").val(),
+                password: $("#pwUserReset").val()
             };
-            console.log(data);
+
             $.ajax({
-                url: '/Admin/Configuracion/UpdateUsuario',
+                url: '/Admin/Usuarios/ResetPassword',
                 type: 'POST',
-                beforeSend: function () {
-                    showLoader();
-                },
-                contentType: 'application/json; charset=utf-8',
+                contentType: 'application/json',
                 data: JSON.stringify(data),
-                success: function (response) {
-                    console.log(response);
+                beforeSend: showLoader,
+                success: function (resp) {
+                    $("#pwUserReset").val('');
+                    showAlert('success','fa-solid fa-circle-check',resp.message);
+                    $("#ResetUserModel").modal('hide');
                 },
-                complete: function () {
-                    hideLoader();
-                }
+                error: function (err) {
+                    showAlert('error','fa-solid fa-circle-xmark',err.responseJSON?.message || 'Error');
+                },
+                complete: hideLoader
             });
         }
 
         function eliminarUsuario(id) {
             new Date().toISOString();
             data = {
-                idUsuario: $("#idUserReset").val(),
+                idUsuario: id,
                 fechaBaja: new Date().toISOString(),
             };
             $.ajax({
@@ -418,16 +437,40 @@
             });
         }
 
-        $("#DisabledUser").click(function (){
-            var id = $(this).data("id");
-            Swal.fire({
-                title: "Esta seguro de deshabilitar este usuario",
-                showDenyButton: true,
-                confirmButtonText: "Deshabilitar",
-            }).then((result) => {
-                if (result.isConfirmed) eliminarUsuario(id);
-            });
+        $(document).on("click", "#btnEditUserModal", function () {
+            const id = $(this).data("id");
+            $("#idUser").val(id);
+            $("#EditUserModal").modal("show");
+            loadUsuario(id);
         });
+
+        $(document).on("click", "#btnResetUserModel", function () {
+            const id = $(this).data("id");
+            $("#pwidUserReset").val(id);
+            $("#ResetUserModel").modal("show");
+        });
+
+        $(document).on("click", "#btnDisabledUser", function () {
+
+            const id = $(this).data("id");
+
+            Swal.fire({
+                title: "¿Está seguro de deshabilitar este usuario?",
+                text: "Esta acción puede revertirse posteriormente.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Deshabilitar",
+                cancelButtonText: "Cancelar"
+            })
+                .then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        eliminarUsuario(id);
+                    }
+                });
+        });
+
         function cargarDashboardUsuarios() {
 
             $.ajax({
@@ -439,38 +482,20 @@
                 success: function (response) {
 
                     if (!response.success) {
-                        mostrarAlerta(
-                            'error',
-                            '',
-                            response.message
-                        );
-
+                        mostrarAlerta('error', '', response.message);
                         return;
                     }
 
                     const data = response.data;
-
-                    $('#cardTotalUsuarios')
-                        .text(data.totalUsuarios);
-
-                    $('#cardUsuariosActivos')
-                        .text(data.usuariosActivos);
-
-                    $('#cardUsuariosInactivos')
-                        .text(data.usuariosInactivos);
-
-                    $('#cardRolesDefinidos')
-                        .text(data.rolesDefinidos);
+                    $('#cardTotalUsuarios').text(data.totalUsuarios);
+                    $('#cardUsuariosActivos').text(data.usuariosActivos);
+                    $('#cardUsuariosInactivos').text(data.usuariosInactivos);
+                    $('#cardRolesDefinidos').text(data.rolesDefinidos);
                 },
 
                 error: function (error) {
 
-                    mostrarAlerta(
-                        'error',
-                        '',
-                        error.responseJSON?.message ||
-                        'Error al cargar dashboard'
-                    );
+                    showAlert('error', '', error.responseJSON?.message || 'Error al cargar dashboard');
                 }
             });
         }

@@ -317,7 +317,12 @@ small,
   border-bottom: 1px solid var(--border-color);
   border-radius: 16px 16px 0 0 !important;
 }
-
+.card-footer {
+  background: transparent;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 16px 16px !important;
+  padding: 15px;  
+}
 .alert {
   border: none;
   border-radius: var(--default-border-radius) !important;

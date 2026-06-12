@@ -22,7 +22,7 @@ namespace AppServiceAndTravel.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.ActividadSistema", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.ActividadSistema", b =>
                 {
                     b.Property<int>("idActividadSistema")
                         .ValueGeneratedOnAdd()
@@ -76,240 +76,7 @@ namespace AppServiceAndTravel.Migrations
                     b.ToTable("ActividadesSistema");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.ApplicationUser", b =>
-                {
-                    b.Property<int>("idUsuario")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idUsuario"));
-
-                    b.Property<bool>("activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("admin")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("avatar")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("cargo")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<bool?>("confirmada")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("correo")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("crypt")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime?>("fechaBaja")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("fechaCambioClave")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("fechaExpiracionToken")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("fechaModificacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("hast")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("nombreCompleto")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("password")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("refreshToken")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<DateTime?>("refreshTokenExpiry")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool?>("restaurada")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("telefono")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("token")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<DateTime?>("ultimoAcceso")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("userName")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("idUsuario");
-
-                    b.ToTable("Usuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            idUsuario = 1,
-                            activo = true,
-                            admin = true,
-                            cargo = "Administrador",
-                            confirmada = true,
-                            correo = "admin@correo.com",
-                            crypt = true,
-                            fechaCambioClave = new DateTime(2026, 8, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9613),
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9613),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9614),
-                            hast = true,
-                            nombreCompleto = "Administrador",
-                            password = "admin",
-                            restaurada = false,
-                            ultimoAcceso = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9590),
-                            userName = "admin"
-                        });
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Clientes", b =>
-                {
-                    b.Property<int>("idCliente")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCliente"));
-
-                    b.Property<bool>("Activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Ciudad")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Direccion")
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NitCedula")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("correo")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("idCliente");
-
-                    b.ToTable("Clientes");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Conductores", b =>
-                {
-                    b.Property<int>("idConductor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idConductor"));
-
-                    b.Property<bool>("Activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("CategoriaLicencia")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("Cedula")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("EmpresaExterna")
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaVencimientoLicencia")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NitEmpresa")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("NumeroLicencia")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("ObservacionesExterno")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<decimal?>("TarifaExterna")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("TipoProveedor")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("correo")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("idConductor");
-
-                    b.HasIndex("Cedula")
-                        .IsUnique();
-
-                    b.HasIndex("NumeroLicencia")
-                        .IsUnique();
-
-                    b.ToTable("Conductores");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.ConfigNotificaciones", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.ConfigNotificaciones", b =>
                 {
                     b.Property<int>("idConfigNotificacion")
                         .ValueGeneratedOnAdd()
@@ -388,7 +155,7 @@ namespace AppServiceAndTravel.Migrations
                     b.ToTable("ConfiguracionNotificaciones");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.ConfiguracionGeneral", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.ConfiguracionGeneral", b =>
                 {
                     b.Property<int>("idConfiguracionGeneral")
                         .ValueGeneratedOnAdd()
@@ -598,180 +365,12 @@ namespace AppServiceAndTravel.Migrations
                             SimboloMoneda = "$",
                             TamanoFuenteBase = "14px",
                             TemaSeleccionado = "Azul corporativo",
-                            UltimaModificacion = new DateTime(2026, 5, 27, 15, 40, 38, 978, DateTimeKind.Local).AddTicks(6114),
+                            UltimaModificacion = new DateTime(2026, 6, 11, 11, 34, 55, 989, DateTimeKind.Local).AddTicks(3218),
                             ZonaHoraria = "America/Bogota"
                         });
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Cotizaciones", b =>
-                {
-                    b.Property<int>("idCotizacion")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCotizacion"));
-
-                    b.Property<string>("DescripcionCarga")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("Destino")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("FechaAprobacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaServicio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("NumPasajeros")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ObservacionesAprobacion")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("ObservacionesRechazo")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("Origen")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<decimal?>("ValorAprobado")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<decimal>("ValorCotizado")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<int>("idCliente")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idUsuarioAprobador")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idUsuarioCreador")
-                        .HasColumnType("int");
-
-                    b.HasKey("idCotizacion");
-
-                    b.HasIndex("idCliente");
-
-                    b.HasIndex("idUsuarioAprobador");
-
-                    b.HasIndex("idUsuarioCreador");
-
-                    b.ToTable("Cotizaciones");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.FormatosCorreos", b =>
-                {
-                    b.Property<int>("idCorreo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCorreo"));
-
-                    b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("abreviatura")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("mensaje")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("titulo")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("idCorreo");
-
-                    b.ToTable("FormatosCorreos");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.HistLogin", b =>
-                {
-                    b.Property<int?>("idHist")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("idHist"));
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("inSesion")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("mensaje")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("userName")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("valido")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("idHist");
-
-                    b.ToTable("HistLogin");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.HistRefreshToken", b =>
-                {
-                    b.Property<int>("IdHistRefreshToken")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdHistRefreshToken"));
-
-                    b.Property<string>("RefreshToken")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Token")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("fechaExpiracion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idUsuarioNavigationidUsuario")
-                        .HasColumnType("int");
-
-                    b.HasKey("IdHistRefreshToken");
-
-                    b.HasIndex("idUsuarioNavigationidUsuario");
-
-                    b.ToTable("HistRefreshToken");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.LogSistema", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.LogSistema", b =>
                 {
                     b.Property<int>("idLogSistema")
                         .ValueGeneratedOnAdd()
@@ -782,10 +381,9 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<string>("Detalle")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Evento")
-                        .IsRequired()
+                    b.Property<int>("Evento")
                         .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
@@ -806,6 +404,10 @@ namespace AppServiceAndTravel.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
+                    b.Property<string>("Tabla")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Url")
                         .HasMaxLength(500)
                         .HasColumnType("varchar(500)");
@@ -821,6 +423,12 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<int?>("idUsuario")
                         .HasColumnType("int");
 
+                    b.Property<string>("valorAnterior")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("valorNuevo")
+                        .HasColumnType("longtext");
+
                     b.HasKey("idLogSistema");
 
                     b.HasIndex("idUsuario");
@@ -828,7 +436,7 @@ namespace AppServiceAndTravel.Migrations
                     b.ToTable("LogsSistema");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Notificaciones", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Notificaciones", b =>
                 {
                     b.Property<int?>("idNotificacion")
                         .ValueGeneratedOnAdd()
@@ -859,7 +467,7 @@ namespace AppServiceAndTravel.Migrations
                     b.ToTable("Notificaciones");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Permisos", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Permisos", b =>
                 {
                     b.Property<int>("idProceso")
                         .HasColumnType("int");
@@ -900,9 +508,6 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<bool>("hereda")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("idPermiso")
-                        .HasColumnType("int");
-
                     b.Property<bool>("lectura")
                         .HasColumnType("tinyint(1)");
 
@@ -925,10 +530,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9440),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9440),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1543),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1543),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -940,10 +544,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9444),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9444),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1547),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1547),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -955,10 +558,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9445),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9445),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1548),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1548),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -970,10 +572,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9446),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9446),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1549),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1549),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -985,10 +586,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9447),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9447),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1550),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1551),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1000,10 +600,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9448),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9448),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1552),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1552),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1015,10 +614,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9449),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9450),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1553),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1553),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1030,10 +628,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9450),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1554),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1554),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1045,10 +642,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9451),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1555),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1555),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1060,10 +656,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9452),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9452),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1556),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1557),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1075,10 +670,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9453),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9453),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1558),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1558),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1090,10 +684,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9454),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9454),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1559),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1559),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1105,10 +698,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9455),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9455),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1560),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1560),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1120,10 +712,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9457),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9457),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1561),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1561),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1135,10 +726,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9458),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9458),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1562),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1562),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1150,10 +740,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9459),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9459),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1563),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1563),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1165,10 +754,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9460),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9460),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1564),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1565),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1180,10 +768,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9461),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9461),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1566),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1566),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1195,10 +782,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9462),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9462),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1567),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1567),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1210,10 +796,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9463),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9463),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1568),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1568),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1225,10 +810,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9464),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9464),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1569),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1569),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1240,10 +824,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9465),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9465),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1570),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1570),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1255,10 +838,9 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9466),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9466),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1571),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1571),
                             hereda = true,
-                            idPermiso = 0,
                             lectura = true
                         },
                         new
@@ -1270,15 +852,112 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9467),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9467),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1572),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1572),
                             hereda = true,
-                            idPermiso = 0,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 25,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1573),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1573),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 26,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1574),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1574),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 27,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1575),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1576),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 28,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1576),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1577),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 29,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1578),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1578),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 30,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1579),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1579),
+                            hereda = true,
+                            lectura = true
+                        },
+                        new
+                        {
+                            idProceso = 31,
+                            idRol = 1,
+                            apiAccess = false,
+                            crea = false,
+                            deny = false,
+                            edita = true,
+                            elimina = true,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1580),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1580),
+                            hereda = true,
                             lectura = true
                         });
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Procesos", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Procesos", b =>
                 {
                     b.Property<int>("idProceso")
                         .HasColumnType("int");
@@ -1301,6 +980,9 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<int?>("idProcesoPadre")
                         .HasColumnType("int");
 
+                    b.Property<int?>("orden")
+                        .HasColumnType("int");
+
                     b.Property<string>("proceso")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
@@ -1319,299 +1001,323 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 1,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8686),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(408),
                             icono = "fa-user-shield",
+                            orden = 7,
                             proceso = "Seguridad"
                         },
                         new
                         {
                             idProceso = 2,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8692),
-                            icono = "fa-gear",
+                            area = "Admin",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(420),
                             idProcesoPadre = 1,
-                            proceso = "Configuracion"
+                            orden = 7,
+                            proceso = "Configuracion General",
+                            url = "ConfiguracionGeneral"
                         },
                         new
                         {
                             idProceso = 3,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8694),
-                            idProcesoPadre = 2,
-                            proceso = "Configuracion General",
-                            url = "ConfiguracionGeneral"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(423),
+                            idProcesoPadre = 1,
+                            orden = 7,
+                            proceso = "Usuarios",
+                            url = "Usuarios"
                         },
                         new
                         {
                             idProceso = 4,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8695),
-                            idProcesoPadre = 2,
-                            proceso = "Usuarios",
-                            url = "Usuarios"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(426),
+                            idProcesoPadre = 1,
+                            orden = 7,
+                            proceso = "Roles",
+                            url = "Roles"
                         },
                         new
                         {
                             idProceso = 5,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8697),
-                            idProcesoPadre = 2,
-                            proceso = "Roles",
-                            url = "Roles"
-                        },
-                        new
-                        {
-                            idProceso = 6,
-                            area = "Admin",
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8698),
-                            idProcesoPadre = 2,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(427),
+                            idProcesoPadre = 1,
+                            orden = 7,
                             proceso = "Permisos",
                             url = "Permisos"
                         },
                         new
                         {
-                            idProceso = 7,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8699),
+                            idProceso = 6,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(429),
                             icono = "fa-users-rectangle",
+                            orden = 6,
                             proceso = "Proveedores"
+                        },
+                        new
+                        {
+                            idProceso = 7,
+                            area = "Admin",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(430),
+                            idProcesoPadre = 6,
+                            orden = 6,
+                            proceso = "Listado de Proveedores",
+                            url = "Proveedores"
                         },
                         new
                         {
                             idProceso = 8,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8755),
-                            idProcesoPadre = 7,
-                            proceso = "Listado de Proveedores",
-                            url = "Proveedores"
-                        },
-                        new
-                        {
-                            idProceso = 9,
-                            area = "Admin",
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8757),
-                            idProcesoPadre = 7,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(432),
+                            idProcesoPadre = 6,
+                            orden = 6,
                             proceso = "Nuevo Proveedor",
                             url = "CrearProveedor"
                         },
                         new
                         {
-                            idProceso = 10,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8759),
+                            idProceso = 9,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(434),
                             icono = "fa-address-card",
+                            orden = 4,
                             proceso = "Conductores"
+                        },
+                        new
+                        {
+                            idProceso = 10,
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(435),
+                            idProcesoPadre = 9,
+                            orden = 4,
+                            proceso = "Listado de Conductores",
+                            url = "Conductores"
                         },
                         new
                         {
                             idProceso = 11,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8760),
-                            idProcesoPadre = 10,
-                            proceso = "Listado de Conductores",
-                            url = "Conductores"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(437),
+                            idProcesoPadre = 9,
+                            orden = 4,
+                            proceso = "Nuevo Conductor",
+                            url = "CrearConductor"
                         },
                         new
                         {
                             idProceso = 12,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8761),
-                            idProcesoPadre = 10,
-                            proceso = "Nuevo Conductor",
-                            url = "CrearConductor"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(439),
+                            idProcesoPadre = 9,
+                            orden = 4,
+                            proceso = "Listado de Conductores Aliados",
+                            url = "ConductoresAliados"
                         },
                         new
                         {
                             idProceso = 13,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8762),
-                            icono = "fa-car",
-                            proceso = "Vehiculos"
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(440),
+                            idProcesoPadre = 9,
+                            orden = 4,
+                            proceso = "Nuevo Conductor Aliado",
+                            url = "CrearConductorAliado"
                         },
                         new
                         {
                             idProceso = 14,
-                            area = "Operaciones",
-                            controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8764),
-                            idProcesoPadre = 13,
-                            proceso = "Listado de Vehiculos",
-                            url = "Vehiculos"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(442),
+                            icono = "fa-car",
+                            orden = 5,
+                            proceso = "Vehiculos"
                         },
                         new
                         {
                             idProceso = 15,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8765),
-                            idProcesoPadre = 13,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(444),
+                            idProcesoPadre = 14,
+                            orden = 5,
+                            proceso = "Listado de Vehiculos",
+                            url = "Vehiculos"
+                        },
+                        new
+                        {
+                            idProceso = 16,
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(446),
+                            idProcesoPadre = 14,
+                            orden = 5,
                             proceso = "Nuevo Vehiculo",
                             url = "CrearVehiculo"
                         },
                         new
                         {
-                            idProceso = 16,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8766),
-                            icono = "fa-handshake",
-                            proceso = "Cotizaciones"
-                        },
-                        new
-                        {
                             idProceso = 17,
-                            area = "Comercial",
+                            area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8767),
-                            idProcesoPadre = 16,
-                            proceso = "Historial",
-                            url = "Cotizaciones"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(448),
+                            idProcesoPadre = 14,
+                            orden = 5,
+                            proceso = "Listado de Vehiculos Aliados",
+                            url = "VehiculosAliados"
                         },
                         new
                         {
                             idProceso = 18,
-                            area = "Comercial",
+                            area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8769),
-                            idProcesoPadre = 16,
-                            proceso = "Nueva Cotización",
-                            url = "CrearCotizacion"
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(451),
+                            idProcesoPadre = 14,
+                            orden = 5,
+                            proceso = "Nuevo Vehiculo Aliado",
+                            url = "CrearVehiculoAliado"
                         },
                         new
                         {
                             idProceso = 19,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8770),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(452),
                             icono = "fa-handshake",
-                            proceso = "Clientes"
+                            orden = 1,
+                            proceso = "Cotizaciones"
                         },
                         new
                         {
                             idProceso = 20,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8771),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(457),
                             idProcesoPadre = 19,
-                            proceso = "Listado de Clientes",
-                            url = "Clientes"
+                            orden = 1,
+                            proceso = "Historial",
+                            url = "Cotizaciones"
                         },
                         new
                         {
                             idProceso = 21,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8772),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(459),
                             idProcesoPadre = 19,
+                            orden = 1,
+                            proceso = "Nueva Cotización",
+                            url = "CrearCotizacion"
+                        },
+                        new
+                        {
+                            idProceso = 22,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(461),
+                            icono = "fa-handshake",
+                            orden = 2,
+                            proceso = "Clientes"
+                        },
+                        new
+                        {
+                            idProceso = 23,
+                            area = "Comercial",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(463),
+                            idProcesoPadre = 22,
+                            orden = 2,
+                            proceso = "Listado de Clientes",
+                            url = "Clientes"
+                        },
+                        new
+                        {
+                            idProceso = 24,
+                            area = "Comercial",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(465),
+                            idProcesoPadre = 22,
+                            orden = 2,
                             proceso = "Nuevo Cliente",
                             url = "CrearCliente"
                         },
                         new
                         {
-                            idProceso = 22,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8774),
+                            idProceso = 25,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(467),
                             icono = "fa-car-side",
+                            orden = 3,
                             proceso = "Servicios"
                         },
                         new
                         {
-                            idProceso = 23,
+                            idProceso = 26,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8775),
-                            idProcesoPadre = 22,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(468),
+                            idProcesoPadre = 25,
+                            orden = 3,
                             proceso = "Historial",
                             url = "Servicios"
                         },
                         new
                         {
-                            idProceso = 24,
+                            idProceso = 27,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(8776),
-                            idProcesoPadre = 22,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(470),
+                            idProcesoPadre = 25,
+                            orden = 3,
                             proceso = "Nuevo Servicio",
                             url = "CrearServicio"
+                        },
+                        new
+                        {
+                            idProceso = 28,
+                            area = "Operaciones",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(471),
+                            idProcesoPadre = 25,
+                            orden = 3,
+                            proceso = "Tipo Servicios",
+                            url = "TipoServicios"
+                        },
+                        new
+                        {
+                            idProceso = 29,
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(473),
+                            icono = "fa-gear",
+                            orden = 8,
+                            proceso = "Configuracion"
+                        },
+                        new
+                        {
+                            idProceso = 30,
+                            area = "Admin",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(475),
+                            idProcesoPadre = 29,
+                            orden = 8,
+                            proceso = "Formatos Correos",
+                            url = "FormatosCorreos"
+                        },
+                        new
+                        {
+                            idProceso = 31,
+                            area = "Admin",
+                            controlador = "App",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(477),
+                            idProcesoPadre = 29,
+                            orden = 8,
+                            proceso = "Tipo Cotizaciónes",
+                            url = "TipoCotizaciones"
                         });
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Proveedores", b =>
-                {
-                    b.Property<int>("idProveedor")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idProveedor"));
-
-                    b.Property<string>("descripcion")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("idProveedor");
-
-                    b.ToTable("Proveedores");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.ProveedoresExternos", b =>
-                {
-                    b.Property<int>("IdProveedorExterno")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdProveedorExterno"));
-
-                    b.Property<bool>("Activo")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Contacto")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Direccion")
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NitCedula")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("Observaciones")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("RazonSocial")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<decimal?>("TarifaBase")
-                        .HasColumnType("decimal(12,2)");
-
-                    b.Property<string>("Telefono")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<int>("TipoServicio")
-                        .HasColumnType("int");
-
-                    b.Property<string>("correo")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.HasKey("IdProveedorExterno");
-
-                    b.ToTable("ProveedoresExternos");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Roles", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Roles", b =>
                 {
                     b.Property<int>("idRol")
                         .ValueGeneratedOnAdd()
@@ -1637,141 +1343,20 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idRol = 1,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9268),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9268),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1325),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1327),
                             nombre = "Administrador"
                         },
                         new
                         {
                             idRol = 2,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9273),
-                            fechaModificacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9274),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1337),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1337),
                             nombre = "Usuarios"
                         });
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.RolesUsuarios", b =>
-                {
-                    b.Property<int>("idUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idRol")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("fechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("idUser")
-                        .HasColumnType("int");
-
-                    b.HasKey("idUsuario", "idRol");
-
-                    b.HasIndex("idRol");
-
-                    b.ToTable("RolesUsuarios");
-
-                    b.HasData(
-                        new
-                        {
-                            idUsuario = 1,
-                            idRol = 1,
-                            fechaCreacion = new DateTime(2026, 5, 27, 20, 40, 38, 975, DateTimeKind.Utc).AddTicks(9360)
-                        });
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Servicios", b =>
-                {
-                    b.Property<int>("idServicio")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idServicio"));
-
-                    b.Property<string>("ConductorExternoCedula")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("ConductorExternoNombre")
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("ConductorExternoTelefono")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<decimal?>("CostoExterno")
-                        .HasColumnType("decimal(14,2)");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime?>("FechaNotificacion")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaServicio")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("NotificacionWhatsAppEnviada")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("NotificacioncorreoEnviada")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Observaciones")
-                        .HasMaxLength(1000)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("TipoServicio")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<bool>("UsaRecursoExterno")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("VehiculoExternoDescripcion")
-                        .HasMaxLength(120)
-                        .HasColumnType("varchar(120)");
-
-                    b.Property<string>("VehiculoExternoPlaca")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int>("idConductor")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idCotizacion")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idProveedorExterno")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("idUsuarioCreador")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idVehiculo")
-                        .HasColumnType("int");
-
-                    b.HasKey("idServicio");
-
-                    b.HasIndex("idConductor");
-
-                    b.HasIndex("idCotizacion")
-                        .IsUnique();
-
-                    b.HasIndex("idProveedorExterno");
-
-                    b.HasIndex("idUsuarioCreador");
-
-                    b.HasIndex("idVehiculo");
-
-                    b.ToTable("Servicios");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.TipoActividadSistema", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.TipoActividadSistema", b =>
                 {
                     b.Property<int>("idTipoActividadSistema")
                         .ValueGeneratedOnAdd()
@@ -2032,7 +1617,756 @@ namespace AppServiceAndTravel.Migrations
                         });
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.ValidacionVehiculo", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.Clientes", b =>
+                {
+                    b.Property<int>("idCliente")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCliente"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("CargoContacto")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Ciudad")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Correo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NitCedula")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("PersonaContacto")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("RazonSocial")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.HasKey("idCliente");
+
+                    b.ToTable("Clientes");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.Cotizaciones", b =>
+                {
+                    b.Property<int>("idCotizacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCotizacion"));
+
+                    b.Property<string>("Destino")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaAprobacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaFinalServicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaInicioServicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("NumPasajeros")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("ObservacionesAprobacion")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("ObservacionesRechazo")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Origen")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<int>("TiempoValidez")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TipoServicioidTipoServicio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TipoVehiculoidTipoVehiculo")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("ValorAprobado")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("ValorCotizado")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int?>("cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("diasServicio")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("disponibilidad")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("idCliente")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idTipoServicio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idTipoVehiculo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idUsuarioAprobador")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idUsuarioCreador")
+                        .HasColumnType("int");
+
+                    b.HasKey("idCotizacion");
+
+                    b.HasIndex("TipoServicioidTipoServicio");
+
+                    b.HasIndex("TipoVehiculoidTipoVehiculo");
+
+                    b.HasIndex("idCliente");
+
+                    b.HasIndex("idUsuarioAprobador");
+
+                    b.HasIndex("idUsuarioCreador");
+
+                    b.ToTable("Cotizaciones");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.DetalleCotizacion", b =>
+                {
+                    b.Property<int>("idDetalleCotizacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idDetalleCotizacion"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Destino")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Disponibilidad")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("FechaServicioFin")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaServicioInicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("NumPasajeros")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Origen")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("Realizado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<decimal>("ValorTotal")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<decimal>("ValorUnitario")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<int>("idCotizacion")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idServicio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idTipoServicio")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idTipoVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idDetalleCotizacion");
+
+                    b.HasIndex("idCotizacion");
+
+                    b.HasIndex("idTipoServicio");
+
+                    b.HasIndex("idTipoVehiculo");
+
+                    b.ToTable("DetalleCotizacion");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.CategoriasVehiculos", b =>
+                {
+                    b.Property<int>("idCategoriaVehiculo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCategoriaVehiculo"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("idCategoriaVehiculo");
+
+                    b.ToTable("CategoriasVehiculos");
+
+                    b.HasData(
+                        new
+                        {
+                            idCategoriaVehiculo = 1,
+                            descripcion = "Transporte Particular"
+                        },
+                        new
+                        {
+                            idCategoriaVehiculo = 2,
+                            descripcion = "Transporte Público Pasajeros"
+                        },
+                        new
+                        {
+                            idCategoriaVehiculo = 3,
+                            descripcion = "Transporte de Carga"
+                        },
+                        new
+                        {
+                            idCategoriaVehiculo = 4,
+                            descripcion = "Motocicletas"
+                        },
+                        new
+                        {
+                            idCategoriaVehiculo = 5,
+                            descripcion = "Remolques y Semirremolques"
+                        },
+                        new
+                        {
+                            idCategoriaVehiculo = 6,
+                            descripcion = "Vehículos Especiales"
+                        });
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Conductores", b =>
+                {
+                    b.Property<int>("idConductor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idConductor"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("CategoriaLicencia")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("CategoriaLicenciaAnterior")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<int>("EstadoConductor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoLicencia")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoPersona")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaExpedicionLicencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaInscripcion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaVencimientoLicencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NitExterno")
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<string>("NombreCompleto")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("NumeroInscripcion")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("NumeroLicencia")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<string>("ObservacionesExterno")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("OrganismoTransitoCancelaLicencia")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("OrganismoTransitoExpideLicencia")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("RazonSocialExterna")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("RestriccionesLicencia")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("RetencionLicencia")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<decimal?>("TarifaExterna")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<bool>("TieneRetencionLicencia")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("TipoProveedor")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("correo")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("idConductor");
+
+                    b.HasIndex("Cedula")
+                        .IsUnique();
+
+                    b.HasIndex("NumeroLicencia")
+                        .IsUnique();
+
+                    b.ToTable("Conductores");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Servicios", b =>
+                {
+                    b.Property<int>("idServicio")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idServicio"));
+
+                    b.Property<string>("ConductorExternoCedula")
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<string>("ConductorExternoNombre")
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("ConductorExternoTelefono")
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<decimal?>("CostoExterno")
+                        .HasColumnType("decimal(14,2)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaNotificacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("FechaServicio")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("NotificacionWhatsAppEnviada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("NotificacioncorreoEnviada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<int?>("TiposServiciosidTipoServicio")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("UsaRecursoExterno")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("VehiculoExternoDescripcion")
+                        .HasMaxLength(120)
+                        .HasColumnType("varchar(120)");
+
+                    b.Property<string>("VehiculoExternoPlaca")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<int>("idConductor")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idDetalleCotizacion")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idProveedorExterno")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idTipoVehiculo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idUsuarioCreador")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idServicio");
+
+                    b.HasIndex("TiposServiciosidTipoServicio");
+
+                    b.HasIndex("idConductor");
+
+                    b.HasIndex("idDetalleCotizacion");
+
+                    b.HasIndex("idProveedorExterno");
+
+                    b.HasIndex("idTipoVehiculo");
+
+                    b.HasIndex("idUsuarioCreador");
+
+                    b.HasIndex("idVehiculo");
+
+                    b.ToTable("Servicios");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", b =>
+                {
+                    b.Property<int>("idTipoServicio")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idTipoServicio"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("idUsuarioModifica")
+                        .HasColumnType("int");
+
+                    b.HasKey("idTipoServicio");
+
+                    b.HasIndex("idUsuarioModifica");
+
+                    b.ToTable("TiposServicios");
+
+                    b.HasData(
+                        new
+                        {
+                            idTipoServicio = 1,
+                            descripcion = "Particular",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1927),
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoServicio = 2,
+                            descripcion = "Público",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1928),
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoServicio = 3,
+                            descripcion = "Oficial",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1986),
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoServicio = 4,
+                            descripcion = "Diplomático",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1987),
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoServicio = 5,
+                            descripcion = "Especial",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1989),
+                            idUsuarioModifica = 1
+                        });
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", b =>
+                {
+                    b.Property<int>("idTipoVehiculo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idTipoVehiculo"));
+
+                    b.Property<string>("descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("idCategoriaVehiculo")
+                        .HasColumnType("int");
+
+                    b.Property<int>("idUsuarioModifica")
+                        .HasColumnType("int");
+
+                    b.HasKey("idTipoVehiculo");
+
+                    b.HasIndex("idCategoriaVehiculo");
+
+                    b.HasIndex("idUsuarioModifica");
+
+                    b.ToTable("TiposVehiculos");
+
+                    b.HasData(
+                        new
+                        {
+                            idTipoVehiculo = 1,
+                            descripcion = "Automóvil",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2070),
+                            idCategoriaVehiculo = 1,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 2,
+                            descripcion = "Campero",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2072),
+                            idCategoriaVehiculo = 1,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 3,
+                            descripcion = "Camioneta",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2072),
+                            idCategoriaVehiculo = 1,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 4,
+                            descripcion = "Motocicleta",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2073),
+                            idCategoriaVehiculo = 4,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 5,
+                            descripcion = "Motocarro",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2074),
+                            idCategoriaVehiculo = 4,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 6,
+                            descripcion = "Cuatrimoto",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2075),
+                            idCategoriaVehiculo = 4,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 7,
+                            descripcion = "Microbús",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2076),
+                            idCategoriaVehiculo = 2,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 8,
+                            descripcion = "Buseta",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2077),
+                            idCategoriaVehiculo = 2,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 9,
+                            descripcion = "Bus",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2078),
+                            idCategoriaVehiculo = 2,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 10,
+                            descripcion = "Furgón",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2079),
+                            idCategoriaVehiculo = 3,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 11,
+                            descripcion = "Volqueta",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2080),
+                            idCategoriaVehiculo = 3,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 12,
+                            descripcion = "Tractocamión",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2081),
+                            idCategoriaVehiculo = 3,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 13,
+                            descripcion = "Vehículo Rígido",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2082),
+                            idCategoriaVehiculo = 3,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 14,
+                            descripcion = "Vehículo Articulado",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2083),
+                            idCategoriaVehiculo = 3,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 15,
+                            descripcion = "Remolque",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2084),
+                            idCategoriaVehiculo = 5,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 16,
+                            descripcion = "Semirremolque",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2085),
+                            idCategoriaVehiculo = 5,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 17,
+                            descripcion = "Ambulancia",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2086),
+                            idCategoriaVehiculo = 6,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 18,
+                            descripcion = "Vehículo de Bomberos",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2087),
+                            idCategoriaVehiculo = 6,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 19,
+                            descripcion = "Vehículo Blindado",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2087),
+                            idCategoriaVehiculo = 6,
+                            idUsuarioModifica = 1
+                        },
+                        new
+                        {
+                            idTipoVehiculo = 20,
+                            descripcion = "Grúa",
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2088),
+                            idCategoriaVehiculo = 6,
+                            idUsuarioModifica = 1
+                        });
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.ValidacionVehiculo", b =>
                 {
                     b.Property<int>("idValidacionVehiculo")
                         .ValueGeneratedOnAdd()
@@ -2082,7 +2416,349 @@ namespace AppServiceAndTravel.Migrations
                     b.ToTable("ValidacionesVehiculo");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Vehiculos", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoBlindaje", b =>
+                {
+                    b.Property<int>("idBlindaje")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idBlindaje"));
+
+                    b.Property<bool>("Blindado")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("FechaBlindaje")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaDesblindaje")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NivelBlindaje")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idBlindaje");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoBlindaje");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoCaracteristicas", b =>
+                {
+                    b.Property<int>("idCaracteristica")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCaracteristica"));
+
+                    b.Property<string>("Cilindraje")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroChasis")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroMotor")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroSerie")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroVIN")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TipoCarroceria")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TipoCombustible")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idCaracteristica");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoCaracteristicas");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoMatricula", b =>
+                {
+                    b.Property<int>("idMatricula")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idMatricula"));
+
+                    b.Property<string>("AutoridadTransito")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaMatriculaInicial")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("GravamenesPropiedad")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LicenciaTransito")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idMatricula");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoMatriculas");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPolizaRC", b =>
+                {
+                    b.Property<int>("idPolizaRC")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idPolizaRC"));
+
+                    b.Property<string>("EntidadExpide")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaExpedicion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaFinVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaInicioVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NumeroPoliza")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RutaDocumento")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TipoPoliza")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idPolizaRC");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoPolizaRC");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPropietario", b =>
+                {
+                    b.Property<int>("idPropietario")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idPropietario"));
+
+                    b.Property<string>("Cedula")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Correo")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("longtext");
+
+                    b.Property<decimal?>("TarifaExterna")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idPropietario");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoPropietarios");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRTM", b =>
+                {
+                    b.Property<int>("idRTM")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idRTM"));
+
+                    b.Property<string>("CDAExpide")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaExpedicion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NumeroCertificado")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RutaDocumento")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TipoRevision")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idRTM");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoRTM");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRegrabaciones", b =>
+                {
+                    b.Property<int>("idRegrabacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idRegrabacion"));
+
+                    b.Property<string>("NumeroRegrabacionChasis")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroRegrabacionMotor")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroRegrabacionSerie")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NumeroRegrabacionVIN")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("RegrabacionChasis")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RegrabacionMotor")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RegrabacionSerie")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("RegrabacionVIN")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idRegrabacion");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoRegrabaciones");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoSOAT", b =>
+                {
+                    b.Property<int>("idSOAT")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idSOAT"));
+
+                    b.Property<string>("EntidadExpide")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaExpedicion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaFinVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaInicioVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NumeroPoliza")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RutaDocumento")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idSOAT");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoSOAT");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoTarjetaOperacion", b =>
+                {
+                    b.Property<int>("idTarjetaOperacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idTarjetaOperacion"));
+
+                    b.Property<string>("EmpresaAfiliadora")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Estado")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FechaExpedicion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaFinVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaInicioVigencia")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NumeroTarjetaOperacion")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RadioAccion")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("idVehiculo")
+                        .HasColumnType("int");
+
+                    b.HasKey("idTarjetaOperacion");
+
+                    b.HasIndex("idVehiculo")
+                        .IsUnique();
+
+                    b.ToTable("VehiculoTarjetaOperacion");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", b =>
                 {
                     b.Property<int>("idVehiculo")
                         .ValueGeneratedOnAdd()
@@ -2099,84 +2775,393 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<int>("CapacidadPasajeros")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CapacidadPasajerosSentados")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClaseVehiculo")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("ClasicoAntiguo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Color")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("FechaVencimientoSOAT")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaVencimientoSeguro")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("FechaVencimientoTecnoMecanica")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("Linea")
+                        .HasMaxLength(60)
+                        .HasColumnType("varchar(60)");
 
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<string>("ModalidadServicio")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("ModalidadTransporte")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
                     b.Property<string>("Modelo")
                         .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
+                    b.Property<int?>("NumeroEjes")
+                        .HasColumnType("int");
+
                     b.Property<string>("Observaciones")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
+
+                    b.Property<decimal?>("PesoBrutoVehicular")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Placa")
                         .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("varchar(12)");
 
-                    b.Property<string>("PropietarioCedula")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
+                    b.Property<int?>("Puertas")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PropietarioNombre")
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("PropietarioTelefono")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
-
-                    b.Property<string>("Propietariocorreo")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("RutaSOAT")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("RutaSeguro")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("RutaTecnoMecanica")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<decimal?>("TarifaExterna")
-                        .HasColumnType("decimal(12,2)");
+                    b.Property<bool>("Repotenciado")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("TipoProveedor")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("TipoServicio")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<bool>("VehiculoEnsenanza")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("idTipoVehiculo")
+                        .HasColumnType("int");
 
                     b.HasKey("idVehiculo");
 
                     b.HasIndex("Placa")
                         .IsUnique();
 
+                    b.HasIndex("idTipoVehiculo");
+
                     b.ToTable("Vehiculos");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.ActividadSistema", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("AppServiceAndTravel.Models.TipoActividadSistema", "TipoActividad")
+                    b.Property<int>("idUsuario")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idUsuario"));
+
+                    b.Property<int?>("RolesidRol")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("activo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("admin")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("avatar")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("cargo")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<bool?>("confirmada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("correo")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("crypt")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime?>("fechaBaja")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("fechaCambioClave")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("fechaExpiracionToken")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("fechaModificacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("hast")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("idRol")
+                        .HasColumnType("int");
+
+                    b.Property<string>("nombreCompleto")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
+
+                    b.Property<string>("password")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("refreshToken")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("refreshTokenExpiry")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool?>("restaurada")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("telefono")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("token")
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<DateTime?>("ultimoAcceso")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("userName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("idUsuario");
+
+                    b.HasIndex("RolesidRol");
+
+                    b.HasIndex("idRol");
+
+                    b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            idUsuario = 1,
+                            activo = true,
+                            admin = true,
+                            avatar = "",
+                            cargo = "Administrador",
+                            confirmada = true,
+                            correo = "admin@correo.com",
+                            crypt = true,
+                            fechaCambioClave = new DateTime(2026, 9, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1721),
+                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1720),
+                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1722),
+                            hast = true,
+                            idRol = 2,
+                            nombreCompleto = "Administrador",
+                            password = "admin",
+                            refreshToken = "",
+                            restaurada = false,
+                            telefono = "",
+                            token = "",
+                            ultimoAcceso = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1699),
+                            userName = "admin"
+                        });
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.FormatosCorreos", b =>
+                {
+                    b.Property<int>("idCorreo")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idCorreo"));
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("abreviatura")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("mensaje")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("titulo")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("idCorreo");
+
+                    b.ToTable("FormatosCorreos");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.HistLogin", b =>
+                {
+                    b.Property<int?>("idHist")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int?>("idHist"));
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("idUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("inSesion")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("mensaje")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("userName")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("valido")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("idHist");
+
+                    b.ToTable("HistLogin");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.HistRefreshToken", b =>
+                {
+                    b.Property<int>("IdHistRefreshToken")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdHistRefreshToken"));
+
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Token")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<bool>("activo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("fechaExpiracion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("idUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("idUsuarioNavigationidUsuario")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdHistRefreshToken");
+
+                    b.HasIndex("idUsuarioNavigationidUsuario");
+
+                    b.ToTable("HistRefreshToken");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.Proveedores", b =>
+                {
+                    b.Property<int>("idProveedor")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("idProveedor"));
+
+                    b.Property<string>("descripcion")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<DateTime>("fechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("idProveedor");
+
+                    b.ToTable("Proveedores");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.ProveedoresExternos", b =>
+                {
+                    b.Property<int>("IdProveedorExterno")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("IdProveedorExterno"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Contacto")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NitCedula")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("RazonSocial")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<decimal?>("TarifaBase")
+                        .HasColumnType("decimal(12,2)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("varchar(25)");
+
+                    b.Property<int>("TipoServicio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("correo")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.HasKey("IdProveedorExterno");
+
+                    b.ToTable("ProveedoresExternos");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.ActividadSistema", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.TipoActividadSistema", "TipoActividad")
                         .WithMany()
                         .HasForeignKey("idTipoActividadSistema")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2191,9 +3176,55 @@ namespace AppServiceAndTravel.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Cotizaciones", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.LogSistema", b =>
                 {
-                    b.HasOne("AppServiceAndTravel.Models.Clientes", "Cliente")
+                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("idUsuario");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Permisos", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.Procesos", "proceso")
+                        .WithMany("Permisos")
+                        .HasForeignKey("idProceso")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.Roles", "rol")
+                        .WithMany("Permisos")
+                        .HasForeignKey("idRol")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("proceso");
+
+                    b.Navigation("rol");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Procesos", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.Procesos", "idProcesoPadreNavigation")
+                        .WithMany("inverseidProcesoPadreNavigation")
+                        .HasForeignKey("idProcesoPadre")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("idProcesoPadreNavigation");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.Cotizaciones", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", "TipoServicio")
+                        .WithMany("cotizaciones")
+                        .HasForeignKey("TipoServicioidTipoServicio");
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", "TipoVehiculo")
+                        .WithMany("Cotizaciones")
+                        .HasForeignKey("TipoVehiculoidTipoVehiculo");
+
+                    b.HasOne("AppServiceAndTravel.Areas.Comercial.Models.Clientes", "Cliente")
                         .WithMany("Cotizaciones")
                         .HasForeignKey("idCliente")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -2211,9 +3242,251 @@ namespace AppServiceAndTravel.Migrations
 
                     b.Navigation("Cliente");
 
+                    b.Navigation("TipoServicio");
+
+                    b.Navigation("TipoVehiculo");
+
                     b.Navigation("UsuarioAprobador");
 
                     b.Navigation("UsuarioCreador");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.DetalleCotizacion", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Comercial.Models.Cotizaciones", "Cotizacion")
+                        .WithMany("Detalles")
+                        .HasForeignKey("idCotizacion")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", "TipoServicio")
+                        .WithMany()
+                        .HasForeignKey("idTipoServicio");
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", "TipoVehiculo")
+                        .WithMany()
+                        .HasForeignKey("idTipoVehiculo");
+
+                    b.Navigation("Cotizacion");
+
+                    b.Navigation("TipoServicio");
+
+                    b.Navigation("TipoVehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Servicios", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", null)
+                        .WithMany("servicios")
+                        .HasForeignKey("TiposServiciosidTipoServicio");
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Conductores", "Conductor")
+                        .WithMany("Servicios")
+                        .HasForeignKey("idConductor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppServiceAndTravel.Areas.Comercial.Models.DetalleCotizacion", "DetalleCotizacion")
+                        .WithMany("Servicios")
+                        .HasForeignKey("idDetalleCotizacion")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AppServiceAndTravel.Models.ProveedoresExternos", "ProveedorExterno")
+                        .WithMany()
+                        .HasForeignKey("idProveedorExterno")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", "TipoVehiculo")
+                        .WithMany()
+                        .HasForeignKey("idTipoVehiculo");
+
+                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "UsuarioCreador")
+                        .WithMany()
+                        .HasForeignKey("idUsuarioCreador")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithMany("Servicios")
+                        .HasForeignKey("idVehiculo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conductor");
+
+                    b.Navigation("DetalleCotizacion");
+
+                    b.Navigation("ProveedorExterno");
+
+                    b.Navigation("TipoVehiculo");
+
+                    b.Navigation("UsuarioCreador");
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "usuario")
+                        .WithMany()
+                        .HasForeignKey("idUsuarioModifica")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("usuario");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.CategoriasVehiculos", "Categoria")
+                        .WithMany("TiposVehiculos")
+                        .HasForeignKey("idCategoriaVehiculo");
+
+                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "usuario")
+                        .WithMany()
+                        .HasForeignKey("idUsuarioModifica")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("usuario");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.ValidacionVehiculo", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithMany()
+                        .HasForeignKey("idVehiculo")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoBlindaje", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("Blindaje")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoBlindaje", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoCaracteristicas", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("Caracteristicas")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoCaracteristicas", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoMatricula", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("Matricula")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoMatricula", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPolizaRC", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("PolizaRC")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPolizaRC", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPropietario", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("Propietario")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoPropietario", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRTM", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("RTM")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRTM", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRegrabaciones", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("Regrabaciones")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoRegrabaciones", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoSOAT", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("SOAT")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoSOAT", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoTarjetaOperacion", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", "Vehiculo")
+                        .WithOne("TarjetaOperacion")
+                        .HasForeignKey("AppServiceAndTravel.Areas.Operaciones.Models.VehiculoTarjetaOperacion", "idVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", "TipoVehiculo")
+                        .WithMany("Vehiculos")
+                        .HasForeignKey("idTipoVehiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoVehiculo");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.Roles", null)
+                        .WithMany("Usuarios")
+                        .HasForeignKey("RolesidRol");
+
+                    b.HasOne("AppServiceAndTravel.Areas.Admin.Models.Roles", "Rol")
+                        .WithMany()
+                        .HasForeignKey("idRol")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Rol");
                 });
 
             modelBuilder.Entity("AppServiceAndTravel.Models.HistRefreshToken", b =>
@@ -2225,152 +3498,80 @@ namespace AppServiceAndTravel.Migrations
                     b.Navigation("idUsuarioNavigation");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.LogSistema", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("idUsuario");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Permisos", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.Procesos", "proceso")
-                        .WithMany("Permisos")
-                        .HasForeignKey("idProceso")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppServiceAndTravel.Models.Roles", "rol")
-                        .WithMany("Permisos")
-                        .HasForeignKey("idRol")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("proceso");
-
-                    b.Navigation("rol");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Procesos", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.Procesos", "idProcesoPadreNavigation")
-                        .WithMany("inverseidProcesoPadreNavigation")
-                        .HasForeignKey("idProcesoPadre")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("idProcesoPadreNavigation");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.RolesUsuarios", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.Roles", "Rol")
-                        .WithMany("RolesUsuarios")
-                        .HasForeignKey("idRol")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "Usuario")
-                        .WithMany("RolesUsuarios")
-                        .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Rol");
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Servicios", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.Conductores", "Conductor")
-                        .WithMany("Servicios")
-                        .HasForeignKey("idConductor")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppServiceAndTravel.Models.Cotizaciones", "Cotizacion")
-                        .WithOne("Servicio")
-                        .HasForeignKey("AppServiceAndTravel.Models.Servicios", "idCotizacion")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AppServiceAndTravel.Models.ProveedoresExternos", "ProveedorExterno")
-                        .WithMany()
-                        .HasForeignKey("idProveedorExterno")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("AppServiceAndTravel.Models.ApplicationUser", "UsuarioCreador")
-                        .WithMany()
-                        .HasForeignKey("idUsuarioCreador")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("AppServiceAndTravel.Models.Vehiculos", "Vehiculo")
-                        .WithMany("Servicios")
-                        .HasForeignKey("idVehiculo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Conductor");
-
-                    b.Navigation("Cotizacion");
-
-                    b.Navigation("ProveedorExterno");
-
-                    b.Navigation("UsuarioCreador");
-
-                    b.Navigation("Vehiculo");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.ValidacionVehiculo", b =>
-                {
-                    b.HasOne("AppServiceAndTravel.Models.Vehiculos", "Vehiculo")
-                        .WithMany()
-                        .HasForeignKey("idVehiculo")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Vehiculo");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("RolesUsuarios");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Clientes", b =>
-                {
-                    b.Navigation("Cotizaciones");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Conductores", b =>
-                {
-                    b.Navigation("Servicios");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Cotizaciones", b =>
-                {
-                    b.Navigation("Servicio");
-                });
-
-            modelBuilder.Entity("AppServiceAndTravel.Models.Procesos", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Procesos", b =>
                 {
                     b.Navigation("Permisos");
 
                     b.Navigation("inverseidProcesoPadreNavigation");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Roles", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Admin.Models.Roles", b =>
                 {
                     b.Navigation("Permisos");
 
-                    b.Navigation("RolesUsuarios");
+                    b.Navigation("Usuarios");
                 });
 
-            modelBuilder.Entity("AppServiceAndTravel.Models.Vehiculos", b =>
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.Clientes", b =>
+                {
+                    b.Navigation("Cotizaciones");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.Cotizaciones", b =>
+                {
+                    b.Navigation("Detalles");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Comercial.Models.DetalleCotizacion", b =>
                 {
                     b.Navigation("Servicios");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.CategoriasVehiculos", b =>
+                {
+                    b.Navigation("TiposVehiculos");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Conductores", b =>
+                {
+                    b.Navigation("Servicios");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposServicios", b =>
+                {
+                    b.Navigation("cotizaciones");
+
+                    b.Navigation("servicios");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.TiposVehiculos", b =>
+                {
+                    b.Navigation("Cotizaciones");
+
+                    b.Navigation("Vehiculos");
+                });
+
+            modelBuilder.Entity("AppServiceAndTravel.Areas.Operaciones.Models.Vehiculos", b =>
+                {
+                    b.Navigation("Blindaje");
+
+                    b.Navigation("Caracteristicas");
+
+                    b.Navigation("Matricula");
+
+                    b.Navigation("PolizaRC");
+
+                    b.Navigation("Propietario");
+
+                    b.Navigation("RTM");
+
+                    b.Navigation("Regrabaciones");
+
+                    b.Navigation("SOAT");
+
+                    b.Navigation("Servicios");
+
+                    b.Navigation("TarjetaOperacion");
                 });
 #pragma warning restore 612, 618
         }

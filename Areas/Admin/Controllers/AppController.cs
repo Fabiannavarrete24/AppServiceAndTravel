@@ -31,15 +31,7 @@ namespace AppServiceAndTravel.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult CreateUsuarios()
-        {
-            return View();
-        }
-        public IActionResult Clientes()
-        {
-            return View();
-        }
-        public IActionResult CreateCliente()
+        public IActionResult CrearUsuarios()
         {
             return View();
         }

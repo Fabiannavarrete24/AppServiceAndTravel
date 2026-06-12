@@ -1,3 +1,7 @@
+@{
+  ViewData["Title"] = "Nuevo Cliente";
+}
+
 <div class="row g-4">
   <div class="col-lg-8">
     <div class="card">
@@ -12,70 +16,81 @@
         </div>
       </div>
       <div class="card-body px-4 py-4">
-        <form asp-area="Comercial" asp-controller="Cliente"
-              asp-action="Create" method="post">
-                    <input type="hidden" asp-for="idCliente" />
+        <form id="formAddCliente">          
           <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
 
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Información principal</h6>
-          <div class="row g-3 mb-4">
+          <div class="row g-3 mb-3">
             <div class="col-md-8">
-              <label asp-for="NombreCompleto" class="form-label fw-semibold small">Razón social / Nombre *</label>
-              <input asp-for="NombreCompleto" class="form-control rounded-3" required />
-              <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+              <label class="form-label fw-semibold small">Razón social / Nombre *</label>
+              <input id="NombreCompleto" class="form-control rounded-3" required />
+              <span  class="text-danger small"></span>
             </div>
             <div class="col-md-4">
-              <label asp-for="NitCedula" class="form-label fw-semibold small">NIT / Cédula *</label>
-              <input asp-for="NitCedula" class="form-control rounded-3" required />
-              <span asp-validation-for="NitCedula" class="text-danger small"></span>
+              <label class="form-label fw-semibold small">NIT / Cédula *</label>
+              <input id="NitCedula" class="form-control rounded-3" required />
+              <span class="text-danger small"></span>
             </div>
           </div>
 
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos de contacto</h6>
-          <div class="row g-3 mb-4">
+          <div class="row g-3 mb-3">
             <div class="col-md-6">
-              <label class="form-label fw-semibold small">Email *</label>
+              <label class="form-label fw-semibold small">Persona de Contacto *</label>
               <div class="input-group">
                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
-                <input  type="email" class="form-control border-start-0 rounded-end-3" required />
+                <input  id="PersonaContacto" name="PersonaContacto" type="text" class="form-control border-start-0 rounded-end-3" required />
               </div>
               <span class="text-danger small"></span>
             </div>
             <div class="col-md-6">
-              <label asp-for="Telefono" class="form-label fw-semibold small">Teléfono *</label>
+              <label class="form-label fw-semibold small">Cargo</label>
+              <div class="input-group">
+                <input  id="CargoContacto" name="CargoContacto" type="text" class="form-control border-start-0 rounded-end-3"/>
+              </div>
+              <span class="text-danger small"></span>
+            </div>                       
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email *</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope text-muted"></i></span>
+                <input  id="correo" name="correo" type="email" class="form-control border-start-0 rounded-end-3" required />
+              </div>
+              <span class="text-danger small"></span>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Teléfono *</label>
               <div class="input-group">
                 <span class="input-group-text bg-light border-end-0"><i class="bi bi-telephone text-muted"></i></span>
-                <input asp-for="Telefono" class="form-control border-start-0 rounded-end-3" required />
+                <input id="Telefono" name="Telefono" class="form-control border-start-0 rounded-end-3" required />
               </div>
-              <span asp-validation-for="Telefono" class="text-danger small"></span>
+              <span class="text-danger small"></span>
             </div>
           </div>
 
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Ubicación</h6>
-          <div class="row g-3 mb-4">
-            <div class="col-12">
-              <label asp-for="Direccion" class="form-label fw-semibold small">Dirección</label>
-              <input asp-for="Direccion" class="form-control rounded-3" />
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label fw-semibold small">Dirección</label>
+              <input id="Direccion" name="Direccion" class="form-control rounded-3" />
             </div>
             <div class="col-md-6">
-              <label asp-for="Ciudad" class="form-label fw-semibold small">Ciudad</label>
-              <input asp-for="Ciudad" class="form-control rounded-3" />
+              <label class="form-label fw-semibold small">Ciudad</label>
+              <input id="Ciudad" name="Ciudad" class="form-control rounded-3" />
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input id="Activo" name="Activo" type="checkbox" class="form-check-input" />
+                <label asp-for="Activo" class="form-check-label fw-semibold small">Cliente activo</label>
+              </div>
             </div>
           </div>
-                    <div class="mb-4">
-                        <div class="form-check form-switch">
-                            <input asp-for="Activo" class="form-check-input" type="checkbox" />
-                            <label asp-for="Activo" class="form-check-label fw-semibold small">Cliente activo</label>
-                        </div>
-                    </div>
 
           <div class="d-flex gap-3 pt-2">
             <button type="submit" class="btn btn-primary px-4 rounded-3">
-            <i class="bi  bi-person-plus" me-2"></i>
-                Registrar cliente
+              <i class="fa-solid fa-user-plus me-2"></i>Registrar cliente
             </button>
-            <a asp-area="Comercial" asp-controller="Cliente" asp-action="Index"
-               class="btn btn-outline-secondary rounded-3">Cancelar</a>
+            <a class="btn btn-outline-secondary rounded-3">Cancelar</a>
           </div>
         </form>
       </div>
@@ -90,11 +105,78 @@
           Una vez registrado el cliente podrá asociarle cotizaciones y hacer seguimiento
           de sus servicios desde el historial.
         </p>
-                <div class="alert alert-info rounded-3 small py-2 mt-3 mb-0">
-                    <i class="bi bi-bell me-1"></i>
-                    Al crear una cotización para este cliente recibirá notificaciones automáticas por email y WhatsApp.
-                </div>
+        <div class="alert alert-info rounded-3 small py-2 mt-3 mb-0">
+            <i class="bi bi-bell me-1"></i>
+            Al crear una cotización para este cliente recibirá notificaciones automáticas por email y WhatsApp.
+        </div>
       </div>
     </div>
   </div>
 </div>
+@section Scripts{
+
+<script>
+
+    $(function () {
+
+        $("#formAddCliente").on("submit", function (e) {
+
+            e.preventDefault();
+
+            let cliente = {
+                RazonSocial: $("#NombreCompleto").val(),
+                nitCedula: $("#NitCedula").val(),
+                personaContacto = $("#PersonaContacto").val(),
+                cargoContacto = $("#CargoContacto").val(),
+                correo: $("#correo").val(),
+                telefono: $("#Telefono").val(),
+                direccion: $("#Direccion").val(),
+                ciudad: $("#Ciudad").val(),
+                activo: $("#Activo").is(":checked")
+            };
+
+            if (!cliente.nombreCompleto) {
+                showAlert("warning","","Debe ingresar el nombre del cliente");
+                return;
+            }
+
+            if (!cliente.nitCedula) {
+                showAlert("warning","","Debe ingresar el NIT o cédula");
+                return;
+            }
+
+            if (!cliente.correo) {
+                showAlert("warning","","Debe ingresar el correo");
+                return;
+            }
+
+            $.ajax({
+                url: '/Comercial/Cliente/SetCliente',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(cliente),
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (response) {
+                    hideLoader();
+                    showAlert("success",response.message,"");
+                    $("#formAddCliente")[0].reset();
+                    setTimeout(function () {
+                        window.location.href = "/Comercial/App/Clientes";
+                    }, 1500);
+                },
+                error: function (xhr) {
+                    hideLoader();
+                    let mensaje = xhr.responseJSON?.message ||"No fue posible registrar el cliente";
+                    showAlert("error","",mensaje);
+                }
+            });
+
+        });
+
+    });
+
+</script>
+
+}

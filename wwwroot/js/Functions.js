@@ -1,15 +1,29 @@
-﻿function togglePwd(id, iconId) {
-    const i = document.getElementById(id);
-    const ic = document.getElementById(iconId);
-    i.type = i.type === 'password' ? 'text' : 'password';
-    ic.className = i.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+﻿
+function formatearMiles(input) {
+  let valor = input.value.replace(/\D/g, "");
+  input.value = new Intl.NumberFormat("es-CO").format(valor);
+}
+function togglePwd(inputId, iconId) {
+
+    const input = $('#' + inputId);
+    const icon = $('#' + iconId);
+
+    if (input.attr('type') === 'password') {
+
+        input.attr('type', 'text');
+        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+    }
+    else {
+        input.attr('type', 'password');
+        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+    }
 }
 
 function showLoader() {
-    $("#globalLoader").removeClass("d-none");
+  $("#globalLoader").removeClass("d-none");
 }
 function hideLoader() {
-    $("#globalLoader").addClass("d-none");
+  $("#globalLoader").addClass("d-none");
 }
 function resetForm(idForm, idDateTime, IdValue) {
   $(idForm)[0].reset();
@@ -140,7 +154,7 @@ function LoadPDF(data, titulo = "Documento") {
 
   const blobUrl = URL.createObjectURL(blob);
 
-  const faviconElement = document.querySelector("link[rel*='icon']");
+  const faviconElement = $document.querySelector("link[rel*='icon']");
   const faviconHref = faviconElement ? faviconElement.href : "";
 
   const ventana = window.open("", "_blank");
@@ -212,12 +226,12 @@ function showAlertError(icon, title, message, fullMessage) {
   Swal.fire({
     title: title,
     html: `
-                    <p>${message}</p>
-                    <a id="verMas" style="cursor:pointer;color:blue">ver más..</a>
-                    <div id="contentvermas" class="d-none" style="text-align:left;max-height:200px;overflow-y:auto;margin-top:10px;">
-                        <p>${fullMessage}</p>
-                    </div>
-                `,
+            <p>${message}</p>
+            <a id="verMas" style="cursor:pointer;color:blue">ver más..</a>
+            <div id="contentvermas" class="d-none" style="text-align:left;max-height:200px;overflow-y:auto;margin-top:10px;">
+                <p>${fullMessage}</p>
+            </div>
+          `,
     icon: icon,
     confirmButtonText: "Cerrar",
 

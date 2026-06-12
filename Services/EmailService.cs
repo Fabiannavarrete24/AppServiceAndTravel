@@ -1,5 +1,6 @@
+using AppServiceAndTravel.Areas.Comercial.Models;
+using AppServiceAndTravel.Areas.Operaciones.Models;
 using AppServiceAndTravel.Data;
-using AppServiceAndTravel.Models;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -95,7 +96,7 @@ namespace AppServiceAndTravel.Services
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Fecha del Servicio</td>
-                            <td style='padding:10px;border:1px solid #ddd;'>{cotizacion.FechaServicio:dd/MM/yyyy}</td>
+                            <td style='padding:10px;border:1px solid #ddd;'>{cotizacion.FechaInicioServicio:dd/MM/yyyy}</td>
                         </tr>
                         <tr style='background:#f0f4f8;'>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Valor Cotizado</td>
@@ -129,7 +130,7 @@ namespace AppServiceAndTravel.Services
                         </tr>
                         <tr style='background:#d4edda;'>
                             <td style='padding:10px;font-weight:bold;border:1px solid #c3e6cb;'>Fecha del Servicio</td>
-                            <td style='padding:10px;border:1px solid #c3e6cb;'>{cotizacion.FechaServicio:dd/MM/yyyy}</td>
+                            <td style='padding:10px;border:1px solid #c3e6cb;'>{cotizacion.FechaInicioServicio:dd/MM/yyyy}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Valor Aprobado</td>
@@ -181,7 +182,7 @@ namespace AppServiceAndTravel.Services
                         </tr>
                         <tr style='background:#cce5ff;'>
                             <td style='padding:10px;font-weight:bold;border:1px solid #b8daff;'>Ruta</td>
-                            <td style='padding:10px;border:1px solid #b8daff;'>{servicio.Cotizacion?.Origen} ? {servicio.Cotizacion?.Destino}</td>
+                            <td style='padding:10px;border:1px solid #b8daff;'>{servicio.DetalleCotizacion?.Origen} ? {servicio.DetalleCotizacion?.Destino}</td>
                         </tr>
                         <tr>
                             <td style='padding:10px;font-weight:bold;border:1px solid #ddd;'>Veh�culo</td>

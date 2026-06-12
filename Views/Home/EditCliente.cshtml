@@ -1,3 +1,4 @@
-@model AppServiceAndTravel.Models.Clientes
-@{ ViewData["Title"] = $"Editar: {Model.NombreCompleto}"; }
+@using AppServiceAndTravel.Areas.Comercial.Models
+@model Clientes
+@{ ViewData["Title"] = $"Editar: {Model.RazonSocial}"; }
 @await Html.PartialAsync("Create", Model)

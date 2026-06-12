@@ -4,7 +4,7 @@
     --surface: var(--cs);
     --border: rgba(255, 255, 255, 0.08);
     --accent: var(--cp);
-    --accent2: var(--ct);
+    --accent2: var(--cp);
     --gold: var(--cw);
     --text: var(--text-main);
     --muted: var(--text-muted);

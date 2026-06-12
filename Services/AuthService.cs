@@ -1,4 +1,5 @@
-﻿using AppServiceAndTravel.Areas.Admin.Services;
+﻿using AppServiceAndTravel.Areas.Admin.Models;
+using AppServiceAndTravel.Areas.Admin.Services;
 using AppServiceAndTravel.Areas.Admin.ViewModels;
 using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
@@ -53,7 +54,7 @@ namespace AppServiceAndTravel.Services
             _emailService = emailService;
             _jwtService = jwtService;
         }
-    
+
         private LoginResponseVM Fail(string message)
         {
             return new LoginResponseVM
@@ -130,7 +131,7 @@ namespace AppServiceAndTravel.Services
             {
                 var message = "Error interno del servidor: " + ex.Message;
 
-                _utilities.RegistrarLog(ex.Message,"SaveHistRefreshToken");
+                _utilities.RegistrarLog(ex.Message, "SaveHistRefreshToken");
 
                 return new AuthResponse
                 {
@@ -267,28 +268,36 @@ namespace AppServiceAndTravel.Services
         }
         public List<MenuVM> NavProcess(int idUser)
         {
-            var procesos = _context.Usuarios
-                .Where(u => u.idUsuario == idUser)
-                .SelectMany(u => u.RolesUsuarios!)
-                .SelectMany(ru => ru.Rol!.Permisos!)
-                .Select(p => p.proceso)
+            var idRol = _context.Usuarios
+                .Where(x => x.idUsuario == idUser)
+                .Select(x => x.idRol)                
+                .FirstOrDefault();
+
+            if (idRol <= 0)
+            {
+                return new List<MenuVM>();
+            }
+
+            var procesos = _context.Permisos
+                .Where(p => p.idRol == idRol)
+                .Select(p => p.proceso!)
                 .Distinct()
-                .OrderBy(p => p!.proceso)
-                .Select(p => new MenuVM
+                .OrderBy(o => o.orden)              
+                .Select(x => new MenuVM
                 {
-                    idProceso = p!.idProceso,
-                    proceso = p.proceso,
-                    area = p.area,
-                    controlador = p.controlador,
-                    url = p.url,
-                    icono = p.icono,
-                    idProcesoPadre = p.idProcesoPadre
+                    idProceso = x.idProceso,
+                    proceso = x.proceso,
+                    area = x.area,
+                    controlador = x.controlador,
+                    url = x.url,
+                    icono = x.icono,
+                    idProcesoPadre = x.idProcesoPadre,
+                    orden = x.orden
                 })
                 .ToList();
-
             return ConstruirMenu(procesos, null);
         }
-        private List<MenuVM> ConstruirMenu(List<MenuVM> procesos,int? idPadre)
+        private List<MenuVM> ConstruirMenu(List<MenuVM> procesos, int? idPadre)
         {
             var hijos = procesos
                 .Where(x =>
@@ -296,7 +305,7 @@ namespace AppServiceAndTravel.Services
                     ||
                     x.idProcesoPadre == idPadre
                 )
-                .OrderBy(x => x.proceso)
+                .OrderBy(x => x.orden)
                 .ToList();
 
             foreach (var item in hijos)
@@ -306,7 +315,7 @@ namespace AppServiceAndTravel.Services
                     item.idProceso
                 );
             }
-
+            _utilities.RegistrarLog($"Procesos encontrados: {procesos.Count}","NavProcess","INFO");
             return hijos;
         }
         public async Task<LoginResponseVM> Login(string usuario, string clave)
@@ -353,12 +362,12 @@ namespace AppServiceAndTravel.Services
                 RegisterHistLogin(user.idUsuario, user.userName!, false, "Su contraseña se encuentra vencida, debe cambiarla.");
                 return Fail("Su contraseña se encuentra vencida, debe cambiarla.");
             }
-            
+
             if (user.restaurada == true)
             {
                 RegisterHistLogin(user.idUsuario, user.userName!, false, "Solicitaste un cambio de contraseña, revise su bandeja de entrada o genere una nueva solicitud.");
                 return Fail("Solicitaste un cambio de contraseña, revise su bandeja de entrada o genere una nueva solicitud.");
-            }            
+            }
 
             if (user.activo == false || user.fechaBaja != null)
             {
@@ -374,10 +383,10 @@ namespace AppServiceAndTravel.Services
 
                 await _context.SaveChangesAsync();
             }
-            
+
 
             var menu = NavProcess(user.idUsuario);
-            
+
             if (menu == null)
             {
                 RegisterHistLogin(user.idUsuario, usuario, false, "Sin permisos");
@@ -387,7 +396,7 @@ namespace AppServiceAndTravel.Services
 
             if (claims == null || !claims.Any())
             {
-                RegisterHistLogin(user.idUsuario,user.userName!,false,"Sin claims");
+                RegisterHistLogin(user.idUsuario, user.userName!, false, "Sin claims");
                 return Fail("No se pudieron generar claims");
             }
 
@@ -404,7 +413,7 @@ namespace AppServiceAndTravel.Services
             };
         }
         private List<Claim> BuildClaims(ApplicationUser user, List<MenuVM> menu)
-        {            
+        {
             var claims = new List<Claim>
              {
                  new Claim(ClaimTypes.NameIdentifier, user.idUsuario.ToString()),
@@ -481,11 +490,11 @@ namespace AppServiceAndTravel.Services
                     message = "Contraseña actualizada con exito";
                 }
 
-                return (true,message);
+                return (true, message);
             }
             catch (Exception ex)
             {
-                return (false,$"Se ha presentado un problema: {ex.Message}");
+                return (false, $"Se ha presentado un problema: {ex.Message}");
             }
         }
         public async Task<(bool success, string message)> RestablecerCuenta(string token, int? usuario)
@@ -522,7 +531,7 @@ namespace AppServiceAndTravel.Services
             {
                 return (false, "Correo no encontrado.");
             }
-            var jwt =  _jwtService.ConfigJWT();
+            var jwt = _jwtService.ConfigJWT();
             var token = _utilities.GenerateToken(usuario.data.Username!, jwt);
 
             if (string.IsNullOrEmpty(token))
@@ -542,7 +551,7 @@ namespace AppServiceAndTravel.Services
                 return (false, "No se encontró el formato del correo.");
             }
 
-            string htmlBody = formato.mensaje!.Replace("{nombreCompleto}", usuario.data.nombreCompleto).Replace("{URL}",$"{url}/account/reset?token={token}");
+            string htmlBody = formato.mensaje!.Replace("{nombreCompleto}", usuario.data.nombreCompleto).Replace("{URL}", $"{url}/account/reset?token={token}");
 
             try
             {

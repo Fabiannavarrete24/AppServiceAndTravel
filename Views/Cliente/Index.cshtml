@@ -1,4 +1,5 @@
-﻿@model IEnumerable<AppServiceAndTravel.Models.Clientes>
+﻿@using AppServiceAndTravel.Areas.Comercial.Models
+@model IEnumerable<Clientes>
 
 @{
     ViewData["Title"] = "Clientes";
@@ -110,13 +111,13 @@
                             <tr>
 
                                 <td class="ps-4">
-                                    <div class="fw-semibold">@c.NombreCompleto</div>
+                                    <div class="fw-semibold">@c.RazonSocial</div>
                                     <small class="text-muted">@c.Direccion</small>
                                 </td>
 
                                 <td>@c.NitCedula</td>
 
-                                <td>@c.correo</td>
+                                <td>@c.Correo</td>
 
                                 <td>@c.Telefono</td>
 

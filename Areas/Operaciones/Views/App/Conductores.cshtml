@@ -1,17 +1,8 @@
-﻿@* @model IEnumerable<AppServiceAndTravel.Models.Conductor>
-
-@{
+﻿@{
     ViewData["Title"] = "Conductores";
     ViewData["Breadcrumb"] = "Gestión de conductores";
-
-    string BadgeTipo(AppServiceAndTravel.Models.TipoProveedor t) => t switch
-    {
-        AppServiceAndTravel.Models.TipoProveedor.Interno => "bg-primary",
-        AppServiceAndTravel.Models.TipoProveedor.Externo => "bg-warning text-dark",
-        _ => "bg-secondary"
-    };
 }
- *@
+
 <!-- Stats -->
 <div class="row g-3 mb-4">
 
@@ -24,7 +15,7 @@
                 </div>
                 <div>
                     <small class="text-muted">Total</small>
-                    <div class="fw-bold fs-4">0</div>
+                    <div class="fw-bold fs-4" id="totalConductores">0</div>
                 </div>
             </div>
         </div>
@@ -39,7 +30,7 @@
                 </div>
                 <div>
                     <small class="text-muted">Internos</small>
-                    <div class="fw-bold fs-4">0</div>
+                    <div class="fw-bold fs-4" id="totalInternos">0</div>
                 </div>
             </div>
         </div>
@@ -53,7 +44,7 @@
                     <i class="bi bi-person-badge-fill"></i>
                 </div>
                 <div>
-                    <small class="text-muted">Externos</small>
+                    <small class="text-muted" id="totalExternos">Externos</small>
                     <div class="fw-bold fs-4">0</div>
                 </div>
             </div>
@@ -69,7 +60,7 @@
                 </div>
                 <div>
                     <small class="text-muted">Licencias vencidas</small>
-                    <div class="fw-bold fs-4">0</div>
+                    <div class="fw-bold fs-4" id="licenciasVencidas">0</div>
                 </div>
             </div>
         </div>
@@ -88,18 +79,15 @@
 
         <!-- Filtro -->
         <div class="btn-group btn-group-sm">
-            <a href="@Url.Action("Index")"
-               class="btn btn-dark">
+            <a href="@Url.Action("Index")" class="btn btn-dark">
                 Todos
             </a>
 
-            <a href="@Url.Action("Index", new { tipo = AppServiceAndTravel.Models.TipoProveedor.Interno })"
-               class="btn btn-primary">
+            <a class="btn btn-primary">
                 Internos
             </a>
 
-            <a href="@Url.Action("Index", new { tipo = AppServiceAndTravel.Models.TipoProveedor.Externo })"
-               class="btn btn-outline-secondary">
+            <a class="btn btn-outline-secondary">
                 Externos
             </a>
         </div>
@@ -109,12 +97,8 @@
 
             <input type="hidden" name="tipo" value="" />
 
-            <input type="search"
-                   name="busqueda"
-                   value=""
-                   class="form-control form-control-sm"
-                   placeholder="Buscar conductor..."
-                   style="min-width:220px;" />
+            <input type="search" name="busqueda" value="" class="form-control form-control-sm"
+                   placeholder="Buscar conductor..." style="min-width:220px;" />
 
             <button class="btn btn-sm btn-outline-primary">
                 <i class="bi bi-search"></i>
@@ -135,7 +119,7 @@
         </div>
         <div class="table-responsive">
 
-            <table class="table table-hover mb-0">
+            <table class="table table-hover mb-0" id="tbodyConductores">
 
                 <thead>
                     <tr>
@@ -148,89 +132,219 @@
                         <th class="text-end pe-4">Acciones</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
-                   @*  @foreach (var c in Model)
-                    {
-                        
-                    } *@
-                    <tr>
-
-                        <td class="ps-4">
-                            <div class="fw-semibold">NombreCompleto</div>
-                            <small class="text-muted">correo</small>
-                        </td>
-
-                        <td>Cedula</td>
-
-                        <td>Telefono</td>
-
-                        <td>
-                            <div>NumeroLicencia</div>
-                            <small class="text-muted">
-                                Vence:
-                                @* @c.FechaVencimientoLicencia.ToString("dd/MM/yyyy") *@
-                            </small>
-                        </td>
-
-                        <td>
-                            <span class="badge ">
-                                @* @c.TipoProveedor *@
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge bg-success">Activo</span>
-                            @*                                 @if (c.Activo)
-                                {
-                                    
-                                }
-                                else
-                                {
-                                    
-                                } *@
-                            <span class="badge bg-danger">Inactivo</span>
-                        </td>
-
-                        <td class="text-end pe-4">
-
-                            <div class="d-flex justify-content-end gap-1">
-
-                                <a class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-
-                                @*    @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
-                                    {
-                                       
-                                    } *@
-                                <a 
-                                   class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                @*  @if (User.IsInRole("Administrador"))
-                                    {
-                                        
-                                    } *@
-                                <form method="post" onsubmit="return confirmada('¿Eliminar conductor?')">
-
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-
-                                </form>
-                            </div>
-
-                        </td>
-
-                    </tr>
                 </tbody>
-
+                <ul class="pagination pagination-sm mb-0" id="paginacionConductores">
+                </ul>
             </table>
-
         </div>
-
     </div>
 
 </div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            cargarConductores();
+        });
+        let paginaActual = 1;
+        let tipoActual = null;
+        let busquedaActual = "";
+
+        async function cargarConductores(page = 1) {
+
+            paginaActual = page;
+
+            const response = await $.get(
+                '/Conductores/ObtenerConductores',
+                {
+                    pagina: page,
+                    busqueda: busquedaActual,
+                    tipo: tipoActual
+                });
+
+            renderStats(response);
+
+            renderTabla(response.conductores);
+
+            renderPaginacion(
+                response.paginaActual,
+                response.totalPaginas
+            );
+        }
+        
+        function renderStats(data) {
+
+            $("#totalConductores").text(data.total);
+
+            $("#totalInternos").text(data.internos);
+
+            $("#totalExternos").text(data.externos);
+
+            $("#licenciasVencidas").text(data.licenciasVencidas);
+        }
+        
+        function renderTabla(items) {
+
+            let html = '';
+
+            if (!items.length) {
+
+                html = `
+            <tr>
+                <td colspan="7" class="text-center py-4">
+                    No hay registros
+                </td>
+            </tr>`;
+            }
+            else {
+
+                items.forEach(c => {
+
+                    html += `
+                <tr>
+
+                    <td class="ps-4">
+                        <div class="fw-semibold">
+                            ${c.nombreCompleto}
+                        </div>
+                        <small class="text-muted">
+                            ${c.correo ?? ''}
+                        </small>
+                    </td>
+
+                    <td>${c.cedula}</td>
+
+                    <td>${c.telefono}</td>
+
+                    <td>
+                        <div>${c.numeroLicencia}</div>
+                        <small class="text-muted">
+                            ${formatDate(c.fechaVencimientoLicencia)}
+                        </small>
+                    </td>
+
+                    <td>
+                        ${badgeTipo(c.tipoProveedor)}
+                    </td>
+
+                    <td>
+                        ${badgeEstado(c.activo)}
+                    </td>
+
+                    <td class="text-end pe-4">
+
+                        <div class="d-flex justify-content-end gap-1">
+
+                            <button class="btn btn-sm btn-outline-secondary"
+                                    onclick="verConductor(${c.id})">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-primary"
+                                    onclick="editarConductor(${c.id})">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </button>
+
+                            <button class="btn btn-sm btn-outline-danger"
+                                    onclick="eliminarConductor(${c.id})">
+
+                                <i class="bi bi-trash"></i>
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>`;
+                });
+            }
+
+            $("#tbodyConductores").html(html);
+        }
+        
+        function renderPaginacion(actual, total) {
+
+            let html = '';
+
+            for (let i = 1; i <= total; i++) {
+
+                html += `
+            <li class="page-item ${i === actual ? 'active' : ''}">
+                <a class="page-link"
+                   href="javascript:void(0)"
+                   onclick="cargarConductores(${i})">
+                    ${i}
+                </a>
+            </li>`;
+            }
+
+            $("#paginacionConductores").html(html);
+        }
+        
+        async function eliminarConductor(id) {
+
+            if (!confirm('¿Eliminar conductor?'))
+                return;
+
+            const response = await $.post(
+                '/Conductores/EliminarConductor',
+                { id });
+
+            if (response.success) {
+
+                toastr.success(response.message);
+
+                cargarConductores(paginaActual);
+            }
+            else {
+
+                toastr.error(response.message);
+            }
+        }
+        
+        async function verConductor(id) {
+
+            const conductor = await $.get(
+                '/Conductores/ObtenerConductor',
+                { id });
+
+            llenarFormulario(conductor);
+
+            $('#modalConductor').modal('show');
+        }
+        
+        $("#txtBusqueda").on('keyup', function () {
+
+            busquedaActual = $(this).val();
+
+            cargarConductores(1);
+        });
+        
+        function filtrarInternos() {
+
+            tipoActual = 1;
+
+            cargarConductores(1);
+        }
+        
+        function filtrarExternos() {
+
+            tipoActual = 2;
+
+            cargarConductores(1);
+        }
+        
+        function filtrarTodos() {
+
+            tipoActual = null;
+
+            cargarConductores(1);
+        }
+    </script>
+}

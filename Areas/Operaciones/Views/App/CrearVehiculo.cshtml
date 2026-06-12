@@ -1,138 +1,447 @@
-@* @model AppServiceAndTravel.Models.Vehiculo
 @{
-    bool esEdicion = Model.Id > 0;
-    ViewData["Title"] = esEdicion ? $"Editar Vehículo {Model.Placa}" : "Nuevo Vehículo";
-    ViewData["Breadcrumb"] = esEdicion ? "Vehículos / Editar" : "Vehículos / Nuevo";
-} *@
-
+  ViewData["Title"] = "Vehículos";
+  ViewData["Breadcrumb"] = "Vehículos / Nuevo";
+}
+@section Styles {
+  <style>
+    .placa-colombia {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      height: 45px;
+      background: #f8d117;
+      border: 4px solid #2d2d2d;
+      border-radius: 6px;
+      font-family: 'Arial Black', sans-serif;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #000;
+    }
+  </style>
+}
 <div class="row g-4">
+
   <div class="col-lg-8">
-    <div class="card border-0 shadow-sm rounded-4">
-      <div class="card-header bg-white border-0 px-4 pt-4 pb-0 d-flex align-items-center gap-2">
-        <div class="rounded-3 d-flex align-items-center justify-content-center"
-             style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
-          <i class="bi bi-truck"></i>
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-1">
+          <button type="button" class="btn btn-primary" id="btnNuevo">
+            <i class="fa-regular fa-square-plus"></i>
+          </button>
+          <button type="button" class="btn btn-success" id="btnGuardar">
+            <i class="fa-solid fa-save"></i>
+          </button>
+          <button type="button" class="btn btn-warning" id="btnEditar">
+            <i class="fa-regular fa-pen-to-square"></i>
+          </button>
+          <button type="button" class="btn btn-danger" id="btnDeshabilitar">
+            <i class="fa-solid fa-ban"></i>
+          </button>
+        </div>
+        <div id="placaPreview" class="placa-colombia">
+          ABC-123
         </div>
         <div>
-          <h5 class="mb-0 fw-semibold">Editar vehículo</h5>
-          <small class="text-muted">Complete la información del vehículo y sus documentos</small>
+          <input id="txtBuscarVehiculo" class="form-control"
+                 placeholder="Buscar por placa, VIN, motor o propietario..." />
         </div>
       </div>
-      <div class="card-body px-4 pb-4 pt-3">
-        <form asp-action="Edit" method="post">
-          @* @Html.AntiForgeryToken() *@
-          @* @if (esEdicion) {  } *@
-          <input type="hidden" />
-          <div class="alert alert-danger rounded-3 py-2 small"></div>
-
-          <!-- Identificación -->
-          <h6 class="fw-semibold text-muted small text-uppercase mb-3 mt-2">
-            <i class="bi bi-card-text me-1"></i>Identificación
-          </h6>
-          <div class="row g-3 mb-4">
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">Placa <span class="text-danger">*</span></label>
-              <input class="form-control rounded-3 text-uppercase" placeholder="ABC-123"
-                     required />
-              <span class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">Marca <span class="text-danger">*</span></label>
-              <input class="form-control rounded-3" placeholder="Ej: Mercedes-Benz" required />
-              <span class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">Modelo <span class="text-danger">*</span></label>
-              <input class="form-control rounded-3" placeholder="Ej: Sprinter 515" required />
-              <span class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label  class="form-label fw-semibold small">Año <span class="text-danger">*</span></label>
-              <input type="number" class="form-control rounded-3"
-                     min="1990" max="@(DateTime.Today.Year + 1)" required />
-              <span class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">Capacidad pasajeros</label>
-              <input type="number" class="form-control rounded-3" min="0" />
-            </div>
-            <div class="col-md-4">
-              <label  class="form-label fw-semibold small">Cap. carga (ton)</label>
-              <input  type="number" class="form-control rounded-3" step="0.5" min="0" />
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">Estado <span class="text-danger">*</span></label>
-              <select class="form-select rounded-3" asp-items="Html.GetEnumSelectList<AppServiceAndTravel.Models.EstadoVehiculo>()">
-              </select>
-            </div>
-          </div>
-
-          <hr class="my-3" />
-
-          <!-- Documentos -->
-          <h6 class="fw-semibold text-muted small text-uppercase mb-3">
-            <i class="bi bi-file-earmark-check me-1"></i>Vencimiento de documentos
-          </h6>
-          <div class="row g-3 mb-4">
-            <div class="col-md-4">
-              <label class="form-label fw-semibold small">
-                SOAT <span class="text-danger">*</span>
-              </label>
-              <div class="input-group">
-                <span class="input-group-text bg-light border-end-0" style="border-radius:12px 0 0 12px;">
-                  <i class="bi bi-calendar3 text-muted"></i>
-                </span>
-                <input  type="date" class="form-control border-start-0"
-                       style="border-radius:0 12px 12px 0;" required />
-              </div>
-              <span  class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label  class="form-label fw-semibold small">
-                Tecno-mecánica <span class="text-danger">*</span>
-              </label>
-              <div class="input-group">
-                <span class="input-group-text bg-light border-end-0" style="border-radius:12px 0 0 12px;">
-                  <i class="bi bi-wrench text-muted"></i>
-                </span>
-                <input  type="date" class="form-control border-start-0"
-                       style="border-radius:0 12px 12px 0;" required />
-              </div>
-              <span  class="text-danger small"></span>
-            </div>
-            <div class="col-md-4">
-              <label  class="form-label fw-semibold small">
-                Seguro <span class="text-danger">*</span>
-              </label>
-              <div class="input-group">
-                <span class="input-group-text bg-light border-end-0" style="border-radius:12px 0 0 12px;">
-                  <i class="bi bi-shield text-muted"></i>
-                </span>
-                <input  type="date" class="form-control border-start-0"
-                       style="border-radius:0 12px 12px 0;" required />
-              </div>
-              <span  class="text-danger small"></span>
-            </div>
-          </div>
-
-          <!-- Observaciones -->
-          <div class="mb-4">
-            <label class="form-label fw-semibold small">Observaciones</label>
-            <textarea  class="form-control rounded-3" rows="3"
-                      placeholder="Condiciones especiales, restricciones, notas del vehículo…"></textarea>
-          </div>
-
-          <div class="d-flex gap-3">
-            <button type="submit" class="btn btn-primary px-4 rounded-3">
-              <i class="bi bi-save me-2"></i>Guardar cambios
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="general-tab" data-bs-toggle="pill" data-bs-target="#general"
+                    type="button" role="tab" aria-controls="general" aria-selected="true">
+              General
             </button>
-            <a asp-action="Index" class="btn btn-outline-secondary rounded-3">Cancelar</a>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="propietario-tab" data-bs-toggle="pill" data-bs-target="#propietario"
+                    type="button" role="tab" aria-controls="propietario" aria-selected="false">
+              Propietario
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="motorCaracteristicas-tab" data-bs-toggle="pill"
+                    data-bs-target="#motorCaracteristicas" type="button" role="tab" aria-controls="motorCaracteristicas"
+                    aria-selected="false">
+              Motor y Caracteristicas
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="matricula-tab" data-bs-toggle="pill" data-bs-target="#matricula" type="button"
+                    role="tab" aria-controls="matricula" aria-selected="false">
+              matricula
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Documentos-tab" data-bs-toggle="pill" data-bs-target="#documentos"
+                    type="button" role="tab" aria-controls="Documentos" aria-selected="false">
+              Documentos
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="configuracion-tab" data-bs-toggle="pill" data-bs-target="#configuracion"
+                    type="button" role="tab" aria-controls="configuracion" aria-selected="false">
+              Configuración Especial
+            </button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab"
+               tabindex="0">
+            <div class="row gy-2">
+              <h6 class="fw-semibold small text-muted mb-2">GENERAL</h6>
+              <div class="col-md-3">
+                <label class="form-label">Placa</label>
+                <input type="hidden" id="idVehiculo" class="form-control" value="0" />
+                <input id="Placa" class="form-control text-uppercase" maxlength="10" placeholder="ABC123" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Licencia de transito</label>
+                <input id="LicenciaTransito" class="form-control" />
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Estado</label>
+                <Select id="Estado" class="form-select"></Select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label">Vehiculo</label>
+                <div class="d-flex justify-content-evenly flex-row">
+                    <div class="form-check"
+                            style="display: flex; align-content: center; align-items: center; justify-content: center; gap: 25px;">
+                        <input class="form-check-input" type="radio" name="radioDefault" id="Interno" checked>
+                        <label class="form-check-label" for="Interno" style="margin-bottom:-5px;">Interno</label>
+                    </div>
+                    <div class="form-check"
+                            style="display: flex; align-content: center; align-items: center; justify-content: center; gap: 25px;">
+                        <input class="form-check-input" type="radio" name="radioDefault" id="Externo">
+                        <label class="form-check-label" for="Externo" style="margin-bottom:-5px;">Externo</label>
+                    </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Tipo de Servicio</label>
+                <select id="TipoServicio" class="form-select"></select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Categoria de Vehiculo</label>
+                <Select id="CategoriaVehiculo" class="form-select"></Select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Tipo Vehículo</label>
+                <select id="TipoVehiculo" class="form-select"></select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Marca</label>
+                <input id="Marca" class="form-control text-uppercase" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Linea</label>
+                <input id="Linea" class="form-control text-uppercase" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Modelo</label>
+                <input id="Modelo" class="form-control text-uppercase" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Color</label>
+                <input id="Color" class="form-control text-uppercase" />
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Observaciones</label>
+                <textarea id="Observaciones" class="form-control"> </textarea>
+              </div>
+            </div>
           </div>
-        </form>
+          <div class="tab-pane fade" id="propietario" role="tabpanel" aria-labelledby="propietario-tab" tabindex="0">
+            <div class="row gy-2">
+              <h6 class="fw-semibold small text-uppercase text-muted mb-2">Propietario</h6>
+              <div class="col-md-4">
+                <label class="form-label">Nombre del propietario</label>
+                <input id="NombrePropietario" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Cedula del propietario</label>
+                <input type="number" id="CedulaPropietario" class="form-control" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Telefono del propietario</label>
+                <input type="number" id="TelefonoPropietario" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="motorCaracteristicas" role="tabpanel"
+               aria-labelledby="motorCaracteristicas-tab" tabindex="0">
+            <div class="row">
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">Motor</h6>
+                <div class="col-md-6">
+                  <label class="form-label">Numero de serie</label>
+                  <input id="NumeroSerie" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Numero de motor</label>
+                  <input id="NumeroMotor" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Numero de chasis</label>
+                  <input id="NumeroChasis" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Numero VIN</label>
+                  <input id="NumeroVIN" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Cilindraje</label>
+                  <input type="number" id="Cilindraje" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Tipo de Combustible</label>
+                  <input id="TipoCombustible" class="form-control text-uppercase" />
+                </div>
+              </div>
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">Caracteristicas Tecnicas</h6>
+                <div class="col-md-4">
+                  <label class="form-label">Tipo de carroceria</label>
+                  <input id="TipoCarroceria" class="form-control text-uppercase" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Pasajeros</label>
+                  <input type="number" id="CapacidadPasajeros" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Pasajeros sentados</label>
+                  <input type="number" id="CapacidadPasajerosSentados" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Capacidad de carga</label>
+                  <input type="number" id="CapacidadCarga" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Peso bruto vehicular</label>
+                  <input type="number" id="PesoBrutoVehicular" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Numero de ejes</label>
+                  <input type="number" id="NumeroEjes" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Puertas</label>
+                  <input type="number" id="Puertas" class="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="matricula" role="tabpanel" aria-labelledby="matricula-tab" tabindex="0">
+            <div class="row gy-2">
+              <h6 class="fw-semibold small text-uppercase text-muted mb-2">Matricula</h6>
+              <div class="col-md-3">
+                <label class="form-label">Matricula inicial</label>
+                <input type="date" id="FechaMatriculaInicial" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Autoridad de transito</label>
+                <input id="AutoridadTransito" class="form-control" />
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="documentos" role="tabpanel" aria-labelledby="Documentos-tab" tabindex="0">
+            <div class="row">
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">
+                SOAT <span id="SoatEstadoBadge" class="badge rounded-pill text-bg-secondary ms-2 align-self-center d-none"> Sin calcular</span>
+                </h6>
+                <div class="col-md-4">
+                  <label class="form-label">Numero de poliza</label>
+                  <input id="SoatNumeroPoliza" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Entidad que expide</label>
+                  <input id="SoatEntidadExpide" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Estado</label>
+                  <select id="SoatEstado" class="form-select"></select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expedicion</label>
+                  <input type="date" id="SoatFechaExpedicion" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Inicio de vigencia</label>
+                  <input type="date" id="SoatFechaInicioVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fin de vigencia</label>
+                  <input type="date" id="SoatFechaFinVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">vigente (dias)</label>
+                  <input id="SoatVigente" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Documento PDF</label>
+                  <input type="file" id="documentoSoat" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">
+                Poliza <span id="PolizaEstadoBadge" class="badge rounded-pill text-bg-secondary ms-2 align-self-center d-none"> Sin calcular</span>
+                </h6>
+                <div class="col-md-3">
+                  <label class="form-label">Numero de poliza</label>
+                  <input id="PolizaNumero" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Tipo de poliza</label>
+                  <input id="PolizaTipo" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Entidad que expide</label>
+                  <input id="PolizaEntidadExpide" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Estado</label>
+                  <Select id="PolizaEstado" class="form-select"> </Select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expedicion</label>
+                  <input type="Date" id="PolizaFechaExpedicion" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Inicio de vigencia</label>
+                  <input type="Date" id="PolizaFechaInicioVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fin de vigencia</label>
+                  <input type="Date" id="PolizaFechaFinVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                 <label class="form-label">Vigente (dias)</label>
+                  <input id="PolizaVigente" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Documento PDF</label>
+                  <input type="file" id="documentoPoliza" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">
+                Revisión Tecnico-Mecanica  <span id="RTMEstadoBadge" class="badge rounded-pill text-bg-secondary ms-2 align-self-center d-none"> Sin calcular</span>
+                </h6>
+                <div class="col-md-3">
+                  <label class="form-label">Tipo de revision</label>
+                  <input id="RtmTipoRevision" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Numero de certificado</label>
+                  <input id="RtmNumeroCertificado" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">CDA que expide</label>
+                  <input id="RtmCDAExpide" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Estado</label>
+                  <select id="RtmEstado" class="form-select"> </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expedicion</label>
+                  <input type="Date" id="RtmFechaExpedicion" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Inicio de vigencia</label>
+                  <input type="Date" id="RtmFechaInicioVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fin de vigencia</label>
+                  <input type="Date" id="RtmFechaFinVigencia" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Vigencia (dias)</label>
+                  <input id="RtmVigente" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Documento PDF</label>
+                  <input type="file" id="documentoRTM" class="form-control" />
+                </div>
+              </div>
+              <div class="col-sm-12 row gy-2 mb-3">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">
+                    Tarjeta de Operación <span id="TOEstadoBadge" class="badge rounded-pill text-bg-secondary ms-2 align-self-center d-none"> Sin calcular</span>
+                </h6>
+                <div class="col-md-4">
+                  <label class="form-label">Empresa afiliadora</label>
+                  <input id="EmpresaAfiliadora" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label">Tarjeta de operacion</label>
+                  <input id="NumeroTarjetaOperacion" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select id="EstadoTarjetaOperacion" class="form-select"> </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Expedicion</label>
+                  <input type="Date" id="FechaExpedicionTarjeta" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Inicio de vigencia</label>
+                  <input type="Date" id="FechaInicioVigenciaTarjeta" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fin de vigencia</label>
+                  <input type="Date" id="FechaFinVigenciaTarjeta" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Vigente (dias)</label>
+                  <input type="text" id="TarjetaOperacionVigente" class="form-control" />
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="configuracion" role="tabpanel" aria-labelledby="configuracion-tab"
+               tabindex="0">
+            <div class="row">
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">Blindaje</h6>
+                <div class="col-md-3">
+                  <label class="form-label">Blindado</label>
+                  <input type="checkbox" id="Blindado">
+                </div>
+              </div>
+              <div class="col-sm-12 row gy-2">
+                <h6 class="fw-semibold small text-uppercase text-muted mb-2">Regrabación</h6>
+                <div class="col-md-6">
+                  <label class="form-label">Nro. de regrabacion de motor</label>
+                  <input id="RegrabacionMotor" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nro. de regrabacion de chasis</label>
+                  <input id="RegrabacionChasis" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nro. de serie de regrabacion</label>
+                  <input id="RegrabacionSerie" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Nro. de regrabacion VIN</label>
+                  <input id="RegrabacionVIN" class="form-control" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
   <div class="col-lg-4">
     <div class="card border-0 shadow-sm rounded-4">
       <div class="card-body p-4">
@@ -161,6 +470,517 @@
       </div>
     </div>
   </div>
-</div>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+</div>
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+  <script>
+
+    $(document).ready(function () {
+        cargarListados();
+        calcularDiasVigencia('#SoatFechaInicioVigencia','#SoatFechaFinVigencia','#SoatVigente');
+        calcularDiasVigencia('#PolizaFechaInicioVigencia','#PolizaFechaFinVigencia','#PolizaVigente');
+        calcularDiasVigencia('#RtmFechaExpedicion','#RtmFechaVigencia','#RtmVigente');
+        calcularDiasVigencia('#FechaInicioVigenciaTarjeta','#FechaFinVigenciaTarjeta','#TarjetaOperacionVigente');
+    });
+    $("#TipoServicio").on("change",function (){
+        select = parseInt($(this).val());
+        switch (select) {
+          case 1:
+                $("#placaPreview").css("background", "#f8d117");
+            break;
+          case 2:
+                $("#placaPreview").css("background", "#FFF");
+            break;
+          case 3:
+                $("#placaPreview").css("background", "#FFF");
+            break;
+          case 4:
+                $("#placaPreview").css("background", "#FFF");
+            break;
+          default:
+                $("#placaPreview").css("background", "#f8d117");
+            break;
+        }
+        if(select = 1){
+            
+        }
+    })
+
+    $("#Placa").on("keyup change", function () {
+
+      let placa = $(this).val().toUpperCase();
+      placa = placa.replace(/[^A-Z0-9]/g, '');
+
+      if (placa.length >= 6) {
+        let letras = placa.substring(0, 3);
+        let numeros = placa.substring(3);
+
+        placa = letras + "-" + numeros;
+      }
+
+      $("#placaPreview").text(placa || "ABC-123");
+
+    });
+           
+    $('#SoatFechaInicioVigencia, #SoatFechaFinVigencia').on('change', function () {
+        calcularDiasVigencia('#SoatFechaInicioVigencia','#SoatFechaFinVigencia','#SoatVigente');
+        actualizarBadgeVigencia('#SoatVigente','#SoatEstadoBadge');
+    });
+
+    $('#PolizaFechaInicioVigencia, #PolizaFechaFinVigencia').on('change', function () {
+        calcularDiasVigencia('#PolizaFechaInicioVigencia','#PolizaFechaFinVigencia','#PolizaVigente');
+        actualizarBadgeVigencia('#PolizaVigente','#PolizaEstadoBadge');
+    });
+
+    $('#RtmFechaInicioVigencia, #RtmFechaFinVigencia').on('change', function () {
+        calcularDiasVigencia('#RtmFechaInicioVigencia','#RtmFechaFinVigencia','#RtmVigente');
+        actualizarBadgeVigencia('#RtmVigente','#RTMEstadoBadge');
+    });
+
+    $('#FechaInicioVigenciaTarjeta, #FechaFinVigenciaTarjeta').on('change', function () {
+        calcularDiasVigencia('#FechaInicioVigenciaTarjeta','#FechaFinVigenciaTarjeta','#TarjetaOperacionVigente');
+        actualizarBadgeVigencia('#TarjetaOperacionVigente','#TOEstadoBadge');
+    });
+
+
+    function limpiarFormulario() {
+
+      $("#idVehiculo").val("");
+
+      $("#Placa").val("");
+      $("#LicenciaTransito").val("");
+      $("#Estado").val("");
+
+      $("#TipoServicio").val("");
+      $("#TipoVehiculo").val("");
+
+      $("#Marca").val("");
+      $("#Linea").val("");
+      $("#Modelo").val("");
+      $("#Color").val("");
+
+      $("#Observaciones").val("");
+
+      $("#NombrePropietario").val("");
+      $("#CedulaPropietario").val("");
+      $("#TelefonoPropietario").val("");
+
+      $("#NumeroSerie").val("");
+      $("#NumeroMotor").val("");
+      $("#NumeroChasis").val("");
+      $("#NumeroVIN").val("");
+
+      $("#Cilindraje").val("");
+      $("#TipoCombustible").val("");
+
+      $("#TipoCarroceria").val("");
+      $("#CapacidadPasajeros").val("");
+      $("#CapacidadPasajerosSentados").val("");
+      $("#CapacidadCarga").val("");
+      $("#PesoBrutoVehicular").val("");
+      $("#NumeroEjes").val("");
+      $("#Puertas").val("");
+
+      $("#FechaMatriculaInicial").val("");
+      $("#AutoridadTransito").val("");
+
+      $("#SoatNumeroPoliza").val("");
+      $("#SoatEntidadExpide").val("");
+      $("#SoatEstado").val("");
+      $("#SoatFechaExpedicion").val("");
+      $("#SoatFechaInicioVigencia").val("");
+      $("#SoatFechaFinVigencia").val("");
+      $("#SoatVigente").val("");
+
+      $("#PolizaNumero").val("");
+      $("#PolizaTipo").val("");
+      $("#PolizaEntidadExpide").val("");
+      $("#PolizaFechaExpedicion").val("");
+      $("#PolizaFechaInicioVigencia").val("");
+      $("#PolizaFechaFinVigencia").val("");
+      $("#PolizaEstado").val("");
+      $("#PolizaVigente").val("");
+
+      $("#RtmTipoRevision").val("");
+      $("#RtmNumeroCertificado").val("");
+      $("#RtmCDAExpide").val("");
+      $("#RtmFechaExpedicion").val("");
+      $("#RtmFechaInicioVigencia").val("");
+      $("#RtmFechaFinVigencia").val("");
+      $("#RtmEstado").val("");
+      $("#RtmVigente").val("");
+
+      $("#EmpresaAfiliadora").val("");
+      $("#NumeroTarjetaOperacion").val("");
+      $("#FechaExpedicionTarjeta").val("");
+      $("#FechaInicioVigenciaTarjeta").val("");
+      $("#FechaFinVigenciaTarjeta").val("");
+      $("#EstadoTarjetaOperacion").val("");
+      $("#TarjetaOperacionVigente").val("");
+
+      $("#Blindado").val("");
+
+      $("#RegrabacionMotor").val("");
+      $("#RegrabacionChasis").val("");
+      $("#RegrabacionSerie").val("");
+      $("#RegrabacionVIN").val("");
+
+      $("#documentoSoat").val("");
+      $("#documentoPoliza").val("");
+      $("#documentoRTM").val("");
+
+    }
+
+    $("#btnNuevo").click(function () {
+
+      limpiarFormulario();
+
+    });
+
+    function cargarVehiculo(id) {
+
+      try {
+
+        $.ajax({
+          url: '/Operaciones/Vehiculos/ObtenerVehiculo',
+          beforeSend: function () {
+            showLoader();
+          },
+          data:
+          {
+            id: id
+          },
+          success: function (response) {
+            var vehiculo = response;
+            $("#idVehiculo").val(vehiculo.idVehiculo);
+            $("#Placa").val(vehiculo.placa);
+            $("#Marca").val(vehiculo.marca);
+            $("#Modelo").val(vehiculo.modelo);
+            $("#Color").val(vehiculo.color);
+
+            $("#NombrePropietario").val(vehiculo.nombrePropietario);
+            $("#CedulaPropietario").val(vehiculo.cedulaPropietario);
+            $("#TelefonoPropietario").val(vehiculo.telefonoPropietario);
+
+            $("#NumeroVIN").val(vehiculo.numeroVIN);
+            $("#NumeroMotor").val(vehiculo.numeroMotor);
+            $("#NumeroChasis").val(vehiculo.numeroChasis);
+            $("#NumeroSerie").val(vehiculo.numeroSerie);
+
+            $("#Cilindraje").val("");
+            $("#TipoCombustible").val("");
+
+            $("#TipoCarroceria").val("");
+            $("#CapacidadPasajeros").val("");
+            $("#CapacidadPasajerosSentados").val("");
+            $("#CapacidadCarga").val("");
+            $("#PesoBrutoVehicular").val("");
+            $("#NumeroEjes").val("");
+            $("#Puertas").val("");
+
+            $("#FechaMatriculaInicial").val("");
+            $("#AutoridadTransito").val("");
+
+            $("#SoatNumeroPoliza").val("");
+            $("#SoatEntidadExpide").val("");
+            $("#SoatEstado").val("");
+            $("#SoatFechaExpedicion").val("");
+            $("#SoatFechaInicioVigencia").val("");
+            $("#SoatFechaFinVigencia").val("");
+            $("#SoatVigente").val("");
+
+            $("#PolizaNumero").val("");
+            $("#PolizaTipo").val("");
+            $("#PolizaEntidadExpide").val("");
+            $("#PolizaFechaExpedicion").val("");
+            $("#PolizaFechaInicioVigencia").val("");
+            $("#PolizaFechaFinVigencia").val("");
+            $("#PolizaEstado").val("");
+            $("#PolizaVigente").val("");
+
+            $("#RtmTipoRevision").val("");
+            $("#RtmNumeroCertificado").val("");
+            $("#RtmCDAExpide").val("");
+            $("#RtmFechaExpedicion").val("");
+            $("#RtmFechaInicioVigencia").val("");
+            $("#RtmFechaFinVigencia").val("");
+            $("#RtmEstado").val("");
+            $("#RtmVigente").val("");
+
+            $("#EmpresaAfiliadora").val("");
+            $("#NumeroTarjetaOperacion").val("");
+            $("#FechaExpedicionTarjeta").val("");
+            $("#FechaInicioVigenciaTarjeta").val("");
+            $("#FechaFinVigenciaTarjeta").val("");
+            $("#EstadoTarjetaOperacion").val("");
+            $("#TarjetaOperacionVigente").val("");
+
+            $("#Blindado").val("");
+
+            $("#RegrabacionMotor").val("");
+            $("#NumeroRegrabacionMotor").val("");
+
+            $("#RegrabacionChasis").val("");
+            $("#NumeroRegrabacionChasis").val("");
+
+            $("#RegrabacionSerie").val("");
+            $("#NumeroRegrabacionSerie").val("");
+
+            $("#RegrabacionVIN").val("");
+            $("#NumeroRegrabacionVIN").val("");
+
+            $("#documentoSoat").val("");
+            $("#documentoPoliza").val("");
+            $("#documentoRTM").val("");
+
+          },
+          complete: function () {
+            hideLoader();
+          },
+          error: function (error) {
+                      showToast($`Error cargando vehículo: ${error}`,"danger");
+          }
+        });
+      }
+      catch (e) {
+          showToast($`Error cargando vehículo: ${e.Message}`,"danger");
+      }
+
+    }
+
+    function obtenerModel() {
+
+      return {
+
+        idVehiculo: parseInt($("#idVehiculo").val()) || 0,
+
+        Placa: $("#Placa").val(),
+        LicenciaTransito: $("#LicenciaTransito").val(),
+        Estado: parseInt($("#Estado").val()) || 0,
+
+        TipoServicio: parseInt($("#TipoServicio").val()) || 0,
+        TipoVehiculo: parseInt($("#TipoVehiculo").val()) || 0,
+        TipoProveedor: $("#Interno").is(":checked") ? 0 : 1,
+        Marca: $("#Marca").val(),
+        Linea: $("#Linea").val(),
+        Modelo: $("#Modelo").val(),
+        Color: $("#Color").val(),
+
+        Observaciones: $("#Observaciones").val(),
+
+        NombrePropietario: $("#NombrePropietario").val(),
+        CedulaPropietario: $("#CedulaPropietario").val(),
+        TelefonoPropietario: $("#TelefonoPropietario").val(),
+
+        NumeroSerie: $("#NumeroSerie").val(),
+        NumeroMotor: $("#NumeroMotor").val(),
+        NumeroChasis: $("#NumeroChasis").val(),
+        NumeroVIN: $("#NumeroVIN").val(),
+
+        Cilindraje: $("#Cilindraje").val(),
+        TipoCombustible: $("#TipoCombustible").val(),
+
+        TipoCarroceria: $("#TipoCarroceria").val(),
+        CapacidadPasajeros: $("#CapacidadPasajeros").val() === "" ? null : parseInt($("#CapacidadPasajeros").val()),
+        CapacidadPasajerosSentados: $("#CapacidadPasajerosSentados").val() === "" ? null : parseFloat($("#CapacidadPasajerosSentados").val()),
+        CapacidadCarga: $("#CapacidadCarga").val() === "" ? null : parseFloat($("#CapacidadCarga").val()),
+        PesoBrutoVehicular: $("#PesoBrutoVehicular").val() === "" ? null : parseFloat($("#PesoBrutoVehicular").val()),
+        NumeroEjes: $("#NumeroEjes").val() === "" ? null : parseInt($("#NumeroEjes").val()),
+        Puertas: $("#Puertas").val() === "" ? null : parseInt($("#Puertas").val()),
+
+        FechaMatriculaInicial: $("#FechaMatriculaInicial").val() || null,
+        AutoridadTransito: $("#AutoridadTransito").val(),
+
+        SoatNumeroPoliza: $("#SoatNumeroPoliza").val(),
+        SoatEntidadExpide: $("#SoatEntidadExpide").val(),
+        SoatEstado: $("#SoatEstado").val(),
+        SoatFechaExpedicion: $("#SoatFechaExpedicion").val() || null,
+        SoatFechaInicioVigencia: $("#SoatFechaInicioVigencia").val() || null,
+        SoatFechaFinVigencia: $("#SoatFechaFinVigencia").val() || null,
+        SoatVigente: $("#SoatVigente").val(),
+
+        PolizaNumero: $("#PolizaNumero").val(),
+        PolizaTipo: $("#PolizaTipo").val(),
+        PolizaEntidadExpide: $("#PolizaEntidadExpide").val(),
+        PolizaFechaExpedicion: $("#PolizaFechaExpedicion").val() || null,
+        PolizaFechaInicioVigencia: $("#PolizaFechaInicioVigencia").val() || null,
+        PolizaFechaFinVigencia: $("#PolizaFechaFinVigencia").val() || null,
+        PolizaEstado: $("#PolizaEstado").val(),
+        PolizaVigente: $("#PolizaVigente").val(),
+
+        RtmTipoRevision: $("#RtmTipoRevision").val(),
+        RtmNumeroCertificado: $("#RtmNumeroCertificado").val(),
+        RtmCDAExpide: $("#RtmCDAExpide").val(),
+        RtmFechaExpedicion: $("#RtmFechaExpedicion").val() || null,
+        RtmFechaInicioVigencia : $("#RtmFechaInicioVigencia").val() || null,
+        RtmFechaFinVigencia : $("#RtmFechaFinVigencia").val() || null,
+        RtmEstado: $("#RtmEstado").val(),
+        RtmVigente: $("#RtmVigente").val(),
+
+        EmpresaAfiliadora: $("#EmpresaAfiliadora").val(),
+        NumeroTarjetaOperacion: $("#NumeroTarjetaOperacion").val(),
+        FechaExpedicionTarjeta: $("#FechaExpedicionTarjeta").val() || null,
+        FechaInicioVigenciaTarjeta: $("#FechaInicioVigenciaTarjeta").val() || null,
+        FechaFinVigenciaTarjeta: $("#FechaFinVigenciaTarjeta").val() || null,
+        EstadoTarjetaOperacion: $("#EstadoTarjetaOperacion").val(),
+        TarjetaOperacionVigente: $("#TarjetaOperacionVigente").val(),
+
+        Blindado: $("#Blindado").is(":checked"),
+
+        RegrabacionMotor: $("#RegrabacionMotor").val(),
+        RegrabacionChasis: $("#RegrabacionChasis").val(),
+        RegrabacionSerie: $("#RegrabacionSerie").val(),
+        RegrabacionVIN: $("#RegrabacionVIN").val(),
+
+        documentoSoat: $("#documentoSoat").val(),
+        documentoPoliza: $("#documentoPoliza").val(),
+        documentoRTM: $("#documentoRTM").val(),
+
+      };
+
+    }
+
+    $("#btnGuardar").click(function () {
+
+      const model = obtenerModel();
+      console.log("imprimiendo modelo enviado",model)
+      $.ajax({
+        url: '/Operaciones/Vehiculos/GuardarVehiculo',
+        type: 'POST',
+        data: model,
+        beforeSend: function () {
+          showLoader();
+        },
+        success: function (response) {
+          toastr.success(response);
+        },
+        complete: function () {
+          toastr.error("Error guardando vehículo");
+          hideLoader();
+        },
+        error: function (error) {
+            showToast($`Error cargando vehículo: ${error}`,"danger");
+        }
+      });
+
+    });
+
+    $("#btnDeshabilitar").click(async function () {
+
+      let id = $("#idVehiculo").val();
+
+      if (!id || id == 0)
+        return;
+
+      if (!confirm("¿Desea deshabilitar este vehículo?"))
+        return;
+
+      const response = await $.post(
+        '/Operaciones/Vehiculos/Deshabilitar',
+        { id }
+      );
+
+      if (response.success) {
+         showToast($`${response.message}`,"success");
+
+        limpiarFormulario();
+
+      }
+
+    });
+
+    $("#txtBuscarVehiculo").autocomplete({
+
+      minLength: 2,
+
+      source: function (request, response) {
+
+        $.get("/Operaciones/Vehiculos/BuscarVehiculo",
+          {
+            term: request.term
+          },
+          function (data) {
+            response(data);
+          });
+
+      },
+
+      select: function (event, ui) {
+
+        if (ui.item.id) {
+
+          cargarVehiculo(ui.item.id);
+
+        }
+
+      }
+
+    });
+
+    function cargarListados() {
+
+      try {
+
+        $.ajax({
+            url: '/Helps/ObtenerListadoSelect',
+            type: 'GET',
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function(response){
+                LoadSelect("#TipoServicio", response.data.tiposServicio);
+                LoadSelect("#Estado", response.data.estados);
+                LoadSelect("#SoatEstado", response.data.estados);
+                LoadSelect("#PolizaEstado", response.data.estados);
+                LoadSelect("#RtmEstado", response.data.estados);
+                LoadSelect("#EstadoTarjetaOperacion", response.data.estados);
+                LoadSelect("#TipoServicio", response.data.tiposServicio);
+                LoadSelect("#TipoVehiculo", response.data.tiposVehiculo);
+                LoadSelect("#CategoriaVehiculo",response.data.categoriasVehiculo);
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });
+          
+      }
+      catch (e) {
+
+        console.error(e);
+
+      }
+
+    }
+
+    $("#CategoriaVehiculo").on("change", function () {
+
+        let idCategoria = $(this).val();
+
+        $("#TipoVehiculo").empty();
+
+        if (!idCategoria)
+            return;
+
+        $.ajax({
+            url: '/Helps/ObtenerTiposVehiculo',
+            type: 'GET',
+            beforeSend: function () {
+                showLoader();
+            },
+            data: {
+                  idCategoria: idCategoria
+            },
+            success: function (data) {
+                LoadSelect("#TipoVehiculo",data);
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });
+
+    });
+
+  </script>
+}
+

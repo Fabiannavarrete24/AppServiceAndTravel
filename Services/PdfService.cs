@@ -1,4 +1,4 @@
-using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Areas.Comercial.Models;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;

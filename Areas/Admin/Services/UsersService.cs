@@ -12,13 +12,14 @@ using MySqlX.XDevAPI.Common;
 
 namespace AppServiceAndTravel.Areas.Admin.Services
 {
-    public interface IUsersService 
+    public interface IUsersService
     {
         Task<ApiResponse<List<UserVM>>> ObtenerUsuarios(UsuariosFilterVM filter);
-        (bool success, string message, UserVM data) ObtenerUsuario(int idUsuario);
+        (bool success, string message, UserVM? data) ObtenerUsuario(int idUsuario);
         (bool success, string message, UserVM data) ObtenerUsuarioPorCorreo(string correo);
-       (bool success, string message, UserVM data) UsuarioPorToken(string token);
-        (bool success, string message) ActualizarUsuario(UserVM model);
+        (bool success, string message, UserVM data) UsuarioPorToken(string token);
+        Task<(bool success, string message)> ActualizarUsuario(UserVM model);
+        Task<(bool success, string message)> ResetPassword(ResetPasswordVM model);
         (bool success, string message, LoginVM data) GuardarUsuario(UserVM model);
         Task<ApiResponse<UsuariosDashboardVM>> ObtenerDashboardUsuarios();
     }
@@ -38,7 +39,9 @@ namespace AppServiceAndTravel.Areas.Admin.Services
         {
             try
             {
-                var query = _context.Usuarios.Include(x => x.RolesUsuarios!).ThenInclude(r => r.Rol).AsQueryable();
+                var query = _context.Usuarios
+                    .Include(x => x.Rol)
+                    .AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(filter.Search))
                 {
@@ -55,15 +58,15 @@ namespace AppServiceAndTravel.Areas.Admin.Services
 
                 if (filter.IdRol.HasValue)
                 {
-                    query = query.Where(x =>
-                        x.RolesUsuarios!.Any(r => r.idRol == filter.IdRol.Value));
+                    query = query.Where(x => x.idRol == filter.IdRol.Value);
                 }
 
                 var total = await query.CountAsync();
 
                 var usuarios = await query
                     .OrderBy(x => x.nombreCompleto)
-                    .Paginate(filter.Page, filter.PageSize)
+                    .Skip((filter.Page - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
                     .Select(user => new UserVM
                     {
                         idUsuario = user.idUsuario,
@@ -79,12 +82,10 @@ namespace AppServiceAndTravel.Areas.Admin.Services
                         fechaUltimoAcceso = user.ultimoAcceso,
                         admin = user.admin,
                         activo = user.activo,
-                        idRol = user.RolesUsuarios!
-                            .Select(r => r.idRol)
-                            .FirstOrDefault(),
-                        rol = user.RolesUsuarios!
-                            .Select(r => r.Rol!.nombre)
-                            .FirstOrDefault()
+                        idRol = user.idRol,
+                        rol = user.Rol != null
+                            ? user.Rol.nombre
+                            : string.Empty
                     })
                     .ToListAsync();
 
@@ -93,6 +94,7 @@ namespace AppServiceAndTravel.Areas.Admin.Services
                     Success = true,
                     Message = "Datos encontrados con éxito",
                     Data = usuarios,
+
                     Pagination = new PaginationVM
                     {
                         Page = filter.Page,
@@ -103,21 +105,34 @@ namespace AppServiceAndTravel.Areas.Admin.Services
             }
             catch (Exception ex)
             {
-                _utilities.RegistrarLog($"Error: {ex.Message}","ObtenerUsuarios","ERROR");
+                _utilities.RegistrarLog(
+                    $"Error: {ex.Message}",
+                    "ObtenerUsuarios",
+                    "ERROR");
 
-                return new ApiResponse<List<UserVM>>{Success = false,Message = ex.Message,Data = []};
+                return new ApiResponse<List<UserVM>>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = []
+                };
             }
         }
-        public (bool success, string message,UserVM data) ObtenerUsuario(int idUsuario)
+        public (bool success, string message, UserVM data) ObtenerUsuario(int idUsuario)
         {
-            
             try
             {
-                var user = _context.Usuarios.FirstOrDefault(u => u.idUsuario == idUsuario);
-                var rol = _context.RolesUsuarios.FirstOrDefault(r => r.idUsuario == idUsuario);
+                var user = _context.Usuarios.Include(x => x.Rol).FirstOrDefault(x => x.idUsuario == idUsuario);
+
+                if (user == null)
+                {
+                    _utilities.RegistrarLog($"Usuario {idUsuario} no se encontro", "ObtenerUsuario", "INFO");
+                    return (false, "Usuario no encontrado", null!);
+                }
+
                 var result = new UserVM
                 {
-                    idUsuario = user!.idUsuario,
+                    idUsuario = user.idUsuario,
                     Username = user.userName,
                     nombreCompleto = user.nombreCompleto,
                     correo = user.correo,
@@ -125,20 +140,23 @@ namespace AppServiceAndTravel.Areas.Admin.Services
                     confirmada = user.confirmada,
                     tokenDateExpiration = user.fechaExpiracionToken,
                     token = user.token,
-                    idRol = rol!.idRol,                    
+                    idRol = user.idRol,
                     fechaBaja = user.fechaBaja,
-                    dateChangePassword = user.fechaCambioClave,                    
+                    dateChangePassword = user.fechaCambioClave,
                     admin = user.admin,
-
+                    activo = user.activo
                 };
-                _utilities.RegistrarLog($"Datos encontrados con exito", "ObtenerUsuario", "INFO");
-                return (true, "Datos encontrados con exito", result);
+
+                _utilities.RegistrarLog($"Usuario {idUsuario} consultado correctamente", "ObtenerUsuario", "INFO");
+
+                return (true, "Datos encontrados con éxito", result);
             }
             catch (Exception ex)
             {
-                _utilities.RegistrarLog($"Se presento un error; {ex.Message}", "ObtenerUsuario");
-                return (true, $"se ha presentado un problema {ex.Message}",null!);
-            }            
+                _utilities.RegistrarLog($"Error: {ex.Message}", "ObtenerUsuario", "ERROR");
+
+                return (false, ex.Message, null!);
+            }
         }
         public (bool success, string message, UserVM data) UsuarioPorToken(string token)
         {
@@ -148,8 +166,7 @@ namespace AppServiceAndTravel.Areas.Admin.Services
             try
             {
 
-                var user = _context.Usuarios.FirstOrDefault(u => u.token == token);
-                var rol = _context.RolesUsuarios.FirstOrDefault(r => r.idUsuario == user!.idUsuario);
+                var user = _context.Usuarios.Include(x => x.Rol).FirstOrDefault(u => u.token == token);
                 if (user!.fechaExpiracionToken <= DateTime.UtcNow)
                 {
                     throw new Exception("El token ya fue utilizado o ya expiro.");
@@ -167,22 +184,23 @@ namespace AppServiceAndTravel.Areas.Admin.Services
                         confirmada = user.confirmada,
                         tokenDateExpiration = user.fechaExpiracionToken,
                         token = user.token,
-                        idRol = rol!.idRol,
+                        idRol = user.idRol,
                         fechaBaja = user.fechaBaja,
                         dateChangePassword = user.fechaCambioClave,
                         admin = user.admin,
+                        activo = user.activo
                     };
                 }
                 if (usuario is null)
                 {
                     _utilities.RegistrarLog("No se encontró ningún usuario.", "UsuarioPorToken");
                     return (false, "No se encontró ningún usuario.", null!);
-                } 
+                }
             }
             catch (Exception ex)
             {
-                _utilities.RegistrarLog($"Error al obtener el usuario por token: {ex.Message}", "UsuarioPorToken","ERROR");
-                return (false,$"Error al obtener el usuario por token: {ex.Message}",null!);
+                _utilities.RegistrarLog($"Error al obtener el usuario por token: {ex.Message}", "UsuarioPorToken", "ERROR");
+                return (false, $"Error al obtener el usuario por token: {ex.Message}", null!);
             }
             _utilities.RegistrarLog($"Datos encontrados con exito", "UsuarioPorToken");
             return (true, $"Datos encontrados con exito", usuario);
@@ -195,8 +213,8 @@ namespace AppServiceAndTravel.Areas.Admin.Services
             try
             {
 
-                var user = _context.Usuarios.FirstOrDefault(u => u.correo == correo);
-                var rol = _context.RolesUsuarios.FirstOrDefault(r => r.idUsuario == user!.idUsuario);
+                var user = _context.Usuarios.Include(x => x.Rol).FirstOrDefault(u => u.token == correo);
+
                 if (user != null)
                 {
                     usuario = new UserVM
@@ -209,10 +227,11 @@ namespace AppServiceAndTravel.Areas.Admin.Services
                         confirmada = user.confirmada,
                         tokenDateExpiration = user.fechaExpiracionToken,
                         token = user.token,
-                        idRol = rol!.idRol,
+                        idRol = user.idRol,
                         fechaBaja = user.fechaBaja,
                         dateChangePassword = user.fechaCambioClave,
                         admin = user.admin,
+                        activo = user.activo
                     };
                 }
                 else
@@ -228,48 +247,59 @@ namespace AppServiceAndTravel.Areas.Admin.Services
             }
 
             return (true, $"Datos encontrados con exito", usuario);
-        }        
-        public (bool success, string message) ActualizarUsuario(UserVM model)
+        }
+        public async Task<(bool success, string message)> ActualizarUsuario(UserVM model)
         {
             try
             {
-                var user = _context.Usuarios.Include(x => x.RolesUsuarios).FirstOrDefault(x => x.idUsuario == model.idUsuario);
-                var rolActual = user!.RolesUsuarios!.FirstOrDefault();
-                
+                var user = await _context.Usuarios
+                    .FirstOrDefaultAsync(x => x.idUsuario == model.idUsuario);
+
                 if (user == null)
                     return (false, "No se encontró el usuario");
 
                 var cambios = new List<string>();
-                bool existeUsuario = _context.Usuarios.Any(x => x.userName == model.Username && x.idUsuario != model.idUsuario);
 
-                if (existeUsuario)
-                    return (false, "El nombre de usuario ya existe");
+                if (!string.IsNullOrWhiteSpace(model.Username))
+                {
+                    bool existeUsuario = await _context.Usuarios.AnyAsync(x =>
+                        x.userName == model.Username &&
+                        x.idUsuario != model.idUsuario);
 
-                if (user.userName != model.Username)
+                    if (existeUsuario)
+                        return (false, "El nombre de usuario ya existe");
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.Username) &&
+                    user.userName != model.Username)
                 {
                     cambios.Add($"Usuario: {user.userName} → {model.Username}");
                     user.userName = model.Username;
                 }
 
-                if (user.nombreCompleto != model.nombreCompleto)
+                if (!string.IsNullOrWhiteSpace(model.nombreCompleto) &&
+                    user.nombreCompleto != model.nombreCompleto)
                 {
                     cambios.Add($"Nombre: {user.nombreCompleto} → {model.nombreCompleto}");
                     user.nombreCompleto = model.nombreCompleto;
                 }
 
-                if (user.correo != model.correo)
+                if (!string.IsNullOrWhiteSpace(model.correo) &&
+                    user.correo != model.correo)
                 {
                     cambios.Add($"Correo: {user.correo} → {model.correo}");
                     user.correo = model.correo;
                 }
-                
-                if (user.telefono != model.telefono)
+
+                if (!string.IsNullOrWhiteSpace(model.telefono) &&
+                    user.telefono != model.telefono)
                 {
-                    cambios.Add($"Telefono: {user.telefono} → {model.telefono}");
+                    cambios.Add($"Teléfono: {user.telefono} → {model.telefono}");
                     user.telefono = model.telefono;
                 }
 
-                if (user.cargo != model.cargo)
+                if (!string.IsNullOrWhiteSpace(model.cargo) &&
+                    user.cargo != model.cargo)
                 {
                     cambios.Add($"Cargo: {user.cargo} → {model.cargo}");
                     user.cargo = model.cargo;
@@ -283,59 +313,99 @@ namespace AppServiceAndTravel.Areas.Admin.Services
 
                 if (user.activo != model.activo)
                 {
-                    cambios.Add($"Fecha baja modificada");
+                    cambios.Add($"Estado: {(user.activo ? "Activo" : "Inactivo")} → {(model.activo ? "Activo" : "Inactivo")}");
+
                     user.activo = model.activo;
-                    user.fechaBaja = model.fechaBaja;
+
+                    if (!model.activo)
+                        user.fechaBaja = DateTime.UtcNow;
+                    else
+                        user.fechaBaja = null;
                 }
 
-                if (!string.IsNullOrWhiteSpace(model.password))
+                // Actualizar rol
+                if (model.idRol > 0 && user.idRol != model.idRol)
                 {
-                    var hasher = new PasswordHasher<string>();
-                    var resultado = hasher.VerifyHashedPassword(model.Username!,user.password!,model.password);
-                    bool passwordValida = resultado != PasswordVerificationResult.Failed;
-
-                    if (!passwordValida)
-                    {
-                        user.password = hasher.HashPassword(model.Username!, model.password);
-                        user.fechaCambioClave = DateTime.UtcNow.AddMonths(3);
-                        cambios.Add("Contraseña actualizada");
-                    }
+                    cambios.Add($"Rol: {user.idRol} → {model.idRol}");
+                    user.idRol = model.idRol;
                 }
 
-                if (rolActual != null)
-                {
-                    if (rolActual.idRol != model.idRol)
-                    {
-                        cambios.Add($"Rol: {rolActual.idRol} → {model.idRol}");
-                        rolActual.idRol = model.idRol;
-                    }
-                }
-                else
-                {
-                    user!.RolesUsuarios!.Add(new RolesUsuarios
-                    {
-                        idRol = model.idRol
-                    });
-
-                    cambios.Add($"Rol asignado: {model.idRol}");
-                }
-
-                 _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 if (cambios.Any())
                 {
-                     _auditoriaService.RegistrarLogAsync(EstadoLogSistema.INFO,EventosSistemas.EDITA,"USUARIOS",string.Join(" | ", cambios),null!,model.Username!);
+                    await _auditoriaService.RegistrarLogAsync(
+                        EstadoLogSistema.INFO,
+                        EventosSistemas.EDITA,
+                        "USUARIOS",
+                        string.Join(" | ", cambios),
+                        null!,
+                        user.userName!);
                 }
 
-                _utilities.RegistrarLog($"Usuario actualizado correctamente: {model.Username}","ActualizarUsuario","INFO");
+                _utilities.RegistrarLog(
+                    $"Usuario actualizado correctamente: {user.userName}",
+                    "ActualizarUsuario",
+                    "INFO");
 
                 return (true, "Usuario actualizado correctamente");
             }
             catch (Exception ex)
             {
-                _utilities.RegistrarLog($"Error actualizando usuario: {ex.Message}","ActualizarUsuario","ERROR");
+                _utilities.RegistrarLog(
+                    ex.ToString(),
+                    "ActualizarUsuario",
+                    "ERROR");
 
-                return (false, $"Error: {ex.Message}");
+                return (false, ex.Message);
+            }
+        }
+        public async Task<(bool success, string message)> ResetPassword(ResetPasswordVM model)
+        {
+            try
+            {
+                var user = await _context.Usuarios
+                    .FirstOrDefaultAsync(x => x.idUsuario == model.idUsuario);
+
+                if (user == null)
+                    return (false, "Usuario no encontrado");
+
+                if (string.IsNullOrWhiteSpace(model.Password))
+                    return (false, "Debe ingresar una contraseña");
+
+                var hasher = new PasswordHasher<string>();
+
+                user.password = hasher.HashPassword(
+                    user.userName!,
+                    model.Password);
+
+                user.fechaCambioClave = DateTime.UtcNow.AddMonths(3);
+
+                await _context.SaveChangesAsync();
+
+                await _auditoriaService.RegistrarLogAsync(
+                    EstadoLogSistema.INFO,
+                    EventosSistemas.EDITA,
+                    "USUARIOS",
+                    "Restablecimiento de contraseña",
+                    null!,
+                    user.userName!);
+
+                _utilities.RegistrarLog(
+                    $"Contraseña restablecida para {user.userName}",
+                    "ResetPassword",
+                    "INFO");
+
+                return (true, "Contraseña actualizada correctamente");
+            }
+            catch (Exception ex)
+            {
+                _utilities.RegistrarLog(
+                    ex.ToString(),
+                    "ResetPassword",
+                    "ERROR");
+
+                return (false, ex.Message);
             }
         }
         public (bool success, string message, LoginVM data) GuardarUsuario(UserVM model)
@@ -355,31 +425,25 @@ namespace AppServiceAndTravel.Areas.Admin.Services
 
                 var request = new ApplicationUser
                 {
-                    userName = model.Username,
+                    userName = model.Username!,
                     nombreCompleto = model.nombreCompleto,
                     password = passwordHash,
-                    correo = model.correo,
-                    cargo = model.cargo,
+                    correo = model.correo!,
+                    cargo = model.cargo!,
                     admin = model.admin,
                     confirmada = true,
                     fechaCreacion = DateTime.UtcNow,
                     fechaCambioClave = DateTime.UtcNow.AddMonths(3),
-                    RolesUsuarios = new List<RolesUsuarios>
-                    {
-                        new RolesUsuarios
-                        {
-                            idRol = model.idRol
-                        }
-                    }
+                    idRol = model.idRol
                 };
 
                 _context.Usuarios.AddAsync(request);
 
                 _context.SaveChangesAsync();
 
-                _auditoriaService.RegistrarLogAsync(EstadoLogSistema.INFO,EventosSistemas.CREA,"USUARIOS",$"Usuario creado: {model.Username}",null!,model.Username);
+                _auditoriaService.RegistrarLogAsync(EstadoLogSistema.INFO, EventosSistemas.CREA, "USUARIOS", $"Usuario creado: {model.Username}", null!, model.Username!);
 
-                _utilities.RegistrarLog($"Usuario creado correctamente: {model.Username}","GuardarUsuario","INFO");
+                _utilities.RegistrarLog($"Usuario creado correctamente: {model.Username}", "GuardarUsuario", "INFO");
 
                 var result = new LoginVM
                 {
@@ -392,7 +456,7 @@ namespace AppServiceAndTravel.Areas.Admin.Services
             }
             catch (Exception ex)
             {
-                _utilities.RegistrarLog($"Error guardando usuario: {ex.Message}","GuardarUsuario","ERROR");
+                _utilities.RegistrarLog($"Error guardando usuario: {ex.Message}", "GuardarUsuario", "ERROR");
 
                 return (false, $"Error: {ex.Message}", null!);
             }

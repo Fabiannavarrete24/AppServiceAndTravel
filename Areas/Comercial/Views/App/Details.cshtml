@@ -1,18 +1,20 @@
-@model AppServiceAndTravel.Models.Cotizaciones
+@using AppServiceAndTravel.Areas.Comercial.Models
+@using AppServiceAndTravel.Models
+@model Cotizaciones
 @{
     ViewData["Title"] = $"Cotización #{Model.idCotizacion:D6}";
     ViewData["Breadcrumb"] = "Cotizaciones / Detalle";
 
     var badgeCss = Model.Estado switch {
-        AppServiceAndTravel.Models.EstadoCotizacion.Pendiente => "background:#fef3c7;color:#92400e;",
-        AppServiceAndTravel.Models.EstadoCotizacion.Aprobada  => "background:#d1fae5;color:#065f46;",
-        AppServiceAndTravel.Models.EstadoCotizacion.Rechazada => "background:#fee2e2;color:#991b1b;",
+        EstadoCotizacion.Pendiente => "background:#fef3c7;color:#92400e;",
+        EstadoCotizacion.Aprobada  => "background:#d1fae5;color:#065f46;",
+        EstadoCotizacion.Rechazada => "background:#fee2e2;color:#991b1b;",
         _ => "background:#e2e8f0;color:#475569;"
     };
     var badgeIcon = Model.Estado switch {
-        AppServiceAndTravel.Models.EstadoCotizacion.Pendiente => "bi-clock",
-        AppServiceAndTravel.Models.EstadoCotizacion.Aprobada  => "bi-check-circle-fill",
-        AppServiceAndTravel.Models.EstadoCotizacion.Rechazada => "bi-x-circle-fill",
+        EstadoCotizacion.Pendiente => "bi-clock",
+        EstadoCotizacion.Aprobada  => "bi-check-circle-fill",
+        EstadoCotizacion.Rechazada => "bi-x-circle-fill",
         _ => "bi-question-circle"
     };
 }

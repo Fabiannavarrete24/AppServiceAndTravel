@@ -12,7 +12,8 @@ namespace AppServiceAndTravel.Areas.Admin.Controllers
     {
         private readonly IUsersService _usersService;
 
-        public UsuariosController(IUsersService usersService) {
+        public UsuariosController(IUsersService usersService)
+        {
             _usersService = usersService;
         }
         public IActionResult Index()
@@ -35,12 +36,12 @@ namespace AppServiceAndTravel.Areas.Admin.Controllers
             {
                 var result = _usersService.ObtenerUsuario(idUsuario);
 
-                if (result.success!)
+                if (!result.success)
                 {
-                    return BadRequest(new { success = false, message = "no se encontraron registros" });
+                    return BadRequest(new { success = false, message = result.message });
                 }
 
-                return Ok(new { success = true, data = result });
+                return Ok(new { success = result.success, data = result.data });
             }
             catch (Exception ex)
             {
@@ -48,24 +49,25 @@ namespace AppServiceAndTravel.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        public IActionResult UpdateUsuario([FromBody] UserVM model)
+        public async Task<IActionResult> UpdateUsuario([FromBody] UserVM model)
         {
+            var result = await _usersService.ActualizarUsuario(model);
 
-            try
-            {
-                var result = _usersService.ActualizarUsuario(model);
+            if (!result.success)
+                return BadRequest(result);
 
-                if (result.success!)
-                {
-                    return BadRequest(new { success = false, message = "no se encontraron registros" });
-                }
+            return Ok(result);
+        }
 
-                return Ok(new { success = true, data = result });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(404, new { success = false, message = $"se ha presentado un error: {ex.Message}" });
-            }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordVM model)
+        {
+            var result = await _usersService.ResetPassword(model);
+
+            if (!result.success)
+                return BadRequest(result);
+
+            return Ok(result);
         }
         [HttpPost]
         public IActionResult SetUsuario([FromBody] UserVM model)

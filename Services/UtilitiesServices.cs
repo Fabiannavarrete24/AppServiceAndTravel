@@ -1,7 +1,10 @@
 ﻿
 using AppServiceAndTravel.Areas.Admin.Models;
 using AppServiceAndTravel.Areas.Admin.ViewModels;
+using AppServiceAndTravel.Areas.Operaciones.Models;
+using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Data;
+using AppServiceAndTravel.Helpers;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +20,6 @@ using System.Text;
 
 namespace AppServiceAndTravel.Services
 {
-
     public class UtilitiesServices
     {
         private readonly IConfiguration _configuration;
@@ -28,6 +30,7 @@ namespace AppServiceAndTravel.Services
             _configuration = configuration;
             _context = context;
         }
+
         public string Encriptar(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -104,6 +107,66 @@ namespace AppServiceAndTravel.Services
                 throw new Exception(ex.Message);
             }
         }
+        public ApiResponse<ListSelectVM> ObtenerSelect()
+        {
+            try
+            {
+                var response = new ListSelectVM
+                {
+                    CategoriasVehiculo = _context.CategoriasVehiculos
+                    .Select(x => new ComboVM
+                    {
+                        id = x.idCategoriaVehiculo,
+                        descripcion = x.descripcion
+                    })
+                    .OrderBy(x => x.descripcion)
+                    .ToList(),
+
+                    TiposServicio = _context.TiposServicios
+                    .Select(x => new ComboVM
+                    {
+                        id = x.idTipoServicio,
+                        descripcion = x.descripcion
+                    })
+                    .ToList(),
+
+                    Estados = Enum.GetValues<EstadoGeneral>()
+                    .Select(x => new ComboVM
+                    {
+                        id = (int)x,
+                        descripcion = x.ToString()
+                    })
+                    .ToList()
+                };
+
+                return new ApiResponse<ListSelectVM>
+                {
+                    Success = true,
+                    Data = response
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ListSelectVM>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+        }
+        public List<ComboVM> ObtenerTiposVehiculos(int idCategoria)
+        {
+            return _context.TiposVehiculos
+                .Where(x => x.idCategoriaVehiculo == idCategoria)
+                .OrderBy(x => x.descripcion)
+                .Select(x => new ComboVM
+                {
+                    id = x.idTipoVehiculo,
+                    descripcion = x.descripcion
+                })
+                .ToList();
+        }
+
         public string ConvertToBase64(IFormFile file)
         {
             using var ms = new MemoryStream();

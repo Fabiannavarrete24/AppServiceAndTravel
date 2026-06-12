@@ -1,45 +1,65 @@
-@{ ViewData["Title"] = "Clientes"; }
+@{
+    ViewData["Title"] = "Clientes";
+}
 
 <div class="row g-3 mb-4">
-    @foreach(var (lbl,val,bg,color,icon) in new[]{
-        ("Total clientes",    (int)ViewBag.Total,    "#dbeafe","#1d4ed8","bi-people"),
-        ("Activos",           (int)ViewBag.Activos,  "#d1fae5","#065f46","bi-check-circle"),
-        ("Inactivos",         (int)ViewBag.Inactivos,"#fee2e2","#991b1b","bi-x-circle"),
-    })
-    {
     <div class="col-sm-4">
         <div class="card">
             <div class="card-body d-flex align-items-center gap-3 p-3">
                 <div class="rounded-3 d-flex align-items-center justify-content-center"
-                     style="width:44px;height:44px;background:@bg;color:@color;font-size:20px;flex-shrink:0;">
-                    <i class="bi @icon"></i>
+                     style="width:44px;height:44px;background:#dbeafe;color:#1d4ed8;font-size:20px;flex-shrink:0;">
+                    <i class="fa-solid fa-user"></i>
                 </div>
                 <div>
-                    <div class="text-muted" style="font-size:12px;">@lbl</div>
-                    <div class="fw-bold fs-4" style="color:@color;">@val</div>
+                    <div class="text-muted" style="font-size:12px;">Total Clientes</div>
+                    <div class="fw-bold fs-4" id="totalClientes">0</div>
                 </div>
             </div>
         </div>
     </div>
-    }
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#d1fae5;color:#065f46;font-size:20px;flex-shrink:0;">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">Activos</div>
+                    <div class="fw-bold fs-4" id="totalActivos">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body d-flex align-items-center gap-3 p-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center"
+                     style="width:44px;height:44px;background:#fee2e2;color:#991b1b;font-size:20px;flex-shrink:0;">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </div>
+                <div>
+                    <div class="text-muted" style="font-size:12px;">Inactivos</div>
+                    <div class="fw-bold fs-4" id="totalInactivos">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="card">
     <div class="card-header bg-white py-3 px-4 d-flex flex-wrap align-items-center gap-3">
         <span class="fw-semibold flex-grow-1">Directorio de clientes</span>
         <form method="get" class="d-flex gap-2">
-            <input type="search" name="q" value="Q" class="form-control form-control-sm rounded-3"
-                   placeholder="Buscar…" style="min-width:180px;" />
+            <input type="search" id="searchCliente" class="form-control form-control-sm rounded-3"
+                   placeholder="Buscar..." />
             <div class="form-check form-switch ms-2 d-flex align-items-center mb-0">
-                <input class="form-check-input" type="checkbox" name="soloActivos" value="true"
-                       id="chkActivos" checked
-                       onchange="this.form.submit()" />
+                <input class="form-check-input" type="checkbox" id="chkActivos" checked />
                 <label class="form-check-label small ms-2" for="chkActivos">Solo activos</label>
             </div>
             <button class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
         </form>
-        <a asp-area="Comercial" asp-controller="Cliente" asp-action="Create"
-           class="btn btn-primary btn-sm rounded-3">
-            <i class="bi bi-person-plus me-1"></i>Nuevo cliente
+        <a asp-area="Comercial" asp-controller="Cliente" asp-action="Create" class="btn btn-primary btn-sm rounded-3">
+            <i class="fa-solid fa-user-plus me-2"></i>Nuevo cliente
         </a>
     </div>
     <div class="card-body p-0">
@@ -48,7 +68,7 @@
             <p class="mt-2">No hay clientes registrados.</p>
         </div>
         <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
+            <table id="tableClientes" class="table table-hover mb-0 align-middle">
                 <thead>
                     <tr>
                         <th class="ps-4">Cliente</th>
@@ -60,62 +80,24 @@
                         <th class="text-end pe-4">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="ps-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle fw-bold d-flex align-items-center justify-content-center"
-                                     style="width:38px;height:38px;background:var(--cp);color:#fff;font-size:15px;flex-shrink:0;">
-                                    NombreCompleto
-                                </div>
-                                <div>
-                                    <div class="fw-semibold small">NombreCompleto</div>
-                                    <div class="text-muted" style="font-size:12px;">Desde FechaCreacion.ToString("dd/MM/yyyy")</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="small">NitCedula</td>
-                        <td>
-                            <div class="small"></div>
-                            <div class="text-muted" style="font-size:12px;"><i class="bi bi-telephone me-1"></i>Telefono</div>
-                        </td>
-                        <td class="small text-muted">Ciudad</td>
-                        <td>
-                            <span class="badge rounded-pill px-3 py-2" style="background:#dbeafe;color:#1e40af;">
-                                Cotizaciones
-                            </span>
-                        </td>
-                        <td>
-                            <span class="badge rounded-pill px-3 py-2"
-                                  style="background:#d1fae5;color:#065f46;">
-                            </span>
-                        </td>
-                        <td class="text-end pe-4">
-                            <div class="d-flex justify-content-end gap-1">
-                                <a asp-area="Comercial" asp-controller="Cliente" asp-action="Details" asp-route-id="idCliente"
-                                   class="btn btn-sm btn-outline-secondary rounded-3" title="Ver"><i class="bi bi-eye"></i></a>
-                                <a asp-area="Comercial" asp-controller="Cliente" asp-action="Edit" asp-route-id="idCliente"
-                                   class="btn btn-sm btn-outline-primary rounded-3" title="Editar"><i class="bi bi-pencil"></i></a>
-                                <form asp-area="Comercial" asp-controller="Cliente" asp-action="ToggleActivo" asp-route-id="idCliente" method="post">
-                                    <button type="submit" class="btn btn-sm rounded-3"
-                                            style="border:1px solid #f59e0b;color:#92400e;"
-                                            title="Desactivar">
-                                        <i class="bi bi-person-dash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
-    <!-- modal Editar Usuarios -->
+    <div class="card-footer bg-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <div id="infoClientes"></div>
+            <ul id="paginationClientes" class="pagination pagination-sm mb-0">
+            </ul>
+        </div>
+    </div>
+    <!-- modal Editar Clientes -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center"
+                         style="width:36px;height:36px;background:#dbeafe;font-size:18px;color:#1d4ed8;">
                         <i class="fa-solid fa-user-plus"></i>
                     </div>
                     <div>
@@ -125,60 +107,225 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formCreateUser">
-                        <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos personales</h6>
-                        <div class="row gy-3 mb-4">
-                            <div class="col-sm-4">
-                                <label class="form-label fw-semibold small">UserName</label>
-                                <input class="form-control rounded-3" required disabled />
-                                <span class="text-danger small"></span>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label fw-semibold small">Nombre completo *</label>
-                                <input class="form-control rounded-3" required />
-                                <span class="text-danger small"></span>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label fw-semibold small">Cargo</label>
-                                <input class="form-control rounded-3" placeholder="Ej: Coordinador operativo" />
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label fw-semibold small">Teléfono</label>
-                                <input class="form-control rounded-3" />
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label fw-semibold small">Email *</label>
-                                <input type="email" class="form-control rounded-3" required />
-                                <span lass="text-danger small"></span>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="form-label">Contraseña *</label>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" id="pwUser">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePwd('pwUser','icoPW')">
-                                        <i class="fa-solid fa-eye" id="icoPW"></i>
-                                    </button>
+                    <form id="formAddCliente">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-3 py-2 small"></div>
+
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-3">Información principal</h6>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-8">
+                                <label asp-for="NombreCompleto" class="form-label fw-semibold small">Razón social /
+                                    Nombre *</label>
+                                    <input asp-for="NombreCompleto" class="form-control rounded-3" required />
+                                    <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label asp-for="NitCedula" class="form-label fw-semibold small">NIT / Cédula *</label>
+                                    <input asp-for="NitCedula" class="form-control rounded-3" required />
+                                    <span asp-validation-for="NitCedula" class="text-danger small"></span>
                                 </div>
                             </div>
-                            <div class="col-sm-5">
-                                <label class="form-label">Roles y Permisos</label>
-                                <select id="selectRol" class="form-select">
-                                </select>
+
+                            <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos de contacto</h6>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small">Email *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-envelope text-muted"></i></span>
+                                            <input type="email" class="form-control border-start-0 rounded-end-3" required />
+                                        </div>
+                                        <span class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Telefono" class="form-label fw-semibold small">Teléfono *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0"><i
+                                                class="bi bi-telephone text-muted"></i></span>
+                                                <input id="Telefono" class="form-control border-start-0 rounded-end-3" required />
+                                            </div>
+                                            <span asp-validation-for="Telefono" class="text-danger small"></span>
+                                        </div>
+                                    </div>
+
+                                    <h6 class="fw-semibold small text-uppercase text-muted mb-3">Ubicación</h6>
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-12">
+                                            <label asp-for="Direccion" class="form-label fw-semibold small">Dirección</label>
+                                            <input id="Direccion" class="form-control rounded-3" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label asp-for="Ciudad" class="form-label fw-semibold small">Ciudad</label>
+                                            <input id="Ciudad" class="form-control rounded-3" />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-check form-switch">
+                                            <input id="Activo" class="form-check-input" type="checkbox" />
+                                            <label asp-for="Activo" class="form-check-label fw-semibold small">Cliente
+                                                activo</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex gap-3 pt-2">
+                                            <button type="submit" class="btn btn-primary px-4 rounded-3">
+                                                <i class="fa-solid fa-user-plus me-2"></i>Guardar Cambios
+                                            </button>
+                                            <a class="btn btn-outline-secondary rounded-3">Cancelar</a>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex gap-3 pt-2">
-                            <button type="submit" class="btn btn-primary px-4 rounded-3">
-                                <i class="fa-solid fa-user-plus me-2"></i>Crear usuario
-                            </button>
-                            <a class="btn btn-outline-secondary rounded-3">Cancelar</a>
+                    </div>
+                </div>
+@section Scripts {
+    <script>
+$(function () {
+    cargarDashboardClientes();
+    clientesTable.load();
+});        
+function cargarDashboardClientes() {
+    $.get('/Comercial/Cliente/ObtenerDashboard',
+        function (response) {
+            if (!response.success)
+            return;
+
+            $("#totalClientes").text(response.data.totalClientes);
+            $("#totalActivos").text(response.data.totalActivos);
+            $("#totalInactivos").text(response.data.totalInactivos);
+        });
+}
+$(document).on('click', '.btnEstado', function () {
+
+    let id = $(this).data('id');
+
+    $.post(`/Comercial/Cliente/ToggleActivo/${id}`,
+
+        function (response) {
+
+            if (response.success) {
+
+                showSuccess(response.message);
+
+                clientesTable.load();
+
+                cargarDashboardClientes();
+            }
+            else {
+
+                showError(response.message);
+            }
+        });
+});        
+const clientesTable = new TableManager({
+    url: '/Comercial/Cliente/ObtenerClientes',
+    tableId: '#tableClientes',
+    paginationId: '#paginationClientes',
+    infoId: '#infoClientes',
+    pageSize: 10,
+    filters: {
+        search: '#searchCliente',
+        soloActivos: () =>
+            $('#chkActivos').is(':checked')
+    },
+    beforeSend: () => showLoader(),
+    onComplete: () => hideLoader(),
+    renderTable: (data) => {
+        let tbody = $("#tableClientes tbody");
+        tbody.empty();
+        if (!data || data.length === 0) {
+            tbody.append(`
+                <tr>
+                    <td colspan="7" class="text-center py-5">
+                        <i class="bi bi-people fs-1 text-muted"></i>
+                        <div class="mt-2">
+                            No se encontraron clientes
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                    </td>
+                </tr>
+            `);
+            return;
+        }
+
+        data.forEach(item => {
+            let iniciales = item.razonSocial
+                .split(' ')
+                .map(x => x.charAt(0))
+                .slice(0, 2)
+                .join('')
+                .toUpperCase();
+            
+                let estadoBadge = item.activo
+                ? `
+                    <span class="badge rounded-pill px-3 py-2" style="background:#d1fae5;color:#065f46;">
+                        Activo
+                    </span>`
+                : `
+                    <span class="badge rounded-pill px-3 py-2" style="background:#fee2e2;color:#991b1b;">
+                        Inactivo
+                    </span>`;
+            
+            tbody.append(`
+                <tr>
+                    <td class="ps-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-circle fw-bold d-flex align-items-center justify-content-center"
+                                 style="width:38px; height:38px; background:#2563eb; color:white;">
+                                ${iniciales}
+                            </div>
+                            <div>
+                                <div class="fw-semibold small">
+                                    ${item.razonSocial}
+                                </div>
+                                <div class="text-muted"
+                                     style="font-size:12px;">
+                                    Desde
+                                    ${moment(item.fechaCreacion)
+                                        .format('DD/MM/YYYY')}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        ${item.nitCedula}
+                    </td>
+                    <td>
+                        <div class="small">
+                            ${item.correo}
+                        </div>
+                        <div class="text-muted" style="font-size:12px;">
+                            <i class="bi bi-telephone me-1"></i>
+                            ${item.telefono}
+                        </div>
+                    </td>
+                    <td>
+                        ${item.ciudad ?? '-'}
+                    </td>
+                    <td>
+                        <span class="badge rounded-pill px-3 py-2" style="background:#dbeafe;color:#1e40af;">
+                            ${item.totalCotizaciones}
+                        </span>
+                    </td>
+                    <td>
+                        ${estadoBadge}
+                    </td>
+                    <td class="text-end pe-4">
+                        <div class="d-flex justify-content-end gap-1">
+                            <button class="btn btn-sm btn-outline-secondary btnDetalle" data-id="${item.idCliente}">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary btnEditar" data-id="${item.idCliente}">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-warning btnEstado" data-id="${item.idCliente}">
+                                <i class="bi bi-person-dash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `);
+        });
+    }
+});        
+    </script>
+}

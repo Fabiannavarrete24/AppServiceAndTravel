@@ -15,7 +15,7 @@ public class ConfiguracionController : Controller
 {
     private readonly IConfiguracionService _configService;
     private readonly ApplicationDBContext _context;
-    private int UserId { get { return Convert.ToInt32(User.FindFirst(ClaimTypes.Sid)?.Value); } }
+    private int UserId { get { return Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value); } }
 
     public ConfiguracionController(IConfiguracionService configService, ApplicationDBContext context)
     {

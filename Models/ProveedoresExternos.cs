@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AppServiceAndTravel.Models
 {
-    public enum TipoServicioExterno { Vehiculo, Conductor, Ambos }
+    
     public class ProveedoresExternos
     {
         [Key]

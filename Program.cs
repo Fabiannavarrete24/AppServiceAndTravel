@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
+using AppServiceAndTravel.Areas.Comercial.Services;
+using AppServiceAndTravel.Areas.Operaciones.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +49,15 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IConfiguracionService, ConfiguracionService>();
 builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
+builder.Services.AddScoped<IClienteService, ClienteService>();
+builder.Services.AddScoped<IServiciosService, ServiciosService>();
+builder.Services.AddScoped<IVehiculoService, VehiculoService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
+builder.Services.AddScoped<ICotizacionService, CotizacionService>();
+builder.Services.AddScoped<IDashboardCotizacionService, DashboardCotizacionService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
-builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 builder.Services.AddHttpClient("WhatsApp");
 builder.Services.AddHttpContextAccessor();

@@ -101,7 +101,7 @@ namespace AppServiceAndTravel.Controllers
             return Ok(alerta);
         }  
 
-        [HttpPost]
+        [HttpPost,ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string usuario,string clave)
         {
             var result = await _authService.Login(usuario,clave);

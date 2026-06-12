@@ -1,4 +1,6 @@
 using AppServiceAndTravel.Areas.Admin.ViewModels;
+using AppServiceAndTravel.Areas.Comercial.Models;
+using AppServiceAndTravel.Areas.Operaciones.Models;
 using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.ViewModels;
@@ -247,29 +249,27 @@ namespace AppServiceAndTravel.Services
             // INGRESOS POR TIPO DE SERVICIO
             // =========================================================
 
-            var ingresosPorTipo = await _context.Servicios
-                .Include(x => x.Cotizacion)
-                .Where(x => x.Cotizacion != null)
-                .GroupBy(x => x.TipoServicio)
+            var ingresosPorTipo = await _context.Cotizaciones
+                .Include(x => x.TipoServicio)
+                .Where(x =>
+                    x.Estado == EstadoCotizacion.Aprobada &&
+                    x.idTipoServicio != null)
+                .GroupBy(x => x.TipoServicio!.descripcion)
                 .Select(g => new
                 {
-                    TipoServicio = g.Key ?? "Sin tipo",
-
-                    Total = g.Sum(x =>
-                        x.Cotizacion!.ValorAprobado ?? 0)
+                    TipoServicio = g.Key,
+                    Total = g.Sum(x => x.ValorAprobado ?? x.ValorCotizado)
                 })
                 .OrderByDescending(x => x.Total)
                 .ToListAsync();
 
-            dashboard.TiposServicio =
-                ingresosPorTipo
-                    .Select(x => x.TipoServicio)
-                    .ToList();
+            dashboard.TiposServicio = ingresosPorTipo
+                .Select(x => x.TipoServicio)
+                .ToList();
 
-            dashboard.IngresosPorTipo =
-                ingresosPorTipo
-                    .Select(x => x.Total)
-                    .ToList();
+            dashboard.IngresosPorTipo = ingresosPorTipo
+                .Select(x => x.Total)
+                .ToList();
 
             // =========================================================
             // ACTIVIDAD RECIENTE

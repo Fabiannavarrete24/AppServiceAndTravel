@@ -1,4 +1,5 @@
-﻿using AppServiceAndTravel.Models;
+﻿using AppServiceAndTravel.Areas.Comercial.Models;
+using AppServiceAndTravel.Areas.Operaciones.Models;
 using System.Net;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
@@ -72,15 +73,15 @@ namespace AppServiceAndTravel.Services
             🚌 *SERVICIO confirmadaADO*
             ━━━━━━━━━━━━━━━━━━━
 
-            📋 Servicio: #{servicio.idCotizacion:D6}
+            📋 Servicio: #{servicio.DetalleCotizacion?.Cotizacion?.idCotizacion:D6}
 
             📅 Fecha:
             {servicio.FechaServicio:dd/MM/yyyy HH:mm}
 
             🗺️ Ruta:
-            {servicio.Cotizacion?.Origen}
+            {servicio.DetalleCotizacion?.Origen}
             ➡️
-            {servicio.Cotizacion?.Destino}
+            {servicio.DetalleCotizacion?.Destino}
 
             🚗 Vehículo:
             {servicio.Vehiculo?.Marca}
@@ -125,7 +126,7 @@ namespace AppServiceAndTravel.Services
             {cotizacion.Destino}
 
             📅 Fecha:
-            {cotizacion.FechaServicio:dd/MM/yyyy}
+            {cotizacion.FechaInicioServicio:dd/MM/yyyy}
 
             💰 Valor:
             ${cotizacion.ValorAprobado ?? cotizacion.ValorCotizado:N0}

@@ -1,4 +1,5 @@
-@model AppServiceAndTravel.Models.Servicios
+@model Servicios
+@using AppServiceAndTravel.Areas.Operaciones.Models
 @using AppServiceAndTravel.Models
 @{ ViewData["Title"] = "Nuevo Servicio"; }
 
@@ -31,11 +32,11 @@
           <!-- Cotización -->
           <h6 class="fw-semibold small text-uppercase text-muted mb-3">Cotización base</h6>
           <div class="mb-4">
-            <label asp-for="idCotizacion" class="form-label fw-semibold small">Cotización aprobada *</label>
-            <select asp-for="idCotizacion" asp-items="ViewBag.Cotizaciones" class="form-select rounded-3" required>
+            <label asp-for="idDetalleCotizacion" class="form-label fw-semibold small">Cotización aprobada *</label>
+            <select asp-for="idDetalleCotizacion" asp-items="ViewBag.Cotizaciones" class="form-select rounded-3" required>
               <option value="">— Seleccione una cotización aprobada —</option>
             </select>
-            <span asp-validation-for="idCotizacion" class="text-danger small"></span>
+            <span asp-validation-for="idDetalleCotizacion" class="text-danger small"></span>
           </div>
 
           <!-- Fecha -->
@@ -246,7 +247,7 @@ async function validarDoc() {
 }
 
 // Preseleccionar cotización si viene por querystring
-@if(Model.idCotizacion > 0)
-{ <text>document.querySelector('[name="CotizacionId"]').value = '@Model.idCotizacion';</text> }
+@if(Model.idDetalleCotizacion > 0)
+{ <text>document.querySelector('[name="CotizacionId"]').value = '@Model.idDetalleCotizacion';</text> }
 </script>
 }

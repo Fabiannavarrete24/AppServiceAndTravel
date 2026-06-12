@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using AppServiceAndTravel.Data.Seeds;
 using AppServiceAndTravel.Areas.Admin.Models;
+using AppServiceAndTravel.Areas.Operaciones.Models;
+using AppServiceAndTravel.Areas.Comercial.Models;
 
 namespace AppServiceAndTravel.Data;
 
@@ -18,29 +20,30 @@ public partial class ApplicationDBContext : DbContext
         _configuration = configuration;
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-{
-    if (optionsBuilder.IsConfigured) return;
-
-    var provider = _configuration!["ConnectionStrings:DbProvider"]?.ToLower();
-
-    switch (provider)
     {
-        case "mysql":
-            optionsBuilder.UseMySql(
-                _configuration.GetConnectionString("MysqlConnection"),
-                ServerVersion.AutoDetect(_configuration.GetConnectionString("MysqlConnection")));
-            break;
-        case "postgresql":
-            optionsBuilder.UseNpgsql(
-                _configuration.GetConnectionString("PostgreSqlConnection"));
-            break;
+        if (optionsBuilder.IsConfigured) return;
+
+        var provider = _configuration!["ConnectionStrings:DbProvider"]?.ToLower();
+
+        switch (provider)
+        {
+            case "mysql":
+                optionsBuilder.UseMySql(
+                    _configuration.GetConnectionString("MysqlConnection"),
+                    ServerVersion.AutoDetect(_configuration.GetConnectionString("MysqlConnection")));
+                break;
+            case "postgresql":
+                optionsBuilder.UseNpgsql(
+                    _configuration.GetConnectionString("PostgreSqlConnection"));
+                break;
+        }
     }
-}
-    public DbSet<Clientes> Clientes { get; set; }    
+    public DbSet<Clientes> Clientes { get; set; }
     public DbSet<Conductores> Conductores { get; set; }
     public DbSet<ConfiguracionGeneral> ConfiguracionGeneral { get; set; }
-    public DbSet<ConfigNotificaciones> ConfiguracionNotificaciones { get; set; }    
+    public DbSet<ConfigNotificaciones> ConfiguracionNotificaciones { get; set; }
     public DbSet<Cotizaciones> Cotizaciones { get; set; }
+    public DbSet<DetalleCotizacion> DetalleCotizacion { get; set; }
     public DbSet<FormatosCorreos> FormatosCorreos { get; set; }
     public DbSet<HistRefreshToken> HistRefreshToken { get; set; }
     public DbSet<HistLogin> HistLogin { get; set; }
@@ -51,10 +54,23 @@ public partial class ApplicationDBContext : DbContext
     public DbSet<ProveedoresExternos> ProveedoresExternos { get; set; }
     public DbSet<Servicios> Servicios { get; set; }
     public DbSet<Roles> Roles { get; set; }
-    public DbSet<RolesUsuarios> RolesUsuarios { get; set; }
+    public DbSet<TiposServicios> TiposServicios { get; set; }
     public DbSet<ApplicationUser> Usuarios { get; set; }
-    public DbSet<ValidacionVehiculo> ValidacionesVehiculo { get; set; }
+    #region Vehiculos
     public DbSet<Vehiculos> Vehiculos { get; set; }
+    public DbSet<TiposVehiculos> TiposVehiculos { get; set; }
+    public DbSet<CategoriasVehiculos> CategoriasVehiculos { get; set; }
+    public DbSet<VehiculoCaracteristicas> VehiculoCaracteristicas { get; set; }
+    public DbSet<VehiculoMatricula> VehiculoMatriculas { get; set; }
+    public DbSet<VehiculoPropietario> VehiculoPropietarios { get; set; }
+    public DbSet<VehiculoSOAT> VehiculoSOAT { get; set; }
+    public DbSet<VehiculoPolizaRC> VehiculoPolizaRC { get; set; }
+    public DbSet<VehiculoRTM> VehiculoRTM { get; set; }
+    public DbSet<VehiculoTarjetaOperacion> VehiculoTarjetaOperacion { get; set; }
+    public DbSet<VehiculoBlindaje> VehiculoBlindaje { get; set; }
+    public DbSet<VehiculoRegrabaciones> VehiculoRegrabaciones { get; set; }
+    public DbSet<ValidacionVehiculo> ValidacionesVehiculo { get; set; }
+    #endregion
     public DbSet<ActividadSistema> ActividadesSistema { get; set; }
     public DbSet<TipoActividadSistema> TiposActividadSistema { get; set; }
     public DbSet<LogSistema> LogsSistema { get; set; }
@@ -62,27 +78,22 @@ public partial class ApplicationDBContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
+
         builder.ApplyConfiguration(new procesoSeed());
         builder.ApplyConfiguration(new RolesSeed());
-        builder.ApplyConfiguration(new RolesUsuariosSeed());
         builder.ApplyConfiguration(new PermissionsSeed());
         builder.ApplyConfiguration(new UserSeed());
         builder.ApplyConfiguration(new TypeActitySeed());
+        builder.ApplyConfiguration(new TypeServiceSeed());
+        builder.ApplyConfiguration(new TypeVehicleSeed());
+        builder.ApplyConfiguration(new CategoryVehicleSeed());
 
-        builder.Entity<RolesUsuarios>(entity =>
+        builder.Entity<ApplicationUser>(entity =>
         {
-            entity.HasKey(p => new { p.idUsuario, p.idRol });
-
-            entity.HasOne(c => c.Usuario)
-                  .WithMany(c => c.RolesUsuarios)
-                  .HasForeignKey(c => c.idUsuario)
-                  .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(c => c.Rol)
-                  .WithMany(c => c.RolesUsuarios)
-                  .HasForeignKey(c => c.idRol)
-                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(x => x.Rol)
+                .WithMany()
+                .HasForeignKey(x => x.idRol)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<Procesos>(entity =>
@@ -135,14 +146,19 @@ public partial class ApplicationDBContext : DbContext
             entity.Property(c => c.Estado)
                   .HasConversion<string>();
         });
-
+        // ── DetalleCotizacion ──────────────────────────────────────────────────
+        builder.Entity<DetalleCotizacion>()
+            .HasOne(x => x.Cotizacion)
+            .WithMany(x => x.Detalles)
+            .HasForeignKey(x => x.idCotizacion)
+            .OnDelete(DeleteBehavior.Cascade);
         // ── Servicio ──────────────────────────────────────────────────
         builder.Entity<Servicios>(entity =>
         {
-            entity.HasOne(s => s.Cotizacion)
-                  .WithOne(c => c.Servicio)
-                  .HasForeignKey<Servicios>(s => s.idCotizacion)
-                  .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(x => x.DetalleCotizacion)
+                    .WithMany(x => x.Servicios)
+                    .HasForeignKey(x => x.idDetalleCotizacion)
+                    .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(s => s.Vehiculo)
                   .WithMany(v => v.Servicios)

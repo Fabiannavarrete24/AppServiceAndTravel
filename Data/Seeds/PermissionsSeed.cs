@@ -33,7 +33,15 @@ namespace AppServiceAndTravel.Data.Seeds
                 new Permisos() { idProceso = 21, idRol = 1, lectura = true, edita = true, elimina = true },
                 new Permisos() { idProceso = 22, idRol = 1, lectura = true, edita = true, elimina = true },
                 new Permisos() { idProceso = 23, idRol = 1, lectura = true, edita = true, elimina = true },
-                new Permisos() { idProceso = 24, idRol = 1, lectura = true, edita = true, elimina = true }
+                new Permisos() { idProceso = 24, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 25, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 26, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 27, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 28, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 29, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 30, idRol = 1, lectura = true, edita = true, elimina = true },
+                new Permisos() { idProceso = 31, idRol = 1, lectura = true, edita = true, elimina = true }
+
 
             );
         }

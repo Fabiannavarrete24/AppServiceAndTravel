@@ -1,163 +1,667 @@
-@* @model IEnumerable<AppServiceAndTravel.Models.Vehiculo>
+@using AppServiceAndTravel.Areas.Operaciones.Models
+
 @{
     ViewData["Title"] = "Vehículos";
     ViewData["Breadcrumb"] = "Flota / Vehículos";
     var hoy = DateTime.Today;
     var alerta = hoy.AddDays(30);
 }
- *@
 <style>
-  .doc-pill { font-size:11px; padding:3px 10px; border-radius:20px; display:inline-block; margin:2px; }
-  .doc-ok   { background:#d1fae5; color:#065f46; }
-  .doc-warn { background:#fef3c7; color:#92400e; }
-  .doc-bad  { background:#fee2e2; color:#991b1b; }
+    .doc-pill {
+        font-size: 11px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    .doc-ok {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .doc-warn {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .doc-bad {
+        background: #fee2e2;
+        color: #991b1b;
+    }
 </style>
 
 <!-- KPIs -->
 <div class="row g-3 mb-4">
-  @* @foreach (var (label, val, icon, bg, color) in new (string,int,string,string,string)[] {
-    ("Activos",         (int)ViewBag.TotalActivos,       "bi-check-circle-fill", "#d1fae5", "#065f46"),
-    ("Inactivos",       (int)ViewBag.TotalInactivos,     "bi-x-circle",          "#fee2e2", "#991b1b"),
-    ("Mantenimiento",   (int)ViewBag.TotalMantenimiento, "bi-wrench",            "#fef3c7", "#92400e"),
-    ("Con alertas doc.",(int)ViewBag.TotalConAlerta,     "bi-exclamation-triangle-fill","#ede9fe","#6d28d9")
-  }) *@
-  {
-    <div class="col-sm-6 col-xl-3">
-      <div class="card border-0 shadow-sm rounded-4">
-        <div class="card-body d-flex align-items-center gap-3 p-3">
-          <div class="rounded-3 d-flex align-items-center justify-content-center"
-               style="width:44px;height:44px;font-size:20px;flex-shrink:0;">
-            <i class="bi"></i>
-          </div>
-          <div>
-            <div class="text-muted" style="font-size:12px;">label</div>
-            <div class="fw-bold fs-4">val</div>
-          </div>
+    @foreach (var (label, val, icon, bg, color) in new (string, int, string, string, string)[] {
+    ("Activos", 0, "bi-check-circle-fill", "#d1fae5", "#065f46"),
+    ("Inactivos", 0, "bi-x-circle", "#fee2e2", "#991b1b"),
+    ("Mantenimiento", 0, "bi-wrench", "#fef3c7", "#92400e"),
+    ("Con alertas doc.",0, "bi-exclamation-triangle-fill","#ede9fe","#6d28d9")
+  })
+    {
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body d-flex align-items-center gap-3 p-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center"
+                         style="width:44px;height:44px;font-size:20px;flex-shrink:0;">
+                        <i class="bi"></i>
+                    </div>
+                    <div>
+                        <div class="text-muted" style="font-size:12px;">@label</div>
+                        <div class="fw-bold fs-4">@val</div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  }
+    }
 </div>
 
 <div class="card border-0 shadow-sm rounded-4">
-  <div class="card-header bg-white border-0 py-3 px-4 d-flex flex-wrap align-items-center gap-3">
-    <span class="fw-semibold flex-grow-1">Flota de vehículos</span>
+    <div class="card-header bg-white border-0 py-3 px-4 d-flex flex-wrap align-items-center gap-3">
+        <span class="fw-semibold flex-grow-1">Flota de vehículos</span>
 
-    <div class="btn-group btn-group-sm">
-      <a href="@Url.Action("Index")" class="btn btn-dark">Todos</a>
-      <a href="@Url.Action("Index", new { estado = AppServiceAndTravel.Models.EstadoVehiculo.Activo })"
-         class="btn btn-success">Activos</a>
-      <a href="@Url.Action("Index", new { estado = AppServiceAndTravel.Models.EstadoVehiculo.Inactivo })"
-         class="btn btn-danger">Inactivos</a>
-      <a href="@Url.Action("Index", new { estado = AppServiceAndTravel.Models.EstadoVehiculo.EnMantenimiento })"
-         class="btn btn-warning">Mantenimiento</a>
+        <div class="btn-group btn-group-sm" <button class="btn btn-dark filtroEstado" data-estado="">
+            Todos
+        </button>
+        <button class="btn btn-success filtroEstado" data-estado="Activo">
+            Activos
+        </button>
+        <button class="btn btn-danger filtroEstado" data-estado="Inactivo">
+            Inactivos
+        </button>
+        <button class="btn btn-warning filtroEstado" data-estado="EnMantenimiento">
+            Mantenimiento
+        </button>
     </div>
 
-    <form method="get" class="d-flex gap-2">
-      @* @if (ViewBag.EstadoFiltro != null) *@
-        <input type="hidden" name="estado" value="@ViewBag.EstadoFiltro" />
-      <input type="search" name="busqueda" value="@ViewBag.Busqueda"
-             class="form-control form-control-sm rounded-3" placeholder="Buscar placa, marca…" style="min-width:180px;" />
-      <button class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-search"></i></button>
-    </form>
+    <div class="d-flex gap-2">
 
-@*     @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
-    {
+        <input type="search" id="txtBuscarVehiculo" class="form-control form-control-sm rounded-3"
+               placeholder="Buscar placa, marca..." />
 
-    } *@
-        <a asp-action="Create" class="btn btn-primary btn-sm rounded-3">
-            <i class="bi bi-plus-lg me-1"></i>Nuevo vehículo
-        </a>
-  </div>
+        <button class="btn btn-sm btn-outline-primary rounded-3" onclick="cargarVehiculos()">
+            <i class="bi bi-search"></i>
+        </button>
 
-  <div class="card-body p-0">
-        <div class="text-center py-5 text-muted">
-            <i class="bi bi-truck" style="font-size:40px;opacity:.3;"></i>
-            <p class="mt-2">No hay vehículos registrados.</p>
+    </div>
+
+    <button class="btn btn-primary btn-sm rounded-3" onclick="nuevoVehiculo()">
+
+        <i class="bi bi-plus-lg me-1"></i>
+        Nuevo vehículo
+
+    </button>
+</div>
+
+<div class="card-body p-0">
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-truck" style="font-size:40px;opacity:.3;"></i>
+        <p class="mt-2">No hay vehículos registrados.</p>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead>
+                <tr>
+                    <th class="ps-4">Placa</th>
+                    <th>Marca / Modelo</th>
+                    <th>Año</th>
+                    <th>Cap.</th>
+                    <th>Estado</th>
+                    <th>Documentos</th>
+                    <th class="text-end pe-4">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyVehiculos">
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="modalVehiculo" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="bi bi-truck text-primary me-2"></i>
+                    Vehículo
+                </h5>
+
+                <button class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="idVehiculo" />
+
+                <!-- Tabs -->
+                <ul class="nav nav-pills mb-4 gap-2">
+
+                    <li class="nav-item">
+                        <button class="btn btn-light active" data-bs-toggle="tab" data-bs-target="#tabGeneral">
+                            General
+                        </button>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-light" data-bs-toggle="tab" data-bs-target="#tabPropietario">
+                            Propietario
+                        </button>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-light" data-bs-toggle="tab" data-bs-target="#tabCaracteristicas">
+                            Características
+                        </button>
+                    </li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-light" data-bs-toggle="tab" data-bs-target="#tabDocumentos">
+                            Documentos
+                        </button>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content">
+
+                    <!-- GENERAL -->
+                    <div class="tab-pane fade show active" id="tabGeneral">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Placa
+                                </label>
+                                <input id="placa" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Marca
+                                </label>
+                                <input id="marca" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Modelo
+                                </label>
+                                <input id="modelo" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Año
+                                </label>
+                                <input id="anio" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">
+                                    Línea
+                                </label>
+                                <input id="linea" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">
+                                    Clase Vehículo
+                                </label>
+                                <input id="claseVehiculo" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">
+                                    Estado
+                                </label>
+
+                                <select id="estadoVehiculo" class="form-select rounded-3">
+                                    <option value="Activo">Activo</option>
+                                    <option value="Inactivo">Inactivo</option>
+                                    <option value="Mantenimiento">Mantenimiento</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- PROPIETARIO -->
+                    <div class="tab-pane fade" id="tabPropietario">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">
+                                    Propietario
+                                </label>
+
+                                <input id="nombrePropietario" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Documento
+                                </label>
+
+                                <input id="cedulaPropietario" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Teléfono
+                                </label>
+
+                                <input id="telefonoPropietario" class="form-control rounded-3" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- CARACTERISTICAS -->
+                    <div class="tab-pane fade" id="tabCaracteristicas">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    VIN
+                                </label>
+
+                                <input id="numeroVin" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Motor
+                                </label>
+
+                                <input id="numeroMotor" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Chasis
+                                </label>
+
+                                <input id="numeroChasis" class="form-control rounded-3" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">
+                                    Serie
+                                </label>
+
+                                <input id="numeroSerie" class="form-control rounded-3" />
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- DOCUMENTOS -->
+                    <div class="tab-pane fade" id="tabDocumentos">
+
+                        <div class="row g-4">
+
+                            <div class="col-md-4">
+
+                                <div class="card border-0 shadow-sm">
+
+                                    <div class="card-header bg-success text-white">
+                                        SOAT
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <input id="numeroPolizaSoat" class="form-control mb-2"
+                                               placeholder="Número póliza" />
+
+                                        <input id="entidadSoat" class="form-control mb-2" placeholder="Entidad" />
+
+                                        <input id="fechaVenceSoat" type="date" class="form-control" />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="card border-0 shadow-sm">
+
+                                    <div class="card-header bg-warning">
+                                        RTM
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <input id="numeroCertificadoRtm" class="form-control mb-2" />
+
+                                        <input id="cdaRtm" class="form-control mb-2" />
+
+                                        <input id="fechaVenceRtm" type="date" class="form-control" />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="card border-0 shadow-sm">
+
+                                    <div class="card-header bg-primary text-white">
+                                        Tarjeta Operación
+                                    </div>
+
+                                    <div class="card-body">
+
+                                        <input id="numeroTarjetaOperacion" class="form-control mb-2" />
+
+                                        <input id="empresaAfiliadora" class="form-control mb-2" />
+
+                                        <input id="fechaVenceOperacion" type="date" class="form-control" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button class="btn btn-primary" onclick="guardarVehiculo()">
+                    <i class="bi bi-save me-2"></i>
+                    Guardar
+                </button>
+            </div>
         </div>
-@*     @if (!Model.Any())
-    {
+    </div>
+</div>
+@section Scripts {
+    <script>
+let estadoActual = '';
+let paginaActual = 1;      
+async function cargarVehiculos(pagina = 1) {
+
+    paginaActual = pagina;
+
+    const busqueda = $('#txtBuscarVehiculo').val();
+
+    try {
+
+        const response = await $.get(
+            '/Operaciones/Vehiculos/ListarVehiculos',
+            {
+                estado: estadoActual,
+                busqueda,
+                pagina
+            });
+
+        renderVehiculos(response.items);
+        renderKPIs(response.kpis);
 
     }
-    else
-    {
-     @foreach (var v in Model)
-                    {
-                        var soat = v.FechaVencimientoSOAT >= hoy;
-                        var soatWarn = v.FechaVencimientoSOAT <= alerta && soat;
-                        var tecno = v.FechaVencimientoTecnoMecanica >= hoy;
-                        var tecnoWarn = v.FechaVencimientoTecnoMecanica <= alerta && tecno;
-                        var seg = v.FechaVencimientoSeguro >= hoy;
-                        var segWarn = v.FechaVencimientoSeguro <= alerta && seg;
+    catch {
 
-                        <tr>
-                            <td class="ps-4">
-                                <span class="fw-bold text-primary fs-6">@v.Placa</span>
-                            </td>
-                            <td>
-                                <div class="fw-semibold">@v.Marca @v.Modelo</div>
-                            </td>
-                            <td>@v.Anio</td>
-                            <td>@v.CapacidadPasajeros pas.</td>
-                            <td>
-                                @{
-                                    var (estBg, estColor, estLabel) = v.Estado switch
-                                    {
-                                        EstadoVehiculo.Activo => ("#d1fae5", "#065f46", "Activo"),
-                                        EstadoVehiculo.Inactivo => ("#fee2e2", "#991b1b", "Inactivo"),
-                                        EstadoVehiculo.EnMantenimiento => ("#fef3c7", "#92400e", "Mantenimiento"),
-                                        _ => ("#e2e8f0", "#475569", v.Estado.ToString())
-                                    };
-                                }
-                                <span class="badge rounded-pill px-3 py-2" style="background:@estBg;color:@estColor;">@estLabel</span>
-                            </td>
-                            <td>
-                                <span class="doc-pill @(soat ? (soatWarn ? "doc-warn" : "doc-ok") : "doc-bad")"
-                                      title="SOAT vence: @v.FechaVencimientoSOAT.ToString("dd/MM/yy")">
-                                    SOAT @(soat ? (soatWarn ? "⚠" : "✓") : "✗")
-                                </span>
-                                <span class="doc-pill @(tecno ? (tecnoWarn ? "doc-warn" : "doc-ok") : "doc-bad")"
-                                      title="Tecno vence: @v.FechaVencimientoTecnoMecanica.ToString("dd/MM/yy")">
-                                    Tecno @(tecno ? (tecnoWarn ? "⚠" : "✓") : "✗")
-                                </span>
-                                <span class="doc-pill @(seg ? (segWarn ? "doc-warn" : "doc-ok") : "doc-bad")"
-                                      title="Seguro vence: @v.FechaVencimientoSeguro.ToString("dd/MM/yy")">
-                                    Seguro @(seg ? (segWarn ? "⚠" : "✓") : "✗")
-                                </span>
-                            </td>
-                            <td class="text-end pe-4">
-                                <div class="d-flex justify-content-end gap-1">
-                                    <a asp-action="Details" asp-route-id="@v.Id" class="btn btn-sm btn-outline-secondary rounded-3"><i class="bi bi-eye"></i></a>
-                                    @if (User.IsInRole("Administrador") || User.IsInRole("Coordinador"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn-sm btn-outline-primary rounded-3"><i class="bi bi-pencil"></i></a>
-                                        <form asp-action="Delete" asp-route-id="@v.Id" method="post" onsubmit="return confirmada('¿Eliminar vehículo @v.Placa?');">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="btn btn-sm btn-outline-danger rounded-3"><i class="bi bi-trash"></i></button>
-                                        </form>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    }
-             
-    } *@
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead>
-                    <tr>
-                        <th class="ps-4">Placa</th>
-                        <th>Marca / Modelo</th>
-                        <th>Año</th>
-                        <th>Cap.</th>
-                        <th>Estado</th>
-                        <th>Documentos</th>
-                        <th class="text-end pe-4">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-  </div>
-</div>
+        toastr.error('No fue posible cargar la flota');
+
+    }
+}  
+
+function renderVehiculos(items) {
+
+    let html = '';
+
+    items.forEach(v => {
+
+        html += `
+        <tr>
+
+            <td class="ps-4">
+                <strong>${v.placa}</strong>
+            </td>
+
+            <td>
+                ${v.marca} ${v.modelo}
+            </td>
+
+            <td>${v.anio}</td>
+
+            <td>${v.capacidadPasajeros}</td>
+
+            <td>
+                ${badgeEstado(v.estado)}
+            </td>
+
+            <td>
+                ${renderDocumentos(v)}
+            </td>
+
+            <td class="text-end pe-4">
+
+                <div class="btn-group btn-group-sm">
+
+                    <button class="btn btn-outline-primary"
+                            onclick="editarVehiculo(${v.idVehiculo})">
+
+                        <i class="bi bi-pencil"></i>
+
+                    </button>
+
+                    <button class="btn btn-outline-danger"
+                            onclick="eliminarVehiculo(${v.idVehiculo})">
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>`;
+    });
+
+    $('#tbodyVehiculos').html(html);
+}        
+
+function badgeEstado(estado) {
+
+    switch (estado) {
+
+        case 'Activo':
+            return '<span class="badge bg-success">Activo</span>';
+
+        case 'Inactivo':
+            return '<span class="badge bg-danger">Inactivo</span>';
+
+        default:
+            return '<span class="badge bg-warning">Mantenimiento</span>';
+    }
+}
+
+function renderDocumentos(v) {
+
+    let html = '';
+
+    html += `<span class="doc-pill ${v.soatColor}">
+                SOAT
+             </span>`;
+
+    html += `<span class="doc-pill ${v.rtmColor}">
+                RTM
+             </span>`;
+
+    html += `<span class="doc-pill ${v.tarjetaColor}">
+                T. Operación
+             </span>`;
+
+    return html;
+}
+
+function nuevoVehiculo() {
+
+    $('#modalVehiculo input').val('');
+    $('#modalVehiculo select').val('');
+
+    $('#idVehiculo').val(0);
+
+    bootstrap.Modal.getOrCreateInstance(document.getElementById('modalVehiculo')).show();
+}
+
+        async function editarVehiculo(id) {
+
+            const response = await $.get(
+                'Operaciones/Vehiculos/GetVehiculo',
+                { id }
+            );
+
+            $('#idVehiculo').val(response.id);
+            $('#placa').val(response.placa);
+            $('#marca').val(response.marca);
+            $('#modelo').val(response.modelo);
+            $('#anio').val(response.anio);
+            $('#linea').val(response.linea);
+            $('#nombrePropietario').val(response.nombrePropietario);
+            $('#cedulaPropietario').val(response.cedulaPropietario);
+            $('#telefonoPropietario').val(response.telefonoPropietario);
+            $('#numeroVin').val(response.numeroVIN);
+            $('#numeroMotor').val(response.numeroMotor);
+            $('#numeroChasis').val(response.numeroChasis);
+            $('#numeroSerie').val(response.numeroSerie);
+            $('#numeroPolizaSoat').val(response.numeroPolizaSoat);
+            $('#entidadSoat').val(response.entidadSoat);
+            $('#numeroCertificadoRtm').val(response.numeroCertificadoRTM);
+            $('#numeroTarjetaOperacion').val(response.numeroTarjetaOperacion);
+            $('#empresaAfiliadora').val(response.empresaAfiliadora);
+
+$('#estadoVehiculo').val(response.estado);
+$('#claseVehiculo').val(response.claseVehiculo);
+$('#fechaVenceSoat').val(response.soatFechaVencimiento?.substring(0,10);
+$('#fechaVenceRtm').val(response.rtmFechaVigencia?.substring(0,10);
+$('#fechaVenceOperacion').val(response.fechaFinVigenciaTO?.substring(0,10);
+
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalVehiculo')).show();
+        }
+
+        async function guardarVehiculo() {
+
+const model = {
+
+    idVehiculo: $('#idVehiculo').val(),
+
+    placa: $('#placa').val(),
+    marca: $('#marca').val(),
+    modelo: $('#modelo').val(),
+    anio: $('#anio').val(),
+    linea: $('#linea').val(),
+
+    claseVehiculo: $('#claseVehiculo').val(),
+    estado: $('#estadoVehiculo').val(),
+
+    nombrePropietario: $('#nombrePropietario').val(),
+    cedulaPropietario: $('#cedulaPropietario').val(),
+    telefonoPropietario: $('#telefonoPropietario').val(),
+
+    numeroVIN: $('#numeroVin').val(),
+    numeroMotor: $('#numeroMotor').val(),
+    numeroChasis: $('#numeroChasis').val(),
+    numeroSerie: $('#numeroSerie').val(),
+
+    soatNumeroPoliza: $('#numeroPolizaSoat').val(),
+    soatEntidadExpide: $('#entidadSoat').val(),
+    soatFechaVencimiento: $('#fechaVenceSoat').val(),
+
+    rtmNumeroCertificado: $('#numeroCertificadoRtm').val(),
+    rtmFechaVigencia: $('#fechaVenceRtm').val(),
+
+    numeroTarjetaOperacion:
+        $('#numeroTarjetaOperacion').val(),
+
+    empresaAfiliadora:
+        $('#empresaAfiliadora').val(),
+
+    fechaFinVigenciaTO:
+        $('#fechaVenceOperacion').val()
+};
+
+            const response = await $.ajax({
+                url: '/Operaciones/Vehiculos/GuardarVehiculo',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(model)
+            });
+
+            if (response.success) {
+                toastr.success(response.message);
+                cargarVehiculos();
+                $('#modalVehiculo').modal('hide');
+            }
+        }
+
+async function eliminarVehiculo(id) {
+
+    if (!confirm('¿Eliminar vehículo?'))
+        return;
+
+    try {
+
+        const response = await $.post(
+            '/Operaciones/Vehiculos/EliminarVehiculo',
+            { id }
+        );
+
+        if (response.success) {
+
+            toastr.success(response.message);
+            cargarVehiculos();
+
+        } else {
+
+            toastr.error(response.message);
+
+        }
+
+    }
+    catch {
+
+        toastr.error('Error eliminando vehículo');
+
+    }
+}   
+
+$(function () {
+
+    cargarVehiculos();
+
+    $('.filtroEstado').on('click', function () {
+
+        estadoActual = $(this).data('estado');
+
+        cargarVehiculos(1);
+
+    });
+
+    $('#txtBuscarVehiculo').on('keyup', function (e) {
+
+        if (e.key === 'Enter')
+            cargarVehiculos();
+
+    });
+
+});
+
+    </script>
+}

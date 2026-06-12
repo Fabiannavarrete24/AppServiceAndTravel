@@ -13,6 +13,7 @@ namespace AppServiceAndTravel.Areas.Admin.Models
         [StringLength(200)] public string? area { get; set; }
         [StringLength(200)] public string? controlador { get; set; }
         [StringLength(200)] public string? icono { get; set; }        
+        public int? orden { get; set; }        
         public DateTime fechaCreacion { get; set; } = DateTime.UtcNow;
         public int? idProcesoPadre { get; set; }
         [ForeignKey("idProcesoPadre")]

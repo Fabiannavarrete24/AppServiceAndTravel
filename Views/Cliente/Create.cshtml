@@ -1,4 +1,5 @@
-﻿@model AppServiceAndTravel.Models.Clientes
+﻿@using AppServiceAndTravel.Areas.Comercial.Models
+@model Clientes
 
 @{
     ViewData["Title"] = "Nuevo Cliente";
@@ -35,9 +36,9 @@
                     <div class="row g-3">
 
                         <div class="col-md-6">
-                            <label asp-for="NombreCompleto" class="form-label"></label>
-                            <input asp-for="NombreCompleto" class="form-control" />
-                            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                            <label asp-for="RazonSocial" class="form-label"></label>
+                            <input asp-for="RazonSocial" class="form-control" />
+                            <span asp-validation-for="RazonSocial" class="text-danger"></span>
                         </div>
 
                         <div class="col-md-6">
@@ -52,8 +53,8 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label asp-for="correo" class="form-label"></label>
-                            <input asp-for="correo" class="form-control" />
+                            <label asp-for="Correo" class="form-label"></label>
+                            <input asp-for="Correo" class="form-control" />
                         </div>
 
                         <div class="col-12">

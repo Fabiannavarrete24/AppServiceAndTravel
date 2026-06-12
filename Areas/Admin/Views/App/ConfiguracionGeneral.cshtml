@@ -1,5 +1,3 @@
-@using AppServiceAndTravel.Areas.Admin.Models
-@model ConfiguracionGeneral
 @{
     ViewData["Title"] = "Configuración del sistema";
 }
@@ -275,7 +273,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionApariencia"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4" onclick="guardarApariencia()">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -341,7 +339,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionRegional"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -382,7 +380,7 @@
                 <label class="form-label fw-semibold small">Password SMTP</label>
                 <div class="input-group">
                     <input id="SmtpPassword" type="password" class="form-control" />
-                    <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('SmtpPassword','icoSmtp')">
+                    <button type="button" class="btn btn-outline-secondary" onclick="togglePwd('SmtpPassword','icoSmtp')">
                         <i class="fa-solid fa-eye" id="icoSmtp"></i>
                     </button>
                 </div>
@@ -422,7 +420,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionCorreo"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -440,10 +438,10 @@
                         <label class="form-label fw-semibold small">Proveedor de WhatsApp</label>
                         <div class="row g-2">
                             @foreach (var (prov, desc, url) in new[]{
-                                                        ("CallMeBot","Gratuito — ideal para notificaciones personales","https://www.callmebot.com"),
-                                                        ("Twilio","Profesional — requiere cuenta de pago","https://www.twilio.com"),
-                                                        ("MetaCloudAPI","Oficial Meta — requiere app aprobada","https://developers.facebook.com"),
-                                                        })
+                                ("CallMeBot","Gratuito — ideal para notificaciones personales","https://www.callmebot.com"),
+                                ("Twilio","Profesional — requiere cuenta de pago","https://www.twilio.com"),
+                                ("MetaCloudAPI","Oficial Meta — requiere app aprobada","https://developers.facebook.com"),
+                                })
                             {
                                 <div class="col-12">
                                     <label class="d-flex align-items-start gap-3 p-3 rounded-3" style="border:1.5px solid #e2e8f0; cursor:pointer;">
@@ -497,7 +495,7 @@
                 <div class="input-group">
                     <input id="WhatsAppApiKey" type="password" class="form-control" />
                     <button type="button" class="btn btn-outline-secondary rounded-end-3"
-                            onclick="toggleViz('WhatsAppApiKey','icoWa')">
+                            onclick="togglePwd('WhatsAppApiKey','icoWa')">
                         <i class="fa-solid fa-eye" id="icoWa"></i>
                     </button>
                 </div>
@@ -536,7 +534,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionWhatsapp"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -586,7 +584,7 @@
                         <div class="input-group">
                             <input type="password" id="bdPwd" class="form-control" placeholder="Contraseña"
                                    oninput="buildConnStr()" />
-                            <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('bdPwd','icoBd')">
+                            <button type="button" class="btn btn-outline-secondary" onclick="togglePwd('bdPwd','icoBd')">
                                 <i class="fa-solid fa-eye" id="icoBd"></i>
                             </button>
                         </div>
@@ -621,7 +619,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionbd"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -642,7 +640,7 @@
                 <div class="input-group">
                     <input id="JwtSecretKey" type="password" class="form-control rounded-start-3"
                            placeholder="Mínimo 32 caracteres alfanuméricos…" />
-                    <button type="button" class="btn btn-outline-secondary" onclick="toggleViz('JwtSecretKey','icoJwt')">
+                    <button type="button" class="btn btn-outline-secondary" onclick="togglePwd('JwtSecretKey','icoJwt')">
                         <i class="fa-solid fa-eye" id="icoJwt"></i>
                     </button>
                     <button type="button" class="btn btn-outline-primary rounded-end-3" onclick="generarSecret()">
@@ -693,7 +691,7 @@
             <span class="me-1">Última modificación:</span><span id="UltimaModificacionApi"></span>
         </div>
         <div class="d-flex gap-3">
-            <a type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
+            <a href="" type="reset" class="btn btn-outline-secondary rounded-3">Descartar</a>
             <button type="button" class="btn btn-primary rounded-3 px-4">
                 <i class="fa-solid fa-save me-2"></i>Guardar configuración
             </button>
@@ -786,30 +784,6 @@
           actualizarPreview();
         }
 
-        function syncColor(field, value) {
-
-          $('#color_' + field).val(value);
-          $('#hex_' + field).val(value);
-
-          const map = {
-            ColorPrimario: '--cp',
-            ColorSecundario: '--cs',
-            ColorAcento: '--ca',
-            ColorTexto: '--ct',
-            ColorFondo: '--cbg',
-            ColorPeligro: '--cd',
-            ColorAdvertencia: '--cw'
-          };
-
-          if (map[field]) {
-
-            document.documentElement.style
-              .setProperty(map[field], value);
-          }
-
-          actualizarPreview();
-        }
-
         function syncHex(field, value) {
 
           if (/^#[0-9A-F]{6}$/i.test(value)) {
@@ -830,22 +804,6 @@
 
           document.documentElement.style
             .setProperty('--font-family-base', `'${fuente}', sans-serif`);
-        }
-
-        function toggleViz(inputId, iconId) {
-
-          const input = $('#' + inputId);
-          const icon = $('#' + iconId);
-
-          if (input.attr('type') === 'password') {
-
-            input.attr('type', 'text');
-            icon.removeClass('fa-eye').addClass('fa-eye-slash');
-          }
-          else {
-            input.attr('type', 'password');
-            icon.removeClass('fa-eye-slash').addClass('fa-eye');
-          }
         }
 
         function validarJWT() {
@@ -985,8 +943,8 @@
               
               localStorage.setItem('app_configuracion', JSON.stringify(response.dataConfig));
               
-              llenarApariencia(response.dataConfig);
-              aplicarApariencia(response.dataConfig);
+              //llenarApariencia(response.dataConfig);
+              //aplicarApariencia(response.dataConfig);
               
               @* datos empresa *@
               $("#NombreEmpresa").val(response.dataConfig.nombreEmpresa);
@@ -1111,7 +1069,7 @@
         function guardarApariencia() {
 
           const data = obtenerApariencia();
-          console.log(data);
+
           $.ajax({
             url: '/Admin/Configuracion/SetApariencia',
             type: 'POST',            
