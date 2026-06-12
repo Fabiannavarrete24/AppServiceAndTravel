@@ -239,7 +239,7 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
         {
             try
             {
-                Vehiculos vehiculo;
+                Vehiculos? vehiculo;
 
                 if (model.idVehiculo > 0)
                 {

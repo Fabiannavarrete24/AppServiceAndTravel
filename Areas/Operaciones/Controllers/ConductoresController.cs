@@ -1,5 +1,6 @@
 using AppServiceAndTravel.Areas.Operaciones.Models;
 using AppServiceAndTravel.Areas.Operaciones.Services;
+using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Data;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.Services;
@@ -23,7 +24,7 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<IActionResult> ObtenerConductores( string? busqueda, TipoProveedor? tipo, int pagina = 1)
+        public async Task<IActionResult> ObtenerConductores(string? busqueda, TipoProveedor? tipo, int pagina = 1)
         {
             var resultado = await _conductorService.ObtenerConductoresAsync(
                 busqueda,
@@ -35,7 +36,7 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerConductor(int id)
         {
-            var conductor = await _conductorService.ObtenerPorIdAsync(id);
+            var conductor = await _conductorService.ObtenerConductor(id);
 
             if (conductor == null)
                 return NotFound();
@@ -48,6 +49,31 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
             var result = await _conductorService.EliminarAsync(id);
 
             return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeshabilitarConductor(int idConductor)
+        {
+            var resultado =
+                await _conductorService.DeshabilitarConductor(idConductor);
+
+            return Json(new
+            {
+                success = resultado.success,
+                message = resultado.message
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> GuardarConductor(ConductorVM model)
+        {
+            var resultado =
+                await _conductorService.GuardarConductor(model);
+
+            return Json(new
+            {
+                success = resultado.success,
+                message = resultado.message,
+                data = resultado.data
+            });
         }
     }
 }

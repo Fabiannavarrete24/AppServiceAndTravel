@@ -135,27 +135,14 @@
                         <label class="form-label fw-semibold small">
                             Estado Persona
                         </label>
-
-                        <select id="EstadoPersona"
-                                class="form-select">
-                            <option value="">Seleccione</option>
-                            <option>Activa</option>
-                            <option>Inactiva</option>
-                        </select>
+<select id="EstadoPersona" class="form-select"></select>
                     </div>
 
                     <div class="col-md-3">
                         <label class="form-label fw-semibold small">
                             Estado Conductor
                         </label>
-
-                        <select id="EstadoConductor"
-                                class="form-select">
-                            <option value="">Seleccione</option>
-                            <option>Activo</option>
-                            <option>Suspendido</option>
-                            <option>Cancelado</option>
-                        </select>
+<select id="EstadoConductor" class="form-select"></select>
                     </div>
 
                 </div>
@@ -202,9 +189,8 @@
                         <label class="form-label fw-semibold small">
                             Estado Licencia
                         </label>
-
-                        <input id="EstadoLicencia"
-                               class="form-control" />
+<select id="EstadoLicencia"
+        class="form-select"></select>
                     </div>
 
                     <div class="col-md-4">
@@ -235,7 +221,17 @@
                                type="date"
                                class="form-control" />
                     </div>
+<div class="col-md-3">
+    <label class="form-label">
+        Tiene Retención
+    </label>
 
+    <div class="form-check form-switch">
+        <input id="TieneRetencionLicencia"
+               class="form-check-input"
+               type="checkbox">
+    </div>
+</div>
                     <div class="col-md-6">
                         <label class="form-label fw-semibold small">
                             Restricciones
@@ -255,7 +251,15 @@
                                   class="form-control"
                                   rows="3"></textarea>
                     </div>
+<div class="col-md-3">
+    <label class="form-label">
+        Tipo Proveedor
+    </label>
 
+    <select id="TipoProveedor"
+            class="form-select">
+    </select>
+</div>
                     <div class="col-md-12">
                         <label class="form-label fw-semibold small">
                             Organismo que Cancela o Suspende
@@ -274,20 +278,233 @@
     </div>
 
     <div class="card-footer bg-white border-0 text-end">
-        <button type="button" class="btn btn-outline-secondary rounded-3">
-            Cancelar
-        </button>
+<button type="button"
+        id="btnCancelar"
+        class="btn btn-outline-secondary rounded-3">
+    Cancelar
+</button>
 
-        <button type="submit" class="btn btn-primary rounded-3">
-            <i class="bi bi-save me-2"></i>
-            Guardar Conductor
-        </button>
+<button type="button"
+        id="btnGuardar"
+        class="btn btn-primary rounded-3">
+    <i class="bi bi-save me-2"></i>
+    Guardar Conductor
+</button>
     </div>
 </div>
 
 @section Scripts {
     <script>
+function obtenerModel() {
+    return {
+        idConductor:parseInt($("#idConductor").val()) || 0,
+        NombreCompleto:$("#NombreCompleto").val(),
+        Cedula:$("#Cedula").val(),
+        Telefono:$("#Telefono").val(),
+        Correo:$("#Correo").val(),
+        NumeroLicencia:$("#NumeroLicencia").val(),
+        CategoriaLicencia:$("#CategoriaLicencia").val(),
+        CategoriaLicenciaAnterior:$("#CategoriaAnterior").val(),
+        FechaExpedicionLicencia:$("#FechaExpedicionLicencia").val() || null,
+        FechaVencimientoLicencia:$("#FechaVencimientoLicencia").val() || null,
+        OrganismoTransitoExpideLicencia:$("#OrganismoExpideLicencia").val(),
+        RestriccionesLicencia:$("#RestriccionesLicencia").val(),
+        TieneRetencionLicencia:$("#TieneRetencionLicencia").is(":checked"),
+        RetencionLicencia:$("#RetencionLicencia").val(),
+        OrganismoTransitoCancelaLicencia:$("#OrganismoCancelaLicencia").val(),
+        EstadoLicencia:parseInt($("#EstadoLicencia").val()) || 0,
+        TipoProveedor:parseInt($("#TipoProveedor").val()) || 0,
+        EstadoPersona:parseInt($("#EstadoPersona").val()) || 0,
+        EstadoConductor:parseInt($("#EstadoConductor").val()) || 0
+    }
+}
 
+$("#btnGuardar").click(function () {
+
+    const model = obtenerModel();
+
+    $.ajax({
+        url: '/Operaciones/Conductores/GuardarConductor',
+        type: 'POST',
+        data: model,
+
+        beforeSend: function () {
+            showLoader();
+        },
+
+        success: function (response) {
+
+            if (response.success) {
+
+                toastr.success(response.message);
+
+                if (response.data != null) {
+                    $("#idConductor").val(response.data.idConductor);
+                }
+
+            } else {
+                toastr.error(response.message);
+            }
+        },
+
+        error: function (xhr) {
+            toastr.error("Error guardando conductor");
+            console.error(xhr);
+        },
+
+        complete: function () {
+            hideLoader();
+        }
+    });
+
+});
+function cargarConductor(id) {
+
+    $.ajax({
+        url: '/Operaciones/Conductores/ObtenerConductor',
+        type: 'GET',
+        data: { id: id },
+
+        beforeSend: function () {
+            showLoader();
+        },
+
+        success: function (response) {
+
+            if (!response.success)
+                return toastr.error(response.message);
+
+            llenarFormulario(response.data);
+        },
+
+        complete: function () {
+            hideLoader();
+        }
+    });
+
+}
+function llenarFormulario(model) {
+
+    $("#idConductor").val(model.idConductor);
+
+    $("#NombreCompleto").val(model.nombreCompleto);
+    $("#Cedula").val(model.cedula);
+    $("#Telefono").val(model.telefono);
+    $("#Correo").val(model.correo);
+
+    $("#EstadoPersona").val(model.estadoPersona);
+    $("#EstadoConductor").val(model.estadoConductor);
+
+    $("#NumeroLicencia").val(model.numeroLicencia);
+    $("#CategoriaLicencia").val(model.categoriaLicencia);
+    $("#CategoriaAnterior").val(model.categoriaLicenciaAnterior);
+
+    $("#EstadoLicencia").val(model.estadoLicencia);
+
+    $("#OrganismoExpideLicencia")
+        .val(model.organismoTransitoExpideLicencia);
+
+    $("#FechaExpedicionLicencia")
+        .val(model.fechaExpedicionLicencia?.split('T')[0]);
+
+    $("#FechaVencimientoLicencia")
+        .val(model.fechaVencimientoLicencia?.split('T')[0]);
+
+    $("#RestriccionesLicencia")
+        .val(model.restriccionesLicencia);
+
+    $("#RetencionLicencia")
+        .val(model.retencionLicencia);
+
+    $("#OrganismoCancelaLicencia")
+        .val(model.organismoTransitoCancelaLicencia);
+}
+function eliminarConductor(id) {
+
+    Swal.fire({
+        title: '¿Eliminar conductor?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar'
+    }).then((result) => {
+
+        if (!result.isConfirmed)
+            return;
+
+        $.ajax({
+            url: '/Operaciones/Conductores/EliminarConductor',
+            type: 'DELETE',
+            data: { id: id },
+
+            beforeSend: function () {
+                showLoader();
+            },
+
+            success: function (response) {
+
+                if (response.success) {
+
+                    toastr.success(response.message);
+
+                    setTimeout(() => {
+                        window.location.href =
+                            '/Operaciones/Conductores';
+                    }, 1000);
+
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+
+            complete: function () {
+                hideLoader();
+            }
+        });
+
+    });
+}
+function limpiarFormulario() {
+
+    $("#idConductor").val(0);
+
+    $("#NombreCompleto").val('');
+    $("#Cedula").val('');
+    $("#Telefono").val('');
+    $("#Correo").val('');
+
+    $("#EstadoPersona").val('');
+    $("#EstadoConductor").val('');
+
+    $("#NumeroLicencia").val('');
+    $("#CategoriaLicencia").val('');
+    $("#CategoriaAnterior").val('');
+
+    $("#EstadoLicencia").val('');
+
+    $("#OrganismoExpideLicencia").val('');
+    $("#FechaExpedicionLicencia").val('');
+    $("#FechaVencimientoLicencia").val('');
+
+    $("#RestriccionesLicencia").val('');
+    $("#RetencionLicencia").val('');
+    $("#OrganismoCancelaLicencia").val('');
+}
+$("#btnCancelar").click(function () {
+
+    Swal.fire({
+        title: '¿Cancelar cambios?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí'
+    }).then((r) => {
+
+        if (r.isConfirmed) {
+            limpiarFormulario();
+        }
+
+    });
+
+});
     </script>
-    <partial name="_ValidationScriptsPartial" />
 }

@@ -10,12 +10,11 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
 {
     public interface IConductorService
     {
-        Task<ConductoresResponseVM> ObtenerConductoresAsync(string? busqueda,TipoProveedor? tipo,int pagina);
-
         Task<object> ObtenerEstadisticasAsync();
-
-        Task<Conductores?> ObtenerPorIdAsync(int id);
-
+        Task<ConductorVM?> ObtenerConductor(int idConductor);
+        Task<ConductoresResponseVM> ObtenerConductoresAsync(string? busqueda, TipoProveedor? tipo, int pagina);
+        Task<(bool success, string message, ConductorVM? data)> GuardarConductor(ConductorVM model);
+        Task<(bool success, string message)> DeshabilitarConductor(int idConductor);
         Task<(bool success, string message)> EliminarAsync(int id);
     }
 
@@ -50,15 +49,58 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
                     .CountAsync(x => x.FechaVencimientoLicencia < hoy)
             };
         }
-        public async Task<Conductores?> ObtenerPorIdAsync(int id)
+        public async Task<ConductorVM?> ObtenerConductor(int idConductor)
         {
             return await _context.Conductores
-                .FirstOrDefaultAsync(x => x.idConductor == id);
+                .Where(x => x.idConductor == idConductor)
+                .Select(x => new ConductorVM
+                {
+                    idConductor = x.idConductor,
+                    NombreCompleto = x.NombreCompleto,
+                    Cedula = x.Cedula,
+                    Telefono = x.Telefono,
+                    Correo = x.correo,
+
+                    NumeroLicencia = x.NumeroLicencia,
+                    CategoriaLicencia = x.CategoriaLicencia,
+                    CategoriaLicenciaAnterior = x.CategoriaLicenciaAnterior,
+
+                    FechaExpedicionLicencia = x.FechaExpedicionLicencia,
+                    FechaVencimientoLicencia = x.FechaVencimientoLicencia,
+
+                    OrganismoTransitoExpideLicencia =
+                        x.OrganismoTransitoExpideLicencia,
+
+                    RestriccionesLicencia =
+                        x.RestriccionesLicencia,
+
+                    TieneRetencionLicencia =
+                        x.TieneRetencionLicencia,
+
+                    RetencionLicencia =
+                        x.RetencionLicencia,
+
+                    OrganismoTransitoCancelaLicencia =
+                        x.OrganismoTransitoCancelaLicencia,
+
+                    EstadoLicencia =
+                        x.EstadoLicencia,
+
+                    TipoProveedor =
+                        x.TipoProveedor,
+
+                    EstadoPersona =
+                        x.EstadoPersona,
+
+                    EstadoConductor =
+                        x.EstadoConductor,
+
+                    Activo =
+                        x.Activo
+                })
+                .FirstOrDefaultAsync();
         }
-        public async Task<ConductoresResponseVM> ObtenerConductoresAsync(
-    string? busqueda,
-    TipoProveedor? tipo,
-    int pagina)
+        public async Task<ConductoresResponseVM> ObtenerConductoresAsync(string? busqueda, TipoProveedor? tipo, int pagina)
         {
             const int pageSize = 10;
 
@@ -117,7 +159,125 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
             };
         }
 
+        public async Task<(bool success, string message, ConductorVM? data)> GuardarConductor(ConductorVM model)
+        {
+            try
+            {
+                Conductores? conductor;
 
+                if (model.idConductor > 0)
+                {
+                    conductor = await _context.Conductores.FirstOrDefaultAsync(x => x.idConductor == model.idConductor);
+
+                    if (conductor == null)
+                        return (false, "Conductor no encontrado", null);
+                }
+                else
+                {
+                    conductor = new Conductores();
+
+                    _context.Conductores.Add(conductor);
+
+                    conductor.FechaCreacion = DateTime.Now;
+                }
+
+                conductor.NombreCompleto = model.NombreCompleto;
+                conductor.Cedula = model.Cedula;
+                conductor.Telefono = model.Telefono;
+                conductor.correo = model.Correo;
+
+                conductor.NumeroLicencia = model.NumeroLicencia;
+                conductor.CategoriaLicencia = model.CategoriaLicencia;
+                conductor.CategoriaLicenciaAnterior = model.CategoriaLicenciaAnterior;
+
+                conductor.FechaExpedicionLicencia =
+                    model.FechaExpedicionLicencia ?? DateTime.Now;
+
+                conductor.FechaVencimientoLicencia =
+                    model.FechaVencimientoLicencia ?? DateTime.Now;
+
+                conductor.OrganismoTransitoExpideLicencia =
+                    model.OrganismoTransitoExpideLicencia;
+
+                conductor.RestriccionesLicencia =
+                    model.RestriccionesLicencia;
+
+                conductor.TieneRetencionLicencia =
+                    model.TieneRetencionLicencia;
+
+                conductor.RetencionLicencia =
+                    model.RetencionLicencia;
+
+                conductor.OrganismoTransitoCancelaLicencia =
+                    model.OrganismoTransitoCancelaLicencia;
+
+                conductor.EstadoLicencia =
+                    model.EstadoLicencia;
+
+                conductor.TipoProveedor =
+                    model.TipoProveedor;
+
+                conductor.RazonSocialExterna =
+                    model.RazonSocialExterna;
+
+                conductor.NitExterno =
+                    model.NitExterno;
+
+                conductor.TarifaExterna =
+                    model.TarifaExterna;
+
+                conductor.ObservacionesExterno =
+                    model.ObservacionesExterno;
+
+                conductor.EstadoPersona =
+                    model.EstadoPersona;
+
+                conductor.EstadoConductor =
+                    model.EstadoConductor;
+
+                conductor.Activo =
+                    model.Activo;
+
+                await _context.SaveChangesAsync();
+
+                return (
+                    true,
+                    model.idConductor > 0
+                        ? "Conductor actualizado correctamente"
+                        : "Conductor creado correctamente",
+                    model
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error guardando conductor");
+
+                return (false, ex.Message, null);
+            }
+        }
+        public async Task<(bool success, string message)> DeshabilitarConductor(int idConductor)
+        {
+            try
+            {
+                var conductor = await _context.Conductores
+                    .FirstOrDefaultAsync(x => x.idConductor == idConductor);
+
+                if (conductor == null)
+                    return (false, "Conductor no encontrado");
+
+                conductor.Activo = false;
+
+                await _context.SaveChangesAsync();
+
+                return (true, "Conductor deshabilitado correctamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deshabilitando conductor");
+
+                return (false, ex.Message);
+            }
+        }
         public async Task<(bool success, string message)> EliminarAsync(int id)
         {
             var conductor = await _context.Conductores
