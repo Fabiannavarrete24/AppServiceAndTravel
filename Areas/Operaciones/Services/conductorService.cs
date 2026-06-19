@@ -5,14 +5,18 @@ using AppServiceAndTravel.Areas.Operaciones.Models;
 using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Helpers.Filters;
 using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Helpers;
+using AppServiceAndTravel.Areas.Admin.Services;
+using AppServiceAndTravel.Services;
 
 namespace AppServiceAndTravel.Areas.Operaciones.Services
 {
     public interface IConductorService
     {
-        Task<object> ObtenerEstadisticasAsync();
+        Task<ApiResponse<object>> ObtenerEstadisticas();
+        Task<ApiResponse<List<ConductorVM>>> BuscarConductores(string filtro);
         Task<ConductorVM?> ObtenerConductor(int idConductor);
-        Task<ConductoresResponseVM> ObtenerConductoresAsync(string? busqueda, TipoProveedor? tipo, int pagina);
+        Task<ApiResponse<List<ConductorListadoVM>>> ObtenerConductores(ConductoresFilterVM filter);
         Task<(bool success, string message, ConductorVM? data)> GuardarConductor(ConductorVM model);
         Task<(bool success, string message)> DeshabilitarConductor(int idConductor);
         Task<(bool success, string message)> EliminarAsync(int id);
@@ -22,32 +26,87 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
     {
         private readonly ApplicationDBContext _context;
         private readonly ILogger<VehiculoService> _logger;
-
+        private readonly UtilitiesServices _utilities;
+        private readonly IAuditoriaService _auditoriaService;
         // Días de alerta anticipada para vencimientos
         private const int DiasAlertaAnticipada = 30;
 
-        public ConductorService(ApplicationDBContext context, ILogger<VehiculoService> logger)
+        public ConductorService(ApplicationDBContext context, ILogger<VehiculoService> logger,UtilitiesServices utilities, IAuditoriaService auditoriaService)
         {
             _context = context;
             _logger = logger;
+            _utilities = utilities;
+            _auditoriaService = auditoriaService;
         }
-        public async Task<object> ObtenerEstadisticasAsync()
+        public async Task<ApiResponse<object>> ObtenerEstadisticas()
         {
             var hoy = DateTime.Today;
-
-            return new
+            try
             {
-                Total = await _context.Conductores.CountAsync(),
+                    var Total = await _context.Conductores.CountAsync();
+                    var Internos = await _context.Conductores.CountAsync(x => x.TipoProveedor == TipoProveedor.Interno);
+                    var Externos = await _context.Conductores.CountAsync(x => x.TipoProveedor == TipoProveedor.Externo);
+                    var LicenciasVencidas = await _context.Conductores.CountAsync(x => x.FechaVencimientoLicencia < hoy);
 
-                Internos = await _context.Conductores
-                    .CountAsync(x => x.TipoProveedor == TipoProveedor.Interno),
+                var result = new
+                {
+                    Total = Total,
+                    Internos = Internos,
+                    Externos = Externos,
+                    LicenciasVencidas = LicenciasVencidas
+                };
 
-                Externos = await _context.Conductores
-                    .CountAsync(x => x.TipoProveedor == TipoProveedor.Externo),
+                return new ApiResponse<object>
+                {
+                    Success = true,
+                    Message = "Dashboard cargado correctamente",
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                _utilities.RegistrarLog(ex.Message,"ObtenerDashboardUsuarios","ERROR");
 
-                LicenciasVencidas = await _context.Conductores
-                    .CountAsync(x => x.FechaVencimientoLicencia < hoy)
-            };
+                return new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+        }        
+        public async Task<ApiResponse<List<ConductorVM>>> BuscarConductores(string filtro)
+        {
+            try
+            {
+                var lista = await _context.Conductores
+                    .Where(x =>
+                        x.NombreCompleto.Contains(filtro)
+                        || x.Cedula.Contains(filtro)
+                        || x.Telefono.Contains(filtro))
+                    .Select(x => new ConductorVM
+                    {
+                        idConductor = x.idConductor,
+                        NombreCompleto = x.NombreCompleto,
+                        Cedula = x.Cedula,
+                        Telefono = x.Telefono
+                    })
+                    .ToListAsync();
+
+                return new ApiResponse<List<ConductorVM>>
+                {
+                    Success = true,
+                    Message = "Consulta realizada",
+                    Data = lista
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<List<ConductorVM>>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
         }
         public async Task<ConductorVM?> ObtenerConductor(int idConductor)
         {
@@ -55,110 +114,93 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
                 .Where(x => x.idConductor == idConductor)
                 .Select(x => new ConductorVM
                 {
+                    //datos generales
                     idConductor = x.idConductor,
                     NombreCompleto = x.NombreCompleto,
                     Cedula = x.Cedula,
                     Telefono = x.Telefono,
+                    TipoDocumento = x.TipoDocumento,
                     Correo = x.correo,
-
+                    //licencia
                     NumeroLicencia = x.NumeroLicencia,
                     CategoriaLicencia = x.CategoriaLicencia,
-                    CategoriaLicenciaAnterior = x.CategoriaLicenciaAnterior,
-
                     FechaExpedicionLicencia = x.FechaExpedicionLicencia,
                     FechaVencimientoLicencia = x.FechaVencimientoLicencia,
-
-                    OrganismoTransitoExpideLicencia =
-                        x.OrganismoTransitoExpideLicencia,
-
-                    RestriccionesLicencia =
-                        x.RestriccionesLicencia,
-
-                    TieneRetencionLicencia =
-                        x.TieneRetencionLicencia,
-
-                    RetencionLicencia =
-                        x.RetencionLicencia,
-
-                    OrganismoTransitoCancelaLicencia =
-                        x.OrganismoTransitoCancelaLicencia,
-
-                    EstadoLicencia =
-                        x.EstadoLicencia,
-
-                    TipoProveedor =
-                        x.TipoProveedor,
-
-                    EstadoPersona =
-                        x.EstadoPersona,
-
-                    EstadoConductor =
-                        x.EstadoConductor,
-
-                    Activo =
-                        x.Activo
+                    OrganismoExpide = x.OrganismoExpide,
+                    RestriccionesLicencia = x.RestriccionesLicencia,
+                    EstadoLicencia = x.EstadoLicencia,
+                    TipoConductor = x.TipoProveedor,
+                    Activo = x.Activo
                 })
                 .FirstOrDefaultAsync();
         }
-        public async Task<ConductoresResponseVM> ObtenerConductoresAsync(string? busqueda, TipoProveedor? tipo, int pagina)
+        public async Task<ApiResponse<List<ConductorListadoVM>>> ObtenerConductores(ConductoresFilterVM filter)
         {
-            const int pageSize = 10;
-
-            var query = _context.Conductores.AsQueryable();
-
-            if (tipo.HasValue)
-                query = query.Where(x => x.TipoProveedor == tipo);
-
-            if (!string.IsNullOrWhiteSpace(busqueda))
+            try
             {
-                query = query.Where(x =>
-                    x.NombreCompleto.Contains(busqueda) ||
-                    x.Cedula.Contains(busqueda) ||
-                    x.Telefono.Contains(busqueda) ||
-                    x.NumeroLicencia.Contains(busqueda));
-            }
+                var query = _context.Conductores.AsQueryable();
 
-            var totalRegistros = await query.CountAsync();
-
-            var conductores = await query
-                .OrderBy(x => x.NombreCompleto)
-                .Skip((pagina - 1) * pageSize)
-                .Take(pageSize)
-                .Select(x => new ConductorListadoVM
+                if (!string.IsNullOrWhiteSpace(filter.Busqueda))
                 {
-                    Id = x.idConductor,
-                    NombreCompleto = x.NombreCompleto,
-                    Cedula = x.Cedula,
-                    Telefono = x.Telefono,
-                    Correo = x.correo!,
-                    NumeroLicencia = x.NumeroLicencia,
-                    FechaVencimientoLicencia = x.FechaVencimientoLicencia,
-                    Activo = x.Activo,
-                    TipoProveedor = x.TipoProveedor
-                })
-                .ToListAsync();
+                    query = query.Where(x =>
+                        x.NombreCompleto!.Contains(filter.Busqueda) ||
+                        x.Cedula!.Contains(filter.Busqueda) ||
+                        x.Telefono!.Contains(filter.Busqueda) ||
+                        x.NumeroLicencia!.Contains(filter.Busqueda));
+                }
 
-            return new ConductoresResponseVM
+                if (filter.Tipo.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.TipoProveedor == filter.Tipo);
+                }
+
+                var total = await query.CountAsync();
+
+                var conductores = await query
+                    .OrderBy(x => x.NombreCompleto)
+                    .Skip((filter.Page - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .Select(x => new ConductorListadoVM
+                    {
+                        Id = x.idConductor,
+                        NombreCompleto = x.NombreCompleto,
+                        Cedula = x.Cedula,
+                        Telefono = x.Telefono,
+                        Correo = x.correo!,
+                        NumeroLicencia = x.NumeroLicencia,
+                        FechaVencimientoLicencia = x.FechaVencimientoLicencia,
+                        Activo = x.Activo,
+                        TipoProveedor = x.TipoProveedor
+                    })
+                    .ToListAsync();
+
+                return new ApiResponse<List<ConductorListadoVM>>
+                {
+                    Success = true,
+                    Message = "Datos encontrados con éxito",
+                    Data = conductores,
+
+                    Pagination = new PaginationVM
+                    {
+                        Page = filter.Page,
+                        PageSize = filter.PageSize,
+                        Total = total
+                    }
+                };
+            }
+            catch (Exception ex)
             {
-                Conductores = conductores,
+                _utilities.RegistrarLog(ex.Message,nameof(ObtenerConductores),"ERROR");
 
-                TotalRegistros = totalRegistros,
-                PaginaActual = pagina,
-                TotalPaginas = (int)Math.Ceiling(totalRegistros / (double)pageSize),
-
-                Total = await _context.Conductores.CountAsync(),
-
-                Internos = await _context.Conductores
-                    .CountAsync(x => x.TipoProveedor == TipoProveedor.Interno),
-
-                Externos = await _context.Conductores
-                    .CountAsync(x => x.TipoProveedor == TipoProveedor.Externo),
-
-                LicenciasVencidas = await _context.Conductores
-                    .CountAsync(x => x.FechaVencimientoLicencia < DateTime.Today)
-            };
-        }
-
+                return new ApiResponse<List<ConductorListadoVM>>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = []
+                };
+            }
+        }        
         public async Task<(bool success, string message, ConductorVM? data)> GuardarConductor(ConductorVM model)
         {
             try
@@ -180,63 +222,24 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
 
                     conductor.FechaCreacion = DateTime.Now;
                 }
-
+                //generales
                 conductor.NombreCompleto = model.NombreCompleto;
+                conductor.TipoDocumento = model.TipoDocumento;
                 conductor.Cedula = model.Cedula;
                 conductor.Telefono = model.Telefono;
                 conductor.correo = model.Correo;
-
+                conductor.Activo = model.EstadoConductor;
+                conductor.TipoProveedor = model.TipoConductor;
+                conductor.EstadoConductor = model.EstadoConductor ? EstadoConductor.Activo : EstadoConductor.Suspendido;
+                //licencia
                 conductor.NumeroLicencia = model.NumeroLicencia;
                 conductor.CategoriaLicencia = model.CategoriaLicencia;
-                conductor.CategoriaLicenciaAnterior = model.CategoriaLicenciaAnterior;
-
-                conductor.FechaExpedicionLicencia =
-                    model.FechaExpedicionLicencia ?? DateTime.Now;
-
-                conductor.FechaVencimientoLicencia =
-                    model.FechaVencimientoLicencia ?? DateTime.Now;
-
-                conductor.OrganismoTransitoExpideLicencia =
-                    model.OrganismoTransitoExpideLicencia;
-
-                conductor.RestriccionesLicencia =
-                    model.RestriccionesLicencia;
-
-                conductor.TieneRetencionLicencia =
-                    model.TieneRetencionLicencia;
-
-                conductor.RetencionLicencia =
-                    model.RetencionLicencia;
-
-                conductor.OrganismoTransitoCancelaLicencia =
-                    model.OrganismoTransitoCancelaLicencia;
-
-                conductor.EstadoLicencia =
-                    model.EstadoLicencia;
-
-                conductor.TipoProveedor =
-                    model.TipoProveedor;
-
-                conductor.RazonSocialExterna =
-                    model.RazonSocialExterna;
-
-                conductor.NitExterno =
-                    model.NitExterno;
-
-                conductor.TarifaExterna =
-                    model.TarifaExterna;
-
-                conductor.ObservacionesExterno =
-                    model.ObservacionesExterno;
-
-                conductor.EstadoPersona =
-                    model.EstadoPersona;
-
-                conductor.EstadoConductor =
-                    model.EstadoConductor;
-
-                conductor.Activo =
-                    model.Activo;
+                conductor.EstadoLicencia = model.EstadoLicencia;
+                conductor.OrganismoExpide = model.OrganismoExpide;
+                conductor.FechaExpedicionLicencia = model.FechaExpedicionLicencia ?? DateTime.Now;
+                conductor.FechaVencimientoLicencia = model.FechaVencimientoLicencia ?? DateTime.Now;
+                conductor.Vigencia = model.Vigencia;
+                conductor.RestriccionesLicencia = model.RestriccionesLicencia;
 
                 await _context.SaveChangesAsync();
 
@@ -266,7 +269,7 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
                     return (false, "Conductor no encontrado");
 
                 conductor.Activo = false;
-
+                conductor.EstadoConductor = EstadoConductor.Suspendido;
                 await _context.SaveChangesAsync();
 
                 return (true, "Conductor deshabilitado correctamente");

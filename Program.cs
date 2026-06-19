@@ -52,6 +52,7 @@ builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IServiciosService, ServiciosService>();
 builder.Services.AddScoped<IVehiculoService, VehiculoService>();
+builder.Services.AddScoped<IConductorService, ConductorService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ICotizacionService, CotizacionService>();

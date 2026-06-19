@@ -131,8 +131,6 @@ namespace AppServiceAndTravel.Services
             {
                 var message = "Error interno del servidor: " + ex.Message;
 
-                _utilities.RegistrarLog(ex.Message, "SaveHistRefreshToken");
-
                 return new AuthResponse
                 {
                     Token = null!,
@@ -315,7 +313,6 @@ namespace AppServiceAndTravel.Services
                     item.idProceso
                 );
             }
-            _utilities.RegistrarLog($"Procesos encontrados: {procesos.Count}","NavProcess","INFO");
             return hijos;
         }
         public async Task<LoginResponseVM> Login(string usuario, string clave)

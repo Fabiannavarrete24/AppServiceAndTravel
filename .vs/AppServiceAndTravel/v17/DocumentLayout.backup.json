@@ -3,20 +3,36 @@
   "WorkspaceRootPath": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\comercial\\views\\app\\crearcotizacion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\comercial\\views\\app\\crearcotizacion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\services\\pdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:services\\pdfservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\comercial\\views\\app\\clientes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\comercial\\views\\app\\clientes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\views\\app\\configuraciongeneral.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\views\\app\\configuraciongeneral.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\comercial\\services\\cotizacionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\comercial\\services\\cotizacionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\operaciones\\views\\app\\crearvehiculo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\operaciones\\views\\app\\crearvehiculo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\admin\\services\\configuracionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\admin\\services\\configuracionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\comercial\\views\\app\\crearcotizacion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\comercial\\views\\app\\crearcotizacion.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\operaciones\\views\\app\\crearvehiculo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|solutionrelative:areas\\operaciones\\views\\app\\crearvehiculo.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7476AC6F-09CA-478C-AEA6-DD41487E8999}|AppServiceAndTravel.csproj|d:\\proyectos\\app\u0027s\\appserviceandtravel\\areas\\operaciones\\controllers\\vehiculoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -46,11 +62,60 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PdfService.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Services\\PdfService.cs",
+              "RelativeDocumentMoniker": "Services\\PdfService.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Services\\PdfService.cs",
+              "RelativeToolTip": "Services\\PdfService.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAgwC4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-18T20:56:37.023Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Clientes.cshtml",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Comercial\\Views\\App\\Clientes.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Comercial\\Views\\App\\Clientes.cshtml",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Comercial\\Views\\App\\Clientes.cshtml",
+              "RelativeToolTip": "Areas\\Comercial\\Views\\App\\Clientes.cshtml",
+              "ViewState": "AgIAAPkAAAAAAAAAAAAAAP0AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-12T15:16:39.022Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ConfiguracionService.cs",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Services\\ConfiguracionService.cs",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Services\\ConfiguracionService.cs",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Services\\ConfiguracionService.cs",
+              "RelativeToolTip": "Areas\\Admin\\Services\\ConfiguracionService.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAUwC4AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T15:10:41.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ConfiguracionGeneral.cshtml",
+              "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\ConfiguracionGeneral.cshtml",
+              "RelativeDocumentMoniker": "Areas\\Admin\\Views\\App\\ConfiguracionGeneral.cshtml",
+              "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Admin\\Views\\App\\ConfiguracionGeneral.cshtml",
+              "RelativeToolTip": "Areas\\Admin\\Views\\App\\ConfiguracionGeneral.cshtml",
+              "ViewState": "AgIAAKMDAAAAAAAAAADgv7UDAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-06-12T15:08:37.822Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "CotizacionService.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Comercial\\Services\\CotizacionService.cs",
               "RelativeDocumentMoniker": "Areas\\Comercial\\Services\\CotizacionService.cs",
@@ -58,38 +123,35 @@
               "RelativeToolTip": "Areas\\Comercial\\Services\\CotizacionService.cs",
               "ViewState": "AgIAANQAAAAAAAAAAAAqwOoAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-12T14:27:45.666Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T14:27:45.666Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 6,
               "Title": "CrearCotizacion.cshtml",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Comercial\\Views\\App\\CrearCotizacion.cshtml",
               "RelativeDocumentMoniker": "Areas\\Comercial\\Views\\App\\CrearCotizacion.cshtml",
               "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Comercial\\Views\\App\\CrearCotizacion.cshtml",
               "RelativeToolTip": "Areas\\Comercial\\Views\\App\\CrearCotizacion.cshtml",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAAAL8AAABoAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-12T14:21:47.318Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-12T14:21:47.318Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
               "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAABPAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAIAwwEQAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-11T19:50:14.902Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T19:50:14.902Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "CrearVehiculo.cshtml",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Operaciones\\Views\\App\\CrearVehiculo.cshtml",
               "RelativeDocumentMoniker": "Areas\\Operaciones\\Views\\App\\CrearVehiculo.cshtml",
@@ -97,25 +159,23 @@
               "RelativeToolTip": "Areas\\Operaciones\\Views\\App\\CrearVehiculo.cshtml",
               "ViewState": "AgIAANEBAAAAAAAAAIAwwA4CAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-06-11T18:39:08.634Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T18:39:08.634Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "VehiculoDetalleVM.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Operaciones\\ViewModels\\VehiculoDetalleVM.cs",
               "RelativeDocumentMoniker": "Areas\\Operaciones\\ViewModels\\VehiculoDetalleVM.cs",
               "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Operaciones\\ViewModels\\VehiculoDetalleVM.cs",
               "RelativeToolTip": "Areas\\Operaciones\\ViewModels\\VehiculoDetalleVM.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAA6wEYAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAADUAAAAAAAAAAAA2wEYAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T17:08:59.291Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T17:08:59.291Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "VehiculosController.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Operaciones\\Controllers\\VehiculosController.cs",
               "RelativeDocumentMoniker": "Areas\\Operaciones\\Controllers\\VehiculosController.cs",
@@ -123,12 +183,11 @@
               "RelativeToolTip": "Areas\\Operaciones\\Controllers\\VehiculosController.cs",
               "ViewState": "AgIAACkAAAAAAAAAAAAkwEMAAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T17:01:19.945Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T17:01:19.945Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "Vehiculo.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Areas\\Operaciones\\Models\\Vehiculo.cs",
               "RelativeDocumentMoniker": "Areas\\Operaciones\\Models\\Vehiculo.cs",
@@ -136,34 +195,31 @@
               "RelativeToolTip": "Areas\\Operaciones\\Models\\Vehiculo.cs",
               "ViewState": "AgIAADoAAAAAAAAAAAAwwE0AAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T17:17:19.406Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T17:17:19.406Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "UtilitiesServices.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Services\\UtilitiesServices.cs",
               "RelativeDocumentMoniker": "Services\\UtilitiesServices.cs",
               "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Services\\UtilitiesServices.cs",
               "RelativeToolTip": "Services\\UtilitiesServices.cs",
-              "ViewState": "AgIAAIUAAAAAAAAAAAArwJ8AAABBAAAAAAAAAA==",
+              "ViewState": "AgIAAIUAAAAAAAAAAAArwJ8AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T14:10:36.72Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T14:10:36.72Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "HelpsController.cs",
               "DocumentMoniker": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Controllers\\HelpsController.cs",
               "RelativeDocumentMoniker": "Controllers\\HelpsController.cs",
               "ToolTip": "D:\\Proyectos\\App\u0027s\\AppServiceAndTravel\\Controllers\\HelpsController.cs",
               "RelativeToolTip": "Controllers\\HelpsController.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAswDEAAABBAAAAAAAAAA==",
+              "ViewState": "AgIAABoAAAAAAAAAAAA7wDEAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-11T12:55:51.177Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-06-11T12:55:51.177Z"
             }
           ]
         }

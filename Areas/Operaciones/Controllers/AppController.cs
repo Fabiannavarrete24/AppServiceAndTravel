@@ -18,7 +18,8 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
         {
             return View();
         }
-        public IActionResult CrearConductor() { 
+        public IActionResult CrearConductor(int? id) { 
+            ViewBag.IdConductor = id;
             return View();
         }
         #endregion

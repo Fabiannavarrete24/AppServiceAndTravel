@@ -2,6 +2,7 @@ using AppServiceAndTravel.Areas.Operaciones.Models;
 using AppServiceAndTravel.Areas.Operaciones.Services;
 using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Data;
+using AppServiceAndTravel.Helpers.Filters;
 using AppServiceAndTravel.Models;
 using AppServiceAndTravel.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -24,15 +25,31 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
             _logger = logger;
         }
         [HttpGet]
-        public async Task<IActionResult> ObtenerConductores(string? busqueda, TipoProveedor? tipo, int pagina = 1)
+        public async Task<IActionResult> ObtenerDashboard()
         {
-            var resultado = await _conductorService.ObtenerConductoresAsync(
-                busqueda,
-                tipo,
-                pagina);
+            var result = await _conductorService.ObtenerEstadisticas();
+
+            if (!result.Success)
+            {
+                return BadRequest(new{success = false,message = result.Message});
+            }
+
+            return Ok(new{success = true,data = result.Data});
+        }        
+        [HttpGet]
+        public async Task<IActionResult> ObtenerConductores(ConductoresFilterVM filter)
+        {
+            var resultado = await _conductorService.ObtenerConductores(filter);
 
             return Ok(resultado);
         }
+        [HttpGet]
+        public async Task<IActionResult> BuscarConductores(string filtro)
+        {
+            var response = await _conductorService.BuscarConductores(filtro);
+
+            return Json(response);
+        }        
         [HttpGet]
         public async Task<IActionResult> ObtenerConductor(int id)
         {
@@ -41,7 +58,7 @@ namespace AppServiceAndTravel.Areas.Operaciones.Controllers
             if (conductor == null)
                 return NotFound();
 
-            return Ok(conductor);
+            return Ok(new{success = true,data = conductor});
         }
         [HttpPost]
         public async Task<IActionResult> EliminarConductor(int id)

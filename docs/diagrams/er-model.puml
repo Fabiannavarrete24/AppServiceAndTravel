@@ -1,0 +1,19 @@
+@startuml
+
+entity Clientes
+entity Cotizaciones
+entity Vehiculos
+entity Conductores
+entity Proveedor
+entity TypeService
+entity ApplicationUser
+entity LogSistema
+entity ActividadSistema
+
+Clientes ||--o{ Cotizaciones
+Proveedor ||--o{ Vehiculos
+Vehiculos ||--o{ Conductores
+ApplicationUser ||--o{ LogSistema
+ApplicationUser ||--o{ ActividadSistema
+
+@enduml

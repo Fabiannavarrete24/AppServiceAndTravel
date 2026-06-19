@@ -39,6 +39,25 @@
             <span class="ms-2">Cargando...</span>
         </div>
     </div>
+    <div id="appNotification" class="notification-overlay d-none">
+        <div class="card notification-card shadow-lg border-0">
+            <div class="card-header border-0 bg-transparent text-center">
+                <i id="notificationIcon" class=""></i>
+            </div>
+            <div class="card-body text-center">
+                <h5 id="notificationTitle" class="fw-bold mb-3"></h5>
+                <p id="notificationMessage" class="text-muted"></p>
+                <button id="btnVerDetalle" class="btn btn-outline-secondary btn-sm">Ver detalle</button>
+                <div id="notificationDetail" class="mt-3 d-none">
+                    <textarea id="notificationContent" class="form-control" rows="8" readonly></textarea>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 text-center">
+                <button id="btnNotificationCancel" class="btn btn-outline-secondary d-none">Cancelar</button>
+                <button id="btnNotificationOk" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+    </div>
     <partial name="_Sidebar" />
     <div id="main-wrapper">
 
@@ -60,12 +79,12 @@
         </div>
     </div>
     <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999; width:350px;">
-    </div>    
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>  
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.js"></script>
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>    
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
     <script src="~/lib/datatables/datatables.js"></script>
     <script src="~/lib/datatables/datatables.min.js"></script>
@@ -79,162 +98,113 @@
     <script src="~/lib/moment/moment-with-locales.js"></script>
     <script src="~/lib/moment/locale/es-mx.js"></script>
     <script src="~/lib/Chart/chart.umd.min.js"></script>
-    <script src="~/js/functions.js"></script>
+    <script src="~/js/functions.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/table-manager.js"></script>
+    <script src="~/js/table-manager.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        function closeNotification() {
+            $("#appNotification").addClass("d-none");
+        }
+
+        $("#btnNotificationOk").on("click", function () {
+            closeNotification();
+        });
+
+        $("#btnVerDetalle").on("click", function () {
+            $("#notificationDetail").toggleClass("d-none");
+        });              
+    </script>
     <script>
         moment.locale('es');
         const tooltipTriggerList = $('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-        
+
         $(document).ready(function () {
 
             let menu = sessionStorage.getItem("app_menu");
 
             if (menu) {
                 renderMenu(JSON.parse(menu));
-            } 
-            else {
-                 loadMenu();
             }
-             LoadConfiguracion();
+            else {
+                loadMenu();
+            }
+            
+            LoadConfiguracion();
         });
 
-        function calcularDiasVigencia(fechaInicioId, fechaFinId, resultadoId) {
-
-            const inicio = $(fechaInicioId).val();
-            const fin = $(fechaFinId).val();
-
-            if (!inicio || !fin) {
-                $(resultadoId).val('');
-                return;
-            }
-
-            const fechaInicio = new Date(inicio);
-            const fechaFin = new Date(fin);
-
-            const diferenciaMs = fechaFin - fechaInicio;
-
-            if (diferenciaMs < 0) {
-                $(resultadoId).val(0);
-                return;
-            }
-
-            const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)) + 1;
-
-            $(resultadoId).val(dias);
-        }
-
-        function actualizarBadgeVigencia(inputId, badgeId) {
-
-            const dias = parseInt($(inputId).val()) || 0;
-            const badge = $(badgeId);
-
-            badge.removeClass('text-bg-success text-bg-warning text-bg-danger text-bg-secondary');
-
-            if (dias > 15) {
-                badge.addClass('text-bg-success').removeClass('d-none').text('Vigente');
-            }
-            else if (dias > 5) {
-                badge.addClass('text-bg-warning').removeClass('d-none').text('Vence pronto');
-            }
-            else {
-                badge.addClass('text-bg-danger').removeClass('d-none').text('Vencido');
-            }
-        }
-
-        function LoadSelect(selectId, data) {
-            var categoriaSelect = $(selectId);
-            categoriaSelect.empty();
-            categoriaSelect.append('<option value="">Seleccione una opción</option>');
-            $.each(data, function (i, item) {
-                categoriaSelect.append('<option value="' + item.id + '">' + item.descripcion + "</option>");
-            });
-        }
-        
-        function showToast(message, type = "success", time = 2500) {
-
-            let id = "toast_" + Date.now();
-            let toast = `<div id="${id}" class="alert alert-${type} shadow toast-animate mb-2" role="alert">${message}</div>`;
-            $("#toastContainer").append(toast);
-
-            setTimeout(() => {
-
-                $("#" + id).fadeOut(300, function () {
-                    $(this).remove();
-                });
-
-            }, time);
-        }
-
         function loadMenu() {
-            $.ajax({
-                url: '/Helps/MenuNavegacion',
-                type: "GET",
-                beforeSend: function () {
-                    showLoader();
-                },
-                success: function (response) {
-                    sessionStorage.setItem("app_menu", JSON.stringify(response.data));
-                    renderMenu(response.data);
-                },
-                error: function (error) {
-                    console.log(error)
-                },
-                complete: function () {
-                    hideLoader();
-                }
-            });
+        $.ajax({
+        url: '/Helps/MenuNavegacion',
+        type: "GET",
+        beforeSend: function () {
+        showLoader();
+        },
+        success: function (response) {
+        sessionStorage.setItem("app_menu", JSON.stringify(response.data));
+        renderMenu(response.data);
+        },
+        error: function (error) {
+        console.log(error)
+        },
+        complete: function () {
+        hideLoader();
+        }
+        });
         }
 
         function renderMenu(data) {
-            const container = $("#sidebarMenuContainer");
-            container.html("");
-            let html = "";
-            data.forEach(menu => {
-                html += renderMenuItem(menu);
-            });
-            container.append(html);
+        const container = $("#sidebarMenuContainer");
+        container.html("");
+        let html = "";
+        data.forEach(menu => {
+        html += renderMenuItem(menu);
+        });
+        container.append(html);
         }
 
         function renderMenuItem(menu, level = 0) {
-            const tieneHijos = menu.hijos && menu.hijos.length > 0;
-            let url = "#";
+        const tieneHijos = menu.hijos && menu.hijos.length > 0;
+        let url = "#";
 
-            if (menu.controlador && menu.url) {
-                if (menu.area) {
-                    url = `/${menu.area}/${menu.controlador}/${menu.url}`;
-                }
-                else {
-                    url = `/${menu.controlador}/${menu.url}`;
-                }
-            }
+        if (menu.controlador && menu.url) {
+        if (menu.area) {
+        url = `/${menu.area}/${menu.controlador}/${menu.url}`;
+        }
+        else {
+        url = `/${menu.controlador}/${menu.url}`;
+        }
+        }
 
-            const icono = menu.icono ? `<i class="fa ${menu.icono} me-2"></i>` : `<i class="fa fa-circle me-2 fs-6"></i>`;
+        const icono = menu.icono ? `<i class="fa ${menu.icono} me-2"></i>` : `<i class="fa fa-circle me-2"></i>`;
 
-            if (tieneHijos) {
-       
-                let subMenuHtml = "";
+        if (tieneHijos) {
+
+            let subMenuHtml = "";
+
             menu.hijos.forEach(hijo => {
                 subMenuHtml += renderMenuItem(hijo, level + 1);
             });
 
             return `
-                <div class="sidebar-group level-${level}">
-                <a class="sidebar-link sidebar-dropdown-toggle" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
-                ${icono} <span>${menu.proceso}</span> <i class="fa fa-chevron-down ms-auto dropdown-icon"></i>
+            <div class="sidebar-group level-${level}">
+                <a class="sidebar-link sidebar-dropdown-toggle justify-content-between" data-id="menu-${menu.idProceso}" href="javascript:void(0)">
+                 <div>
+                    ${icono} <span>${menu.proceso}</span>
+                 </div> 
+                 <i class="fa fa-chevron-down dropdown-icon"></i>
                 </a>
                 <div class="sidebar-submenu" id="menu-${menu.idProceso}">
                 ${subMenuHtml}
                 </div>
-                </div>`;
-            }
+            </div>`;
+        }
 
-            return `
-                <a href="${url}" class="sidebar-link level-${level}">
-                ${icono} <span>${menu.proceso}</span>
-                </a>`;
+        return `
+        <a href="${url}" class="sidebar-link level-${level}">
+            ${icono} <span>${menu.proceso}</span>
+        </a>`;
         }
 
         $(document).on("click", ".sidebar-dropdown-toggle", function () {
@@ -245,87 +215,87 @@
 
         function LoadConfiguracion() {
 
-            const cfg = localStorage.getItem('app_configuracion');
+        const cfg = localStorage.getItem('app_configuracion');
 
-            if (cfg) {
+        if (cfg) {
 
-                const config = JSON.parse(cfg);
-                AplicarConfiguracion(config);
+        const config = JSON.parse(cfg);
+        AplicarConfiguracion(config);
 
-                return;
-            }
-
-            $.ajax({
-                url: '/Admin/Configuracion/GetConfiguracion',
-                type: 'GET',
-                beforeSend: function () {
-                    showLoader();
-                },
-                success: function (response) {
-                    if (!response.success)
-                        return;
-
-                        const config = response.dataConfig;
-                        localStorage.setItem('app_configuracion',JSON.stringify(config)
-                    );
-                    AplicarConfiguracion(config);
-                },
-                error: function (xhr) {
-                    console.error('Error cargando configuración',xhr);
-                },
-                complete: function () {
-                    hideLoader();
-                }
-            });
+        return;
         }
-        
+
+        $.ajax({
+        url: '/Admin/Configuracion/GetConfiguracion',
+        type: 'GET',
+        beforeSend: function () {
+        showLoader();
+        },
+        success: function (response) {
+        if (!response.success)
+        return;
+
+        const config = response.dataConfig;
+        localStorage.setItem('app_configuracion', JSON.stringify(config)
+        );
+        AplicarConfiguracion(config);
+        },
+        error: function (xhr) {
+        console.error('Error cargando configuración', xhr);
+        },
+        complete: function () {
+        hideLoader();
+        }
+        });
+        }
+
         function syncColor(field, value) {
 
-          $('#color_' + field).val(value);
-          $('#hex_' + field).val(value);
+        $('#color_' + field).val(value);
+        $('#hex_' + field).val(value);
 
-          const map = {
-            ColorPrimario: '--cp',
-            ColorSecundario: '--cs',
-            ColorAcento: '--ca',
-            ColorTexto: '--ct',
-            ColorFondo: '--cbg',
-            ColorPeligro: '--cd',
-            ColorAdvertencia: '--cw'
-          };
+        const map = {
+        ColorPrimario: '--cp',
+        ColorSecundario: '--cs',
+        ColorAcento: '--ca',
+        ColorTexto: '--ct',
+        ColorFondo: '--cbg',
+        ColorPeligro: '--cd',
+        ColorAdvertencia: '--cw'
+        };
 
-          if (map[field]) {
+        if (map[field]) {
 
-            document.documentElement.style.setProperty(map[field], value);
-          }
+        document.documentElement.style.setProperty(map[field], value);
+        }
 
         }
 
         function AplicarConfiguracion(config) {
 
-            syncColor('ColorPrimario', config.colorPrimario || '#1d4ed8');
-            syncColor('ColorSecundario', config.colorSecundario || '#475569');
-            syncColor('ColorAcento', config.colorAcento || '#0ea5e9');
-            syncColor('ColorTexto', config.colorTexto || '#1e293b');
-            syncColor('ColorFondo', config.colorFondo || '#f8fafc');
-            syncColor('ColorPeligro', config.colorPeligro || '#dc2626');
-            syncColor('ColorAdvertencia', config.colorAdvertencia || '#f59e0b');
+        syncColor('ColorPrimario', config.colorPrimario || '#1d4ed8');
+        syncColor('ColorSecundario', config.colorSecundario || '#475569');
+        syncColor('ColorAcento', config.colorAcento || '#0ea5e9');
+        syncColor('ColorTexto', config.colorTexto || '#1e293b');
+        syncColor('ColorFondo', config.colorFondo || '#f8fafc');
+        syncColor('ColorPeligro', config.colorPeligro || '#dc2626');
+        syncColor('ColorAdvertencia', config.colorAdvertencia || '#f59e0b');
 
-            const fuente = config.fuenteSistema || 'Segoe UI';
+        const fuente = config.fuenteSistema || 'Segoe UI';
 
-            $('#inputFuente').val(fuente);
-            document.documentElement.style.setProperty('--font-family-base',`'${fuente}', sans-serif`);
-            document.documentElement.style.setProperty('--font-size-base', config.tamanoFuenteBase || '14px');
-            $('body').css({
-                'font-family': `'${fuente}', sans-serif`,
-                'font-size': config.tamanoFuenteBase || '14px',
-                'background-color': config.colorFondo || '#f8fafc',
-                'color': config.colorTexto || '#1e293b'
-            });
+        $('#inputFuente').val(fuente);
+        document.documentElement.style.setProperty('--font-family-base', `'${fuente}', sans-serif`);
+        document.documentElement.style.setProperty('--font-size-base', config.tamanoFuenteBase || '14px');
+        $('body').css({
+        'font-family': `'${fuente}', sans-serif`,
+        'font-size': config.tamanoFuenteBase || '14px',
+        'background-color': config.colorFondo || '#f8fafc',
+        'color': config.colorTexto || '#1e293b'
+        });
 
-            if (config.nombreTema) {
-                $('#inputTema').val(config.nombreTema);
-            }
+        if (config.nombreTema) {
+        $('#inputTema').val(config.nombreTema);
+        }
 
         }
 

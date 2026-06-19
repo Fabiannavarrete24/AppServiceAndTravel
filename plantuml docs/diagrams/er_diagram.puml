@@ -1,0 +1,77 @@
+@startuml
+entity "Clientes" as Clientes {
+  * ClienteId : int
+  --
+  Nombre : nvarchar
+  Email : nvarchar
+  Telefono : nvarchar
+}
+
+entity "Cotizaciones" as Cotizaciones {
+  * CotizacionId : int
+  --
+  Fecha : datetime
+  Total : decimal
+  ClienteId : int
+  TipoServiceId : int
+}
+
+entity "Vehiculos" as Vehiculos {
+  * VehiculoId : int
+  --
+  Marca : nvarchar
+  Modelo : nvarchar
+  ProveedorId : int
+}
+
+entity "Conductores" as Conductores {
+  * ConductorId : int
+  --
+  Nombre : nvarchar
+  Licencia : nvarchar
+  VehiculoId : int
+}
+
+entity "Proveedor" as Proveedor {
+  * ProveedorId : int
+  --
+  Nombre : nvarchar
+}
+
+entity "TypeService" as TypeService {
+  * TypeServiceId : int
+  --
+  Nombre : nvarchar
+}
+
+entity "ApplicationUser" as ApplicationUser {
+  * Id : nvarchar
+  --
+  UserName : nvarchar
+  Email : nvarchar
+}
+
+entity "LogSistema" as LogSistema {
+  * LogId : int
+  --
+  Fecha : datetime
+  Accion : nvarchar
+  UsuarioId : nvarchar
+}
+
+entity "ActividadSistema" as ActividadSistema {
+  * ActividadId : int
+  --
+  Fecha : datetime
+  Descripcion : nvarchar
+  UsuarioId : nvarchar
+}
+
+Clientes ||--o{ Cotizaciones : "ClienteId"
+TypeService ||--o{ Cotizaciones : "TipoServiceId"
+Proveedor ||--o{ Vehiculos : "ProveedorId"
+Vehiculos ||--o{ Conductores : "VehiculoId"
+ApplicationUser ||--o{ LogSistema : "UsuarioId"
+ApplicationUser ||--o{ ActividadSistema : "UsuarioId"
+
+@enduml	

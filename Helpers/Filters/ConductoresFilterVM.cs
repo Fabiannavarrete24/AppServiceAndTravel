@@ -9,12 +9,8 @@ namespace AppServiceAndTravel.Helpers.Filters
 
         public TipoProveedor? Tipo { get; set; }
 
-        public int Pagina { get; set; } = 1;
+        public int Page { get; set; } = 1;
 
-        public int TotalPaginas { get; set; }
-
-        public int TotalRegistros { get; set; }
-
-        public List<Conductores> Conductores { get; set; } = [];
+        public int PageSize { get; set; } = 10;
     }
 }

@@ -365,7 +365,7 @@ namespace AppServiceAndTravel.Migrations
                             SimboloMoneda = "$",
                             TamanoFuenteBase = "14px",
                             TemaSeleccionado = "Azul corporativo",
-                            UltimaModificacion = new DateTime(2026, 6, 11, 11, 34, 55, 989, DateTimeKind.Local).AddTicks(3218),
+                            UltimaModificacion = new DateTime(2026, 6, 16, 14, 53, 57, 160, DateTimeKind.Local).AddTicks(7854),
                             ZonaHoraria = "America/Bogota"
                         });
                 });
@@ -530,8 +530,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1543),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1543),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9848),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9848),
                             hereda = true,
                             lectura = true
                         },
@@ -544,8 +544,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1547),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1547),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9850),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9850),
                             hereda = true,
                             lectura = true
                         },
@@ -558,8 +558,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1548),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1548),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9851),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9851),
                             hereda = true,
                             lectura = true
                         },
@@ -572,8 +572,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1549),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1549),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9852),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9852),
                             hereda = true,
                             lectura = true
                         },
@@ -586,8 +586,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1550),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1551),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9853),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9853),
                             hereda = true,
                             lectura = true
                         },
@@ -600,8 +600,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1552),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1552),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9854),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9854),
                             hereda = true,
                             lectura = true
                         },
@@ -614,8 +614,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1553),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1553),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9855),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9855),
                             hereda = true,
                             lectura = true
                         },
@@ -628,8 +628,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1554),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1554),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9856),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9856),
                             hereda = true,
                             lectura = true
                         },
@@ -642,8 +642,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1555),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1555),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9857),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9857),
                             hereda = true,
                             lectura = true
                         },
@@ -656,8 +656,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1556),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1557),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9858),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9858),
                             hereda = true,
                             lectura = true
                         },
@@ -670,8 +670,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1558),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1558),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9859),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9859),
                             hereda = true,
                             lectura = true
                         },
@@ -684,8 +684,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1559),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1559),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9860),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9860),
                             hereda = true,
                             lectura = true
                         },
@@ -698,8 +698,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1560),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1560),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9861),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9861),
                             hereda = true,
                             lectura = true
                         },
@@ -712,8 +712,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1561),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1561),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9862),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9862),
                             hereda = true,
                             lectura = true
                         },
@@ -726,8 +726,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1562),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1562),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9863),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9863),
                             hereda = true,
                             lectura = true
                         },
@@ -740,8 +740,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1563),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1563),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9865),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9865),
                             hereda = true,
                             lectura = true
                         },
@@ -754,8 +754,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1564),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1565),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9866),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9866),
                             hereda = true,
                             lectura = true
                         },
@@ -768,8 +768,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1566),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1566),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9867),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9867),
                             hereda = true,
                             lectura = true
                         },
@@ -782,8 +782,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1567),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1567),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9868),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9868),
                             hereda = true,
                             lectura = true
                         },
@@ -796,8 +796,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1568),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1568),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9868),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9869),
                             hereda = true,
                             lectura = true
                         },
@@ -810,8 +810,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1569),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1569),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9869),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9870),
                             hereda = true,
                             lectura = true
                         },
@@ -824,8 +824,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1570),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1570),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9870),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9870),
                             hereda = true,
                             lectura = true
                         },
@@ -838,8 +838,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1571),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1571),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9871),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9871),
                             hereda = true,
                             lectura = true
                         },
@@ -852,8 +852,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1572),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1572),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9872),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9872),
                             hereda = true,
                             lectura = true
                         },
@@ -866,8 +866,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1573),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1573),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9873),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9873),
                             hereda = true,
                             lectura = true
                         },
@@ -880,8 +880,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1574),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1574),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9874),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9874),
                             hereda = true,
                             lectura = true
                         },
@@ -894,8 +894,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1575),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1576),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9875),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9875),
                             hereda = true,
                             lectura = true
                         },
@@ -908,8 +908,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1576),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1577),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9876),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9876),
                             hereda = true,
                             lectura = true
                         },
@@ -922,8 +922,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1578),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1578),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9877),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9877),
                             hereda = true,
                             lectura = true
                         },
@@ -936,8 +936,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1579),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1579),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9878),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9878),
                             hereda = true,
                             lectura = true
                         },
@@ -950,8 +950,8 @@ namespace AppServiceAndTravel.Migrations
                             deny = false,
                             edita = true,
                             elimina = true,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1580),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1580),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9878),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9879),
                             hereda = true,
                             lectura = true
                         });
@@ -1001,7 +1001,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 1,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(408),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9514),
                             icono = "fa-user-shield",
                             orden = 7,
                             proceso = "Seguridad"
@@ -1011,7 +1011,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 2,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(420),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9521),
                             idProcesoPadre = 1,
                             orden = 7,
                             proceso = "Configuracion General",
@@ -1022,7 +1022,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 3,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(423),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9523),
                             idProcesoPadre = 1,
                             orden = 7,
                             proceso = "Usuarios",
@@ -1033,7 +1033,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 4,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(426),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9525),
                             idProcesoPadre = 1,
                             orden = 7,
                             proceso = "Roles",
@@ -1044,7 +1044,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 5,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(427),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9526),
                             idProcesoPadre = 1,
                             orden = 7,
                             proceso = "Permisos",
@@ -1053,7 +1053,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 6,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(429),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9527),
                             icono = "fa-users-rectangle",
                             orden = 6,
                             proceso = "Proveedores"
@@ -1063,7 +1063,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 7,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(430),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9528),
                             idProcesoPadre = 6,
                             orden = 6,
                             proceso = "Listado de Proveedores",
@@ -1074,7 +1074,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 8,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(432),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9530),
                             idProcesoPadre = 6,
                             orden = 6,
                             proceso = "Nuevo Proveedor",
@@ -1083,7 +1083,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 9,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(434),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9531),
                             icono = "fa-address-card",
                             orden = 4,
                             proceso = "Conductores"
@@ -1093,7 +1093,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 10,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(435),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9532),
                             idProcesoPadre = 9,
                             orden = 4,
                             proceso = "Listado de Conductores",
@@ -1104,7 +1104,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 11,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(437),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9533),
                             idProcesoPadre = 9,
                             orden = 4,
                             proceso = "Nuevo Conductor",
@@ -1115,7 +1115,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 12,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(439),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9569),
                             idProcesoPadre = 9,
                             orden = 4,
                             proceso = "Listado de Conductores Aliados",
@@ -1126,7 +1126,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 13,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(440),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9570),
                             idProcesoPadre = 9,
                             orden = 4,
                             proceso = "Nuevo Conductor Aliado",
@@ -1135,7 +1135,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 14,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(442),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9572),
                             icono = "fa-car",
                             orden = 5,
                             proceso = "Vehiculos"
@@ -1145,7 +1145,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 15,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(444),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9573),
                             idProcesoPadre = 14,
                             orden = 5,
                             proceso = "Listado de Vehiculos",
@@ -1156,7 +1156,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 16,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(446),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9574),
                             idProcesoPadre = 14,
                             orden = 5,
                             proceso = "Nuevo Vehiculo",
@@ -1167,7 +1167,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 17,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(448),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9575),
                             idProcesoPadre = 14,
                             orden = 5,
                             proceso = "Listado de Vehiculos Aliados",
@@ -1178,7 +1178,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 18,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(451),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9577),
                             idProcesoPadre = 14,
                             orden = 5,
                             proceso = "Nuevo Vehiculo Aliado",
@@ -1187,7 +1187,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 19,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(452),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9578),
                             icono = "fa-handshake",
                             orden = 1,
                             proceso = "Cotizaciones"
@@ -1197,7 +1197,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 20,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(457),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9579),
                             idProcesoPadre = 19,
                             orden = 1,
                             proceso = "Historial",
@@ -1208,7 +1208,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 21,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(459),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9581),
                             idProcesoPadre = 19,
                             orden = 1,
                             proceso = "Nueva Cotización",
@@ -1217,7 +1217,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 22,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(461),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9582),
                             icono = "fa-handshake",
                             orden = 2,
                             proceso = "Clientes"
@@ -1227,7 +1227,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 23,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(463),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9583),
                             idProcesoPadre = 22,
                             orden = 2,
                             proceso = "Listado de Clientes",
@@ -1238,7 +1238,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 24,
                             area = "Comercial",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(465),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9584),
                             idProcesoPadre = 22,
                             orden = 2,
                             proceso = "Nuevo Cliente",
@@ -1247,7 +1247,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 25,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(467),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9586),
                             icono = "fa-car-side",
                             orden = 3,
                             proceso = "Servicios"
@@ -1257,7 +1257,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 26,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(468),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9587),
                             idProcesoPadre = 25,
                             orden = 3,
                             proceso = "Historial",
@@ -1268,7 +1268,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 27,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(470),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9588),
                             idProcesoPadre = 25,
                             orden = 3,
                             proceso = "Nuevo Servicio",
@@ -1279,7 +1279,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 28,
                             area = "Operaciones",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(471),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9589),
                             idProcesoPadre = 25,
                             orden = 3,
                             proceso = "Tipo Servicios",
@@ -1288,7 +1288,7 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idProceso = 29,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(473),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9591),
                             icono = "fa-gear",
                             orden = 8,
                             proceso = "Configuracion"
@@ -1298,7 +1298,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 30,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(475),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9592),
                             idProcesoPadre = 29,
                             orden = 8,
                             proceso = "Formatos Correos",
@@ -1309,7 +1309,7 @@ namespace AppServiceAndTravel.Migrations
                             idProceso = 31,
                             area = "Admin",
                             controlador = "App",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(477),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9593),
                             idProcesoPadre = 29,
                             orden = 8,
                             proceso = "Tipo Cotizaciónes",
@@ -1343,15 +1343,15 @@ namespace AppServiceAndTravel.Migrations
                         new
                         {
                             idRol = 1,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1325),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1327),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9775),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9775),
                             nombre = "Administrador"
                         },
                         new
                         {
                             idRol = 2,
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1337),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1337),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9777),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9777),
                             nombre = "Usuarios"
                         });
                 });
@@ -1906,14 +1906,9 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<bool>("Activo")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("CategoriaLicencia")
-                        .IsRequired()
+                    b.Property<int>("CategoriaLicencia")
                         .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("CategoriaLicenciaAnterior")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Cedula")
                         .IsRequired()
@@ -1927,77 +1922,49 @@ namespace AppServiceAndTravel.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
-                    b.Property<int>("EstadoPersona")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("FechaExpedicionLicencia")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime?>("FechaInscripcion")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<DateTime>("FechaVencimientoLicencia")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NitExterno")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.Property<string>("NombreCompleto")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<string>("NumeroInscripcion")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<string>("NumeroLicencia")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<string>("ObservacionesExterno")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<string>("OrganismoTransitoCancelaLicencia")
+                    b.Property<string>("OrganismoExpide")
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
-
-                    b.Property<string>("OrganismoTransitoExpideLicencia")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("RazonSocialExterna")
-                        .HasMaxLength(150)
-                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("RestriccionesLicencia")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
-
-                    b.Property<string>("RetencionLicencia")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
-
-                    b.Property<decimal?>("TarifaExterna")
-                        .HasColumnType("decimal(12,2)");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<bool>("TieneRetencionLicencia")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<int>("TipoDocumento")
+                        .HasMaxLength(25)
+                        .HasColumnType("int");
 
                     b.Property<string>("TipoProveedor")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("Vigencia")
+                        .HasColumnType("int");
 
                     b.Property<string>("correo")
                         .HasMaxLength(200)
@@ -2140,35 +2107,35 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoServicio = 1,
                             descripcion = "Particular",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1927),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(187),
                             idUsuarioModifica = 1
                         },
                         new
                         {
                             idTipoServicio = 2,
                             descripcion = "Público",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1928),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(188),
                             idUsuarioModifica = 1
                         },
                         new
                         {
                             idTipoServicio = 3,
                             descripcion = "Oficial",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1986),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(190),
                             idUsuarioModifica = 1
                         },
                         new
                         {
                             idTipoServicio = 4,
                             descripcion = "Diplomático",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1987),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(191),
                             idUsuarioModifica = 1
                         },
                         new
                         {
                             idTipoServicio = 5,
                             descripcion = "Especial",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1989),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(192),
                             idUsuarioModifica = 1
                         });
                 });
@@ -2208,7 +2175,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 1,
                             descripcion = "Automóvil",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2070),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(265),
                             idCategoriaVehiculo = 1,
                             idUsuarioModifica = 1
                         },
@@ -2216,7 +2183,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 2,
                             descripcion = "Campero",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2072),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(268),
                             idCategoriaVehiculo = 1,
                             idUsuarioModifica = 1
                         },
@@ -2224,7 +2191,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 3,
                             descripcion = "Camioneta",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2072),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(269),
                             idCategoriaVehiculo = 1,
                             idUsuarioModifica = 1
                         },
@@ -2232,7 +2199,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 4,
                             descripcion = "Motocicleta",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2073),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(269),
                             idCategoriaVehiculo = 4,
                             idUsuarioModifica = 1
                         },
@@ -2240,7 +2207,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 5,
                             descripcion = "Motocarro",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2074),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(270),
                             idCategoriaVehiculo = 4,
                             idUsuarioModifica = 1
                         },
@@ -2248,7 +2215,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 6,
                             descripcion = "Cuatrimoto",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2075),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(271),
                             idCategoriaVehiculo = 4,
                             idUsuarioModifica = 1
                         },
@@ -2256,7 +2223,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 7,
                             descripcion = "Microbús",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2076),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(272),
                             idCategoriaVehiculo = 2,
                             idUsuarioModifica = 1
                         },
@@ -2264,7 +2231,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 8,
                             descripcion = "Buseta",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2077),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(272),
                             idCategoriaVehiculo = 2,
                             idUsuarioModifica = 1
                         },
@@ -2272,7 +2239,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 9,
                             descripcion = "Bus",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2078),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(273),
                             idCategoriaVehiculo = 2,
                             idUsuarioModifica = 1
                         },
@@ -2280,7 +2247,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 10,
                             descripcion = "Furgón",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2079),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(274),
                             idCategoriaVehiculo = 3,
                             idUsuarioModifica = 1
                         },
@@ -2288,7 +2255,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 11,
                             descripcion = "Volqueta",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2080),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(274),
                             idCategoriaVehiculo = 3,
                             idUsuarioModifica = 1
                         },
@@ -2296,7 +2263,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 12,
                             descripcion = "Tractocamión",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2081),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(275),
                             idCategoriaVehiculo = 3,
                             idUsuarioModifica = 1
                         },
@@ -2304,7 +2271,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 13,
                             descripcion = "Vehículo Rígido",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2082),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(276),
                             idCategoriaVehiculo = 3,
                             idUsuarioModifica = 1
                         },
@@ -2312,7 +2279,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 14,
                             descripcion = "Vehículo Articulado",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2083),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(277),
                             idCategoriaVehiculo = 3,
                             idUsuarioModifica = 1
                         },
@@ -2320,7 +2287,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 15,
                             descripcion = "Remolque",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2084),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(277),
                             idCategoriaVehiculo = 5,
                             idUsuarioModifica = 1
                         },
@@ -2328,7 +2295,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 16,
                             descripcion = "Semirremolque",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2085),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(278),
                             idCategoriaVehiculo = 5,
                             idUsuarioModifica = 1
                         },
@@ -2336,7 +2303,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 17,
                             descripcion = "Ambulancia",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2086),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(279),
                             idCategoriaVehiculo = 6,
                             idUsuarioModifica = 1
                         },
@@ -2344,7 +2311,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 18,
                             descripcion = "Vehículo de Bomberos",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2087),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(279),
                             idCategoriaVehiculo = 6,
                             idUsuarioModifica = 1
                         },
@@ -2352,7 +2319,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 19,
                             descripcion = "Vehículo Blindado",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2087),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(280),
                             idCategoriaVehiculo = 6,
                             idUsuarioModifica = 1
                         },
@@ -2360,7 +2327,7 @@ namespace AppServiceAndTravel.Migrations
                         {
                             idTipoVehiculo = 20,
                             descripcion = "Grúa",
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(2088),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(281),
                             idCategoriaVehiculo = 6,
                             idUsuarioModifica = 1
                         });
@@ -2769,10 +2736,10 @@ namespace AppServiceAndTravel.Migrations
                     b.Property<int>("Anio")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("CapacidadCarga")
+                    b.Property<decimal?>("CapacidadCarga")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("CapacidadPasajeros")
+                    b.Property<int?>("CapacidadPasajeros")
                         .HasColumnType("int");
 
                     b.Property<int?>("CapacidadPasajerosSentados")
@@ -2971,9 +2938,9 @@ namespace AppServiceAndTravel.Migrations
                             confirmada = true,
                             correo = "admin@correo.com",
                             crypt = true,
-                            fechaCambioClave = new DateTime(2026, 9, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1721),
-                            fechaCreacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1720),
-                            fechaModificacion = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1722),
+                            fechaCambioClave = new DateTime(2026, 9, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(5),
+                            fechaCreacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(5),
+                            fechaModificacion = new DateTime(2026, 6, 16, 19, 53, 57, 158, DateTimeKind.Utc).AddTicks(6),
                             hast = true,
                             idRol = 2,
                             nombreCompleto = "Administrador",
@@ -2982,7 +2949,7 @@ namespace AppServiceAndTravel.Migrations
                             restaurada = false,
                             telefono = "",
                             token = "",
-                            ultimoAcceso = new DateTime(2026, 6, 11, 16, 34, 55, 986, DateTimeKind.Utc).AddTicks(1699),
+                            ultimoAcceso = new DateTime(2026, 6, 16, 19, 53, 57, 157, DateTimeKind.Utc).AddTicks(9988),
                             userName = "admin"
                         });
                 });

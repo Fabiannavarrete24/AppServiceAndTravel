@@ -36,4 +36,12 @@ public class PdfService
 
         }).GeneratePdf();
     }
+
+    public byte[] GenerarCotizacionNreco(string html) {
+        
+        var htmlTopdf = new NReco.PdfGenerator.HtmlToPdfConverter();
+        var pdfByte = htmlTopdf.GeneratePdf(html);
+
+        return pdfByte;
+    }
 }

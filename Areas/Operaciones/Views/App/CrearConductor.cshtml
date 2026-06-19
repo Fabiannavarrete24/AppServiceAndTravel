@@ -3,508 +3,583 @@
     ViewData["Title"] = "Nuevo Conductor";
     ViewData["Breadcrumb"] = "Conductores / Nuevo";
 }
+@section Styles{
 <style>
-    #tabsConductor .nav-link{
-    border:none;
-    color:#64748b;
-    font-weight:500;
-    padding:.65rem 1rem;
-}
 
-#tabsConductor .nav-link.active{
-    background:#0d6efd;
-    color:white;
-}
-
-#tabsConductor .nav-link:hover{
-    background:#eff6ff;
-}
-
-.form-label.small{
-    font-size:.78rem;
-    letter-spacing:.3px;
-    margin-bottom:.35rem;
-}
-
-.card{
-    border-radius:1rem;
-}
-
-.input-group-text{
-    background:#f8fafc;
-}
-</style>
-<div class="card border-0 shadow-sm rounded-4">
-    <div class="card-header bg-white border-0 py-3">
-        <ul class="nav nav-pills gap-2" id="tabsConductor" role="tablist">
-            <li class="nav-item">
-                <button class="nav-link active rounded-3"
-                        data-bs-toggle="tab"
-                        data-bs-target="#tabGeneral"
-                        type="button">
-                    <i class="bi bi-person me-2"></i>
-                    Información General
-                </button>
-            </li>
-
-            <li class="nav-item">
-                <button class="nav-link rounded-3"
-                        data-bs-toggle="tab"
-                        data-bs-target="#tabLicencia"
-                        type="button">
-                    <i class="bi bi-card-heading me-2"></i>
-                    Licencia de Conducción
-                </button>
-            </li>
-        </ul>
-    </div>
-
-    <div class="card-body">
-
-        <input type="hidden" id="idConductor" />
-
-        <div class="tab-content">
-
-            <!-- GENERAL -->
-            <div class="tab-pane fade show active" id="tabGeneral">
-
-                <h6 class="fw-semibold small text-uppercase text-muted mb-3">
-                    Datos Personales
-                </h6>
-
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold small">
-                            Nombre Completo
-                        </label>
-
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-person"></i>
-                            </span>
-                            <input id="NombreCompleto"
-                                   class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold small">
-                            Documento
-                        </label>
-
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-card-text"></i>
-                            </span>
-                            <input id="Cedula"
-                                   class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold small">
-                            Teléfono
-                        </label>
-
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-telephone"></i>
-                            </span>
-                            <input id="Telefono"
-                                   class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold small">
-                            Correo Electrónico
-                        </label>
-
-                        <div class="input-group">
-                            <span class="input-group-text bg-light">
-                                <i class="bi bi-envelope"></i>
-                            </span>
-                            <input id="Correo"
-                                   type="email"
-                                   class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold small">
-                            Estado Persona
-                        </label>
-<select id="EstadoPersona" class="form-select"></select>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold small">
-                            Estado Conductor
-                        </label>
-<select id="EstadoConductor" class="form-select"></select>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- LICENCIA -->
-            <div class="tab-pane fade" id="tabLicencia">
-
-                <h6 class="fw-semibold small text-uppercase text-muted mb-3">
-                    Información de la Licencia
-                </h6>
-
-                <div class="row g-3">
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold small">
-                            Número Licencia
-                        </label>
-
-                        <input id="NumeroLicencia"
-                               class="form-control" />
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold small">
-                            Categoría
-                        </label>
-
-                        <input id="CategoriaLicencia"
-                               class="form-control" />
-                    </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold small">
-                            Categoría Anterior
-                        </label>
-
-                        <input id="CategoriaAnterior"
-                               class="form-control" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold small">
-                            Estado Licencia
-                        </label>
-<select id="EstadoLicencia"
-        class="form-select"></select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold small">
-                            Organismo Expide
-                        </label>
-
-                        <input id="OrganismoExpideLicencia"
-                               class="form-control" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold small">
-                            Fecha Expedición
-                        </label>
-
-                        <input id="FechaExpedicionLicencia"
-                               type="date"
-                               class="form-control" />
-                    </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold small">
-                            Fecha Vencimiento
-                        </label>
-
-                        <input id="FechaVencimientoLicencia"
-                               type="date"
-                               class="form-control" />
-                    </div>
-<div class="col-md-3">
-    <label class="form-label">
-        Tiene Retención
-    </label>
-
-    <div class="form-check form-switch">
-        <input id="TieneRetencionLicencia"
-               class="form-check-input"
-               type="checkbox">
-    </div>
-</div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold small">
-                            Restricciones
-                        </label>
-
-                        <textarea id="RestriccionesLicencia"
-                                  class="form-control"
-                                  rows="3"></textarea>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-semibold small">
-                            Retención
-                        </label>
-
-                        <textarea id="RetencionLicencia"
-                                  class="form-control"
-                                  rows="3"></textarea>
-                    </div>
-<div class="col-md-3">
-    <label class="form-label">
-        Tipo Proveedor
-    </label>
-
-    <select id="TipoProveedor"
-            class="form-select">
-    </select>
-</div>
-                    <div class="col-md-12">
-                        <label class="form-label fw-semibold small">
-                            Organismo que Cancela o Suspende
-                        </label>
-
-                        <input id="OrganismoCancelaLicencia"
-                               class="form-control" />
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="card-footer bg-white border-0 text-end">
-<button type="button"
-        id="btnCancelar"
-        class="btn btn-outline-secondary rounded-3">
-    Cancelar
-</button>
-
-<button type="button"
-        id="btnGuardar"
-        class="btn btn-primary rounded-3">
-    <i class="bi bi-save me-2"></i>
-    Guardar Conductor
-</button>
-    </div>
-</div>
-
-@section Scripts {
-    <script>
-function obtenerModel() {
-    return {
-        idConductor:parseInt($("#idConductor").val()) || 0,
-        NombreCompleto:$("#NombreCompleto").val(),
-        Cedula:$("#Cedula").val(),
-        Telefono:$("#Telefono").val(),
-        Correo:$("#Correo").val(),
-        NumeroLicencia:$("#NumeroLicencia").val(),
-        CategoriaLicencia:$("#CategoriaLicencia").val(),
-        CategoriaLicenciaAnterior:$("#CategoriaAnterior").val(),
-        FechaExpedicionLicencia:$("#FechaExpedicionLicencia").val() || null,
-        FechaVencimientoLicencia:$("#FechaVencimientoLicencia").val() || null,
-        OrganismoTransitoExpideLicencia:$("#OrganismoExpideLicencia").val(),
-        RestriccionesLicencia:$("#RestriccionesLicencia").val(),
-        TieneRetencionLicencia:$("#TieneRetencionLicencia").is(":checked"),
-        RetencionLicencia:$("#RetencionLicencia").val(),
-        OrganismoTransitoCancelaLicencia:$("#OrganismoCancelaLicencia").val(),
-        EstadoLicencia:parseInt($("#EstadoLicencia").val()) || 0,
-        TipoProveedor:parseInt($("#TipoProveedor").val()) || 0,
-        EstadoPersona:parseInt($("#EstadoPersona").val()) || 0,
-        EstadoConductor:parseInt($("#EstadoConductor").val()) || 0
+    @@media (max-width: 1200px) {
+        .flex-row {
+            flex-direction: column !important;
+        }
     }
+
+    @@media (max-width: 990px) {
+        #content {
+            flex-direction: column-reverse !important;
+        }
+    }    
+    
+</style>
 }
+<div class="row" id="content">
+    <div class="col-lg-8 mt-3">
+        <div class="card border-0 shadow-sm rounded-4 mb-3">
+            <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-1">
+                <button type="button" class="btn btn-primary" id="btnNuevo">
+                <i class="fa-regular fa-square-plus"></i>
+                </button>
+                <button type="button" class="btn btn-success" id="btnGuardar">
+                <i class="fa-solid fa-save"></i>
+                </button>
+                <button type="button" class="btn btn-warning" id="btnEditar">
+                <i class="fa-regular fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn btn-danger" id="btnDeshabilitar">
+                <i class="fa-solid fa-ban"></i>
+                </button>
+            </div>
+            <div style="width: 30%;">
+                <input id="txtBuscar" class="form-control" placeholder="Buscar ..." />
+            </div>
+            </div>
+        </div>
+        <form class="card border-0 shadow-sm rounded-4 mb-3" id="frmConductor">
+            <div class="card-header bg-white border-0">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="general-tab" data-bs-toggle="pill" data-bs-target="#general"
+                            type="button" role="tab" aria-controls="general" aria-selected="true">
+                    General
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="licencia-tab" data-bs-toggle="pill" data-bs-target="#licencia"
+                            type="button" role="tab" aria-controls="licencia" aria-selected="false">
+                    Licencia
+                    </button>
+                </li>          
+                </ul>                
+            </div>
+            <div class="card-body">
+                <input type="hidden" id="idConductor" value="@ViewBag.IdConductor" />
+                <div class="tab-content">        
+                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab" tabindex="0">
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-3">Datos Personales</h6>
+                        <div class="row gy-3">
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Tipo Documento</label>
+                                <select id="TipoDocumento" class="form-select" required></select>
+                            </div>          
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">Documento</label>
+                                <input id="Cedula" class="form-control" required/>
+                            </div>                            
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">Nombre Completo</label>
+                                <input id="NombreCompleto" class="form-control" required/>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold small">Teléfono</label>
+                                <input id="Telefono" class="form-control" required/>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Correo Electrónico</label>
+                                <input id="Correo" type="email" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Activo</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="EstadoConductor">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Conductor</label>
+                                <div class="d-flex flex-row">
+                                    <div class="form-check"
+                                            style="display: flex; align-content: center; align-items: center; justify-content: center; gap: 28px;">
+                                        <input class="form-check-input" type="radio" name="radioDefault" id="Interno" checked>
+                                        <label class="form-check-label" for="Interno" style="margin-bottom:-5px;">Interno</label>
+                                    </div>
+                                    <div class="form-check"
+                                            style="display: flex; align-content: center; align-items: center; justify-content: center; gap: 28px;">
+                                        <input class="form-check-input" type="radio" name="radioDefault" id="Externo">
+                                        <label class="form-check-label" for="Externo" style="margin-bottom:-5px;">Externo</label>
+                                    </div>
+                                </div>
+                            </div>                               
+                        </div>
+                </div>
+                <div class="tab-pane fade" id="licencia" role="tabpanel" aria-labelledby="licenica-tab" tabindex="0">
+                        <h6 class="fw-semibold small text-uppercase text-muted mb-3">
+                            Información de la Licencia<span id="EstadoLicenciaBadge" class="badge rounded-pill text-bg-secondary ms-2 align-self-center d-none">Sin calcular</span>
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">Número Licencia</label>
+                                <input id="NumeroLicencia" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Categoría</label>
+                                <select id="CategoriaLicencia" class="form-select" required></select>
+                            </div>
+                            <div class="col-md-1">
+                                <label class="form-label fw-semibold small">Activa</label>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch" id="EstadoLicencia" disabled required>                                    
+                                </div>
+                            </div>                         
+                            <div class="col-md-5">
+                                <label class="form-label fw-semibold small">Organismo Expide</label>
+                                <input id="OrganismoExpideLicencia" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Fecha Expedición</label>
+                                <input id="FechaExpedicionLicencia" type="date" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Fecha Vencimiento</label>
+                                <input id="FechaVencimientoLicencia" type="date" class="form-control" required/>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-semibold small">Vigencia</label>
+                                <input type="number" id="VigenciaLicencia" class="form-control" disabled required/>
+                            </div>                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Restricciones</label>
+                                <textarea id="RestriccionesLicencia" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                </div>                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-4 mt-3">
+        <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+            <h6 class="fw-semibold mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Documentos requeridos</h6>
+            @foreach (var (icon, doc, desc) in new[] {
+            ("bi-file-earmark-check", "SOAT", "Seguro Obligatorio de Accidentes de Tránsito"),
+            ("bi-wrench-adjustable", "Revisión Técnico-Mecánica", "Certificado de revisión periódica obligatoria"),
+            ("bi-shield-shaded", "Seguro del Vehículo", "Póliza de seguro todo riesgo o responsabilidad civil")
+            })
+            {
+            <div class="d-flex gap-3 mb-3">
+                <div class="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style="width:34px;height:34px;background:#dbeafe;font-size:16px;color:#1d4ed8;">
+                <i class="bi @icon"></i>
+                </div>
+                <div>
+                <div class="fw-semibold small">@doc</div>
+                <div class="text-muted" style="font-size:12px;">@desc</div>
+                </div>
+            </div>
+            }
+            <div class="alert alert-warning rounded-3 small py-2 mt-2 mb-0">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            El sistema alertará 30 días antes del vencimiento de cada documento.
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalConductores" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Conductores encontrados
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Documento</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblConductores">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+$(document).ready(function () {
 
-$("#btnGuardar").click(function () {
+    cargarListados();
 
-    const model = obtenerModel();
+    let idConductor = $("#idConductor").val();
+
+    if (idConductor && parseInt(idConductor) > 0) {
+        cargarConductor(idConductor);
+    }
+    else {
+        limpiarFormulario();
+    }
+
+    calcularDiasVigencia('#FechaExpedicionLicencia','#FechaVencimientoLicencia','#VigenciaLicencia');
+});    
+    
+    $('#FechaExpedicionLicencia, #FechaVencimientoLicencia').on('change', function () {
+        calcularDiasVigencia('#FechaExpedicionLicencia','#FechaVencimientoLicencia','#VigenciaLicencia');
+        actualizarBadgeVigencia('#VigenciaLicencia','#EstadoLicenciaBadge');
+    });
+
+@* $("#Cedula").on("blur", function () {
+
+    let documento = $(this).val();
+
+    if (!documento)
+        return;
 
     $.ajax({
-        url: '/Operaciones/Conductores/GuardarConductor',
-        type: 'POST',
-        data: model,
-
-        beforeSend: function () {
-            showLoader();
+        url: '/Empleados/Empleados/ObtenerEmpleadoPorDocumento',
+        type: 'GET',
+        data: {
+            documento: documento
         },
-
         success: function (response) {
+                console.log(response);
+            if (!response.success)
+                return;
 
-            if (response.success) {
+            let empleado = response.data;
 
-                toastr.success(response.message);
+            $("#NombreCompleto").val(empleado.nombreCompleto);
+            $("#Telefono").val(empleado.telefono);
+            $("#Correo").val(empleado.correo);
+            $("#TipoDocumento").val(empleado.tipoDocumento);
 
-                if (response.data != null) {
-                    $("#idConductor").val(response.data.idConductor);
+            $("#Interno").prop("checked", true);
+
+            toastr.info("Los datos fueron cargados desde Empleados.");
+        }
+    });
+
+}); *@
+
+let timeoutBusqueda = null;
+
+    $("#txtBuscar").on("keyup", function () {
+
+        const valor = $(this).val().trim();
+
+        clearTimeout(timeoutBusqueda);
+
+        if (valor.length === 0) {
+            busquedaActual = "";
+            buscarConductores();
+            return;
+        }    
+
+        timeoutBusqueda = setTimeout(() => {
+
+            if (valor.length < 5) {
+                toastr.warning("debe ingresar mas caracteres");
+                return;
+            }
+
+            busquedaActual = valor;
+            buscarConductores();
+        }, 1000);
+    });
+
+    function buscarConductores() {
+
+        let filtro = $("#txtBuscar").val();
+
+        if (!filtro)
+            return;
+        
+        $.ajax({
+            url: '/Operaciones/Conductores/BuscarConductores',
+            type: 'GET',
+            data: {
+                filtro: filtro
+            },
+            beforeSend: showLoader,
+            complete: hideLoader,
+            success: function (response) {
+
+                if (!response.success)
+                    return toastr.error(response.message);
+
+                let lista = response.data;
+
+                if (lista.length === 0) {
+                    toastr.warning("No se encontraron coincidencias.");
+                    return;
                 }
 
-            } else {
-                toastr.error(response.message);
+                if (lista.length === 1) {
+                    cargarConductor(lista[0].idConductor);
+                    return;
+                }
+
+                llenarModalConductores(lista);
+
+                $("#modalConductores").modal("show");
             }
-        },
+        });
 
-        error: function (xhr) {
-            toastr.error("Error guardando conductor");
-            console.error(xhr);
-        },
+    }
+    
+    function llenarModalConductores(lista) {
+            console.log("imprimiendo lista",lista);
+        let html = "";
 
-        complete: function () {
-            hideLoader();
+        lista.forEach(x => {
+
+            html += `
+            <tr>
+                <td>${x.cedula}</td>
+                <td>${x.nombreCompleto}</td>
+                <td>${x.telefono ?? ''}</td>
+                <td>
+
+                    <button
+                        class="btn btn-primary btn-sm btnSeleccionarConductor"
+                        data-id="${x.idConductor}">
+
+                        Seleccionar
+
+                    </button>
+
+                </td>
+            </tr>
+            `;
+        });
+
+        $("#tblConductores").html(html);
+    } 
+    
+    $(document).on("click",".btnSeleccionarConductor",
+        function () {
+
+            let id = $(this).data("id");
+
+            $("#modalConductores").modal("hide");
+
+            cargarConductor(id);
         }
-    });
+    );
 
-});
-function cargarConductor(id) {
-
-    $.ajax({
-        url: '/Operaciones/Conductores/ObtenerConductor',
-        type: 'GET',
-        data: { id: id },
-
-        beforeSend: function () {
-            showLoader();
-        },
-
-        success: function (response) {
-
-            if (!response.success)
-                return toastr.error(response.message);
-
-            llenarFormulario(response.data);
-        },
-
-        complete: function () {
-            hideLoader();
-        }
-    });
-
-}
-function llenarFormulario(model) {
-
-    $("#idConductor").val(model.idConductor);
-
-    $("#NombreCompleto").val(model.nombreCompleto);
-    $("#Cedula").val(model.cedula);
-    $("#Telefono").val(model.telefono);
-    $("#Correo").val(model.correo);
-
-    $("#EstadoPersona").val(model.estadoPersona);
-    $("#EstadoConductor").val(model.estadoConductor);
-
-    $("#NumeroLicencia").val(model.numeroLicencia);
-    $("#CategoriaLicencia").val(model.categoriaLicencia);
-    $("#CategoriaAnterior").val(model.categoriaLicenciaAnterior);
-
-    $("#EstadoLicencia").val(model.estadoLicencia);
-
-    $("#OrganismoExpideLicencia")
-        .val(model.organismoTransitoExpideLicencia);
-
-    $("#FechaExpedicionLicencia")
-        .val(model.fechaExpedicionLicencia?.split('T')[0]);
-
-    $("#FechaVencimientoLicencia")
-        .val(model.fechaVencimientoLicencia?.split('T')[0]);
-
-    $("#RestriccionesLicencia")
-        .val(model.restriccionesLicencia);
-
-    $("#RetencionLicencia")
-        .val(model.retencionLicencia);
-
-    $("#OrganismoCancelaLicencia")
-        .val(model.organismoTransitoCancelaLicencia);
-}
-function eliminarConductor(id) {
-
-    Swal.fire({
-        title: '¿Eliminar conductor?',
-        text: 'Esta acción no se puede deshacer',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar'
-    }).then((result) => {
-
-        if (!result.isConfirmed)
-            return;
-
+    function cargarListados() {
+      try {
         $.ajax({
-            url: '/Operaciones/Conductores/EliminarConductor',
-            type: 'DELETE',
-            data: { id: id },
-
+            url: '/Helps/ObtenerListadoSelect',
+            type: 'GET',
             beforeSend: function () {
                 showLoader();
             },
+            success: function(response){
+                LoadSelect("#TipoDocumento", response.data.tiposDocumento);
+                LoadSelect("#CategoriaLicencia", response.data.tiposLicencia);
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });  
+      }
+      catch (e) {
+        console.error(e);
+      }
+    }
 
+    function obtenerModel() {
+        return {
+            //datos generales
+            idConductor:parseInt($("#idConductor").val()) || 0,
+            NombreCompleto:$("#NombreCompleto").val(),
+            TipoDocumento:$("#TipoDocumento").val(),
+            Cedula:$("#Cedula").val(),
+            Telefono:$("#Telefono").val(),
+            Correo:$("#Correo").val(),
+            EstadoConductor:$("#EstadoConductor").is(":checked") ? 1 : 0,        
+            TipoConductor:$("#Interno").is(":checked") ? 0 : 1,
+            //licencia
+            NumeroLicencia:$("#NumeroLicencia").val(),
+            CategoriaLicencia:$("#CategoriaLicencia").val(),
+            EstadoLicencia:$("#EstadoLicencia").is(":checked") ? 1 : 0,            
+            OrganismoExpide:$("#OrganismoExpideLicencia").val(),
+
+            FechaExpedicionLicencia:$("#FechaExpedicionLicencia").val() || null,
+            FechaVencimientoLicencia:$("#FechaVencimientoLicencia").val() || null,
+            Vigencia:$("#VigenciaLicencia").val(),
+            
+            RestriccionesLicencia:$("#RestriccionesLicencia").val(),
+        }
+    }
+
+    $("#btnGuardar").click(function () {
+
+        const model = obtenerModel();
+
+        if (!validateForm("#frmConductor"))
+        return;
+
+        $.ajax({
+            url: '/Operaciones/Conductores/GuardarConductor',
+            type: 'POST',
+            data: model,
+            beforeSend: function () {
+                showLoader();
+            },
             success: function (response) {
-
                 if (response.success) {
-
                     toastr.success(response.message);
-
-                    setTimeout(() => {
-                        window.location.href =
-                            '/Operaciones/Conductores';
-                    }, 1000);
-
+                    if (response.data != null) {
+                        $("#idConductor").val(response.data.idConductor);
+                    }
                 } else {
                     toastr.error(response.message);
                 }
             },
-
+            error: function (xhr) {
+                toastr.error("Error guardando conductor");
+                console.error(xhr);
+            },
             complete: function () {
                 hideLoader();
             }
         });
 
     });
-}
-function limpiarFormulario() {
 
-    $("#idConductor").val(0);
+    function cargarConductor(id) {
+        $.ajax({
+            url: '/Operaciones/Conductores/ObtenerConductor',
+            type: 'GET',
+            data: { id: id },
+            beforeSend: function () {
+                showLoader();
+            },
+            success: function (response) {
+                if (!response.success)
+                    return toastr.error(response.message);
 
-    $("#NombreCompleto").val('');
-    $("#Cedula").val('');
-    $("#Telefono").val('');
-    $("#Correo").val('');
+                llenarFormulario(response.data);
+            },
+            complete: function () {
+                hideLoader();
+            }
+        });
+    }
 
-    $("#EstadoPersona").val('');
-    $("#EstadoConductor").val('');
+    function llenarFormulario(model) {
 
-    $("#NumeroLicencia").val('');
-    $("#CategoriaLicencia").val('');
-    $("#CategoriaAnterior").val('');
+        $("#idConductor").val(model.idConductor);
+        $("#NombreCompleto").val(model.nombreCompleto);
+        $("#TipoDocumento").val(model.tipoDocumento);
+        $("#Cedula").val(model.cedula);
+        $("#Telefono").val(model.telefono);
+        $("#Correo").val(model.correo);
 
-    $("#EstadoLicencia").val('');
+        $("#EstadoConductor").prop("checked",model.activo);
+        if (model.tipoConductor = "Interno" )
+        $("#Interno").prop("checked", true);
+        else
+        $("#Externo").prop("checked", true);
+        
+        $("#NumeroLicencia").val(model.numeroLicencia);
+        $("#CategoriaLicencia").val(model.categoriaLicencia);
+        $("#EstadoLicencia").prop("checked",model.estadoLicencia);
 
-    $("#OrganismoExpideLicencia").val('');
-    $("#FechaExpedicionLicencia").val('');
-    $("#FechaVencimientoLicencia").val('');
+        $("#OrganismoExpideLicencia").val(model.organismoExpide);
+        $("#FechaExpedicionLicencia").val(model.fechaExpedicionLicencia?.substring(0,10));
+        $("#FechaVencimientoLicencia").val(model.fechaVencimientoLicencia?.substring(0,10));
+        $("#VigenciaLicencia").val(model.vigencia);
+        $("#RestriccionesLicencia").val(model.restriccionesLicencia);
 
-    $("#RestriccionesLicencia").val('');
-    $("#RetencionLicencia").val('');
-    $("#OrganismoCancelaLicencia").val('');
-}
-$("#btnCancelar").click(function () {
+        actualizarBadgeVigencia('#VigenciaLicencia','#EstadoLicenciaBadge');
+    }
 
-    Swal.fire({
-        title: '¿Cancelar cambios?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí'
-    }).then((r) => {
+    function eliminarConductor(id) {
 
-        if (r.isConfirmed) {
-            limpiarFormulario();
-        }
+        Swal.fire({
+            title: '¿Eliminar conductor?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar'
+        }).then((result) => {
+
+            if (!result.isConfirmed)
+                return;
+
+            $.ajax({
+                url: '/Operaciones/Conductores/EliminarConductor',
+                type: 'DELETE',
+                data: { id: id },
+                beforeSend: function () {
+                    showLoader();
+                },
+                success: function (response) {
+
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(() => {
+                            window.location.href =
+                                '/Operaciones/Conductores';
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                complete: function () {
+                    hideLoader();
+                }
+            });
+
+        });
+    }
+
+    function limpiarFormulario() {
+
+        $("#idConductor").val(0);
+        $("#NombreCompleto").val("");
+        $("#TipoDocumento").val("");
+        $("#Cedula").val("");
+        $("#Telefono").val("");
+        $("#Correo").val("");
+        $("#EstadoConductor").prop("checked",false);
+        $("#Interno").prop("checked",false);
+            //licencia
+        $("#NumeroLicencia").val("");
+        $("#CategoriaLicencia").val("");
+        $("#EstadoLicencia").prop("checked",false);
+        $("#OrganismoExpideLicencia").val(""),
+
+        $("#FechaExpedicionLicencia").val("");
+        $("#FechaVencimientoLicencia").val("");
+        $("#VigenciaLicencia").val("");
+            
+        $("#RestriccionesLicencia").val("");
+    }
+
+    $("#btnCancelar").click(function () {
+
+        Swal.fire({
+            title: '¿Cancelar cambios?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí'
+        }).then((r) => {
+
+            if (r.isConfirmed) {
+                limpiarFormulario();
+            }
+
+        });
 
     });
-
-});
-    </script>
+</script>
 }

@@ -1,0 +1,17 @@
+@startuml
+class ApplicationUser
+class Clientes
+class Cotizaciones
+class Vehiculos
+class Conductores
+class Proveedor
+class TypeService
+class LogSistema
+class ActividadSistema
+
+Clientes "1" -- "*" Cotizaciones
+Proveedor "1" -- "*" Vehiculos
+Vehiculos "1" -- "*" Conductores
+ApplicationUser "1" -- "*" LogSistema
+ApplicationUser "1" -- "*" ActividadSistema
+@enduml

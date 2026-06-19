@@ -1,0 +1,29 @@
+@startuml
+package "Areas" {
+  [ "Comercial (UI/API)" ] as Comercial
+  [ "Operaciones (UI/API)" ] as Operaciones
+  [ "Admin (UI/API)" ] as Admin
+}
+
+package "Core" {
+  [ "ApplicationDBContext" ] as DBContext
+  [ "Services (PdfService, Business Services)" ] as Services
+  [ "Identity" ] as Identity
+}	
+
+Comercial --> DBContext : "leer / escribir"
+Operaciones --> DBContext : "leer / escribir"
+Admin --> DBContext : "leer / escribir"
+
+Comercial --> Services : "PdfService, negocio"
+Operaciones --> Services : "negocio"
+Admin --> Services : "auditoría"
+
+Identity --> DBContext
+
+note right of Services
+  PdfService usa QuestPDF
+  Otros servicios usan DI (DbContext, UserManager)
+end note
+
+@enduml

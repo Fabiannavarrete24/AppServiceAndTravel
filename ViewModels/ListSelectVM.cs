@@ -8,5 +8,7 @@ namespace AppServiceAndTravel.ViewModels
         public List<ComboVM> Estados { get; set; } = [];
         public List<ComboVM> TiposVehiculo { get; set; } = [];
         public List<ComboVM> CategoriasVehiculo { get; set; } = [];
+        public List<ComboVM> TiposDocumento { get; set; } = [];
+        public List<ComboVM> TiposLicencia { get; set; } = [];
     }
 }

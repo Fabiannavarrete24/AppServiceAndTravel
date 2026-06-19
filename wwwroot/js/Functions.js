@@ -1,22 +1,84 @@
 ﻿
+function calcularDiasVigencia(fechaInicioId, fechaFinId, resultadoId) {
+  const inicio = $(fechaInicioId).val();
+  const fin = $(fechaFinId).val();
+
+  if (!inicio || !fin) {
+    $(resultadoId).val("");
+    return;
+  }
+
+  const fechaInicio = new Date();
+  const fechaFin = new Date(fin);
+
+  const diferenciaMs = fechaFin - fechaInicio;
+
+  if (diferenciaMs < 0) {
+    $(resultadoId).val(0);
+    return;
+  }
+
+  const dias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24)) + 1;
+
+  $(resultadoId).val(dias);
+}
+
+function actualizarBadgeVigencia(inputId, badgeId) {
+  const dias = parseInt($(inputId).val()) || 0;
+  const badge = $(badgeId);
+
+  badge.removeClass("text-bg-success text-bg-warning text-bg-danger text-bg-secondary");
+
+  if (dias > 5) {
+    badge.addClass("text-bg-success").removeClass("d-none").text("Vigente");
+  } else if (dias > 1) {
+    badge
+      .addClass("text-bg-warning")
+      .removeClass("d-none")
+      .text("Vence pronto");
+  } else {
+    badge.addClass("text-bg-danger").removeClass("d-none").text("Vencido");
+  }
+}
+
+function LoadSelect(selectId, data) {
+  var categoriaSelect = $(selectId);
+  categoriaSelect.empty();
+  categoriaSelect.append('<option value="">Seleccione una opción</option>');
+  $.each(data, function (i, item) {
+    categoriaSelect.append(
+      '<option value="' + item.id + '">' + item.descripcion + "</option>",
+    );
+  });
+}
+
+function showToast(message, type = "success", time = 2500) {
+  let id = "toast_" + Date.now();
+  let toast = `<div id="${id}" class="alert alert-${type} shadow toast-animate mb-2" role="alert">${message}</div>`;
+  $("#toastContainer").append(toast);
+
+  setTimeout(() => {
+    $("#" + id).fadeOut(300, function () {
+      $(this).remove();
+    });
+  }, time);
+}
+
 function formatearMiles(input) {
   let valor = input.value.replace(/\D/g, "");
   input.value = new Intl.NumberFormat("es-CO").format(valor);
 }
 function togglePwd(inputId, iconId) {
+  const input = $("#" + inputId);
+  const icon = $("#" + iconId);
 
-    const input = $('#' + inputId);
-    const icon = $('#' + iconId);
-
-    if (input.attr('type') === 'password') {
-
-        input.attr('type', 'text');
-        icon.removeClass('fa-eye').addClass('fa-eye-slash');
-    }
-    else {
-        input.attr('type', 'password');
-        icon.removeClass('fa-eye-slash').addClass('fa-eye');
-    }
+  if (input.attr("type") === "password") {
+    input.attr("type", "text");
+    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+  } else {
+    input.attr("type", "password");
+    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+  }
 }
 
 function showLoader() {
@@ -25,37 +87,40 @@ function showLoader() {
 function hideLoader() {
   $("#globalLoader").addClass("d-none");
 }
-function resetForm(idForm, idDateTime, IdValue) {
-  $(idForm)[0].reset();
-  $(idDateTime).text("");
-  $(IdValue).text("");
+
+function resetForm(formId) {
+
+    const form = $(formId);
+
+    form[0].reset();
+    form.find("input[type=hidden]").val("");
+    form.find("select").prop("selectedIndex", 0).trigger("change");
+
+    resetValidation(formId);
 }
 
 function validateForm(formId) {
-  let form = $(formId);
-  let firstInvalid = null;
 
-  let fields = form.find("input, select, textarea");
+    const form = $(formId);
 
-  fields.each(function () {
-    if (!this.checkValidity()) {
-      if (!firstInvalid) firstInvalid = this;
+    form.addClass('was-validated');
+
+    const invalid = form.find(':invalid').first();
+
+    if (invalid.length > 0) {
+        invalid.focus();
+        return false;
     }
-  });
 
-  form.addClass("was-validated");
-
-  if (firstInvalid) {
-    $(firstInvalid);
-    return false;
-  }
-
-  return true;
+    return true;
 }
-
 function resetValidation(formId) {
-  let form = document.$(formId);
-  form.classList.remove("was-validated");
+
+    const form = $(formId);
+
+    form.removeClass('was-validated');
+    form.find('.is-invalid').removeClass('is-invalid');
+    form.find('.is-valid').removeClass('is-valid');
 }
 
 function ChangeStatusBtn(config, btn, nav, edit, remove, cancel, save, form) {

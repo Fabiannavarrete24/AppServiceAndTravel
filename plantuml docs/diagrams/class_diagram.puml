@@ -1,0 +1,67 @@
+@startuml
+' Diagrama de clases principal (altos niveles)
+class "ApplicationUser" as ApplicationUser {
+  +Id : string
+  +UserName : string
+  +Email : string
+}
+
+class "Clientes" as Clientes {
+  +ClienteId : int
+  +Nombre : string
+  +Email : string
+}
+
+class "Cotizaciones" as Cotizaciones {
+  +CotizacionId : int
+  +Fecha : DateTime
+  +Total : decimal
+  +ClienteId : int
+}
+
+class "Vehiculos" as Vehiculos {
+  +VehiculoId : int
+  +Marca : string
+  +Modelo : string
+}
+
+class "Conductores" as Conductores {
+  +ConductorId : int
+  +Nombre : string
+  +Licencia : string
+}
+
+class "Proveedor" as Proveedor {	
+  +ProveedorId : int
+  +Nombre : string
+}
+
+class "TypeService" as TypeService {
+  +TypeServiceId : int
+  +Nombre : string
+}
+
+class "LogSistema" as LogSistema {
+  +LogId : int
+  +Fecha : DateTime
+  +Accion : string
+  +UsuarioId : string
+}
+
+class "ActividadSistema" as ActividadSistema {
+  +ActividadId : int
+  +Fecha : DateTime
+  +Descripcion : string
+  +UsuarioId : string
+}
+
+Clientes "1" -- "0..*" Cotizaciones : "tiene"
+Cotizaciones "0..1" -- "0..*" Vehiculos : "puede_asignar"
+Vehiculos "0..*" -- "0..*" Conductores : "asignado_a"
+Proveedor "1" -- "0..*" Vehiculos : "suministra"
+TypeService "1" -- "0..*" Cotizaciones : "tipo_de"
+
+ApplicationUser <|-- LogSistema : "usuario"
+ApplicationUser <|-- ActividadSistema : "usuario"
+
+@enduml

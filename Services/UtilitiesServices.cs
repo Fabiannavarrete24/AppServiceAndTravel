@@ -136,6 +136,22 @@ namespace AppServiceAndTravel.Services
                         id = (int)x,
                         descripcion = x.ToString()
                     })
+                    .ToList(),
+                    
+                    TiposDocumento = Enum.GetValues<TipoDocumento>()
+                    .Select(x => new ComboVM
+                    {
+                        id = (int)x,
+                        descripcion = x.ToString()
+                    })
+                    .ToList(),
+                    
+                    TiposLicencia = Enum.GetValues<TipoLicencia>()
+                    .Select(x => new ComboVM
+                    {
+                        id = (int)x,
+                        descripcion = x.ToString()
+                    })
                     .ToList()
                 };
 

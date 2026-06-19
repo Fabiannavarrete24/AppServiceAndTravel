@@ -6,23 +6,19 @@ namespace AppServiceAndTravel.Areas.Operaciones.ViewModels
     public class VehiculoListadoVM
     {
         public int idVehiculo { get; set; }
-
         public string Placa { get; set; } = string.Empty;
-
         public string Marca { get; set; } = string.Empty;
-
         public string Modelo { get; set; } = string.Empty;
-
+        public string Linea { get; set; } = string.Empty;
+        public string Color { get; set; } = string.Empty;
+        public string SoatColor { get; set; } = string.Empty;
+        public string RTMColor { get; set; } = string.Empty;
+        public string tarjetaColor { get; set; } = string.Empty;    
         public int? CapacidadPasajeros { get; set; }
-
         public EstadoVehiculo Estado { get; set; }
-
         public DateTime? SoatVence { get; set; }
-
-        public DateTime? RtmVence { get; set; }
-
+        public DateTime? RtmVence { get; set; }        
         public DateTime? TarjetaOperacionVence { get; set; }
-
         public bool TieneAlertas =>
             (SoatVence.HasValue && SoatVence <= DateTime.Today.AddDays(30))
             ||

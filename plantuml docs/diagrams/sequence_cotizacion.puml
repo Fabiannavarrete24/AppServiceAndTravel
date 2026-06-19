@@ -1,0 +1,18 @@
+@startuml
+actor "Usuario Comercial" as Usuario
+participant "Comercial UI" as UI
+participant "ComercialController" as Controller
+participant "ComercialService" as Service
+participant "ApplicationDBContext" as DB
+participant "PdfService" as Pdf
+
+Usuario -> UI : Rellenar formulario de cotización
+UI -> Controller : POST /Comercial/Cotizacion/Create
+Controller -> Service : CrearCotizacion(model)
+Service -> DB : Guardar Cotizacion
+DB --> Service : Cotizacion guardada
+Service -> Pdf : GenerarCotizacion(cotizacion)
+Pdf --> Service : byte[] PDF
+Service -> Controller : Resultado + PDF
+Controller -> UI : Mostrar confirmación / enlace descarga
+@enduml

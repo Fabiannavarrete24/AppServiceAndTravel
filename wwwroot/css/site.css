@@ -1,0 +1,27 @@
+.notification-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.15);
+    backdrop-filter: blur(5px);
+}
+
+.notification-card {
+    width: 450px;
+    max-width: 95%;
+    max-height: 90vh;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.notification-icon {
+    font-size: 70px;
+}
+
+.notification-detail {
+    max-height: 250px;
+    overflow: auto;
+}

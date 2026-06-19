@@ -6,12 +6,14 @@ using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Helpers;
 using AppServiceAndTravel.ViewModels;
 using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Helpers.Filters;
+using AppServiceAndTravel.Services;
 
 namespace AppServiceAndTravel.Areas.Operaciones.Services
 {
     public interface IVehiculoService
     {
-        Task<List<VehiculoListadoVM>> ListarVehiculos(string? busqueda, EstadoVehiculo? estado);
+        Task<ApiResponse<List<VehiculoListadoVM>>> ListarVehiculos(VehiculosFilterVM filter);
         Task<VehiculoDetalleVM?> ObtenerVehiculo(int id);
         Task<(bool success, string message, VehiculoDetalleVM Data)> GuardarVehiculo(VehiculoDetalleVM model);
         Task<(bool success, string message)> EliminarVehiculo(int id);
@@ -37,11 +39,13 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
         private readonly ApplicationDBContext _context;
         private readonly ILogger<VehiculoService> _logger;
         private const int DiasAlertaAnticipada = 30;
+        private readonly UtilitiesServices _utilities;
 
-        public VehiculoService(ApplicationDBContext context, ILogger<VehiculoService> logger)
+        public VehiculoService(ApplicationDBContext context, ILogger<VehiculoService> logger,UtilitiesServices utilities)
         {
             _context = context;
             _logger = logger;
+            _utilities = utilities;
         }
         public async Task<VehiculoKpiVM> ObtenerKpis()
         {
@@ -96,52 +100,89 @@ namespace AppServiceAndTravel.Areas.Operaciones.Services
 
             return vehiculos.Cast<object>().ToList();
         }
-        public async Task<List<VehiculoListadoVM>> ListarVehiculos(string? busqueda, EstadoVehiculo? estado)
+        public async Task<ApiResponse<List<VehiculoListadoVM>>> ListarVehiculos(VehiculosFilterVM filter)
         {
-            var query = _context.Vehiculos
-                .Include(x => x.SOAT)
-                .Include(x => x.RTM)
-                .Include(x => x.TarjetaOperacion)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(busqueda))
+            try
             {
-                query = query.Where(x =>
-                    x.Placa.Contains(busqueda) ||
-                    x.Marca.Contains(busqueda) ||
-                    x.Modelo.Contains(busqueda));
-            }
+                var query = _context.Vehiculos
+                    .Include(x => x.SOAT)
+                    .Include(x => x.RTM)
+                    .Include(x => x.TarjetaOperacion)
+                    .AsQueryable();
 
-            if (estado.HasValue)
-            {
-                query = query.Where(x => x.Estado == estado);
-            }
-
-            return await query
-                .OrderBy(x => x.Placa)
-                .Select(x => new VehiculoListadoVM
+                if (!string.IsNullOrWhiteSpace(filter.Busqueda))
                 {
-                    idVehiculo = x.idVehiculo,
-                    Placa = x.Placa,
-                    Marca = x.Marca,
-                    Modelo = x.Modelo,
-                    Estado = x.Estado,
-                    CapacidadPasajeros = x.CapacidadPasajeros,
+                    query = query.Where(x =>
+                        x.Placa.Contains(filter.Busqueda) ||
+                        x.Marca.Contains(filter.Busqueda) ||
+                        x.Modelo.Contains(filter.Busqueda));
+                }
 
-                    SoatVence = x.SOAT != null
-                        ? x.SOAT.FechaFinVigencia
-                        : null,
+                if (filter.Estado.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Estado == filter.Estado);
+                }
 
-                    RtmVence = x.RTM != null
-                        ? x.RTM.FechaVigencia
-                        : null,
+                var total = await query.CountAsync();
 
-                    TarjetaOperacionVence = x.TarjetaOperacion != null
-                        ? x.TarjetaOperacion.FechaFinVigencia
-                        : null
-                })
-                .ToListAsync();
-        }
+                var vehiculos = await query
+                    .OrderBy(x => x.Placa)
+                    .Skip((filter.Page - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .Select(x => new VehiculoListadoVM
+                    {
+                        idVehiculo = x.idVehiculo,
+                        Placa = x.Placa,
+                        Marca = x.Marca,
+                        Modelo = x.Modelo,
+                        Linea = x.Linea!,
+                        Estado = x.Estado,
+                        Color = x.Color!,
+                        CapacidadPasajeros = x.CapacidadPasajeros,
+                        SoatVence = x.SOAT != null ? x.SOAT.FechaFinVigencia : null,
+                        SoatColor = x.SOAT == null || !x.SOAT.FechaFinVigencia.HasValue ? "bg-secondary" : x.SOAT.FechaFinVigencia.Value 
+                                    < DateTime.Today ? "bg-danger" : x.SOAT.FechaFinVigencia.Value 
+                                    <= DateTime.Today.AddDays(30) ? "bg-warning" : "bg-success",
+
+                        RtmVence = x.RTM != null ? x.RTM.FechaVigencia : null,    
+                        RTMColor = x.RTM == null || !x.RTM!.FechaVigencia .HasValue ? "bg-secondary" : x.RTM!.FechaVigencia .Value 
+                                    < DateTime.Today ? "bg-danger" : x.RTM!.FechaVigencia .Value 
+                                    <= DateTime.Today.AddDays(30) ? "bg-warning" : "bg-success",
+                        
+                        TarjetaOperacionVence = x.TarjetaOperacion != null ? x.TarjetaOperacion.FechaFinVigencia : null,
+                        tarjetaColor = x.TarjetaOperacion == null || !x.TarjetaOperacion!.FechaFinVigencia .HasValue ? "bg-secondary" : x.TarjetaOperacion!.FechaFinVigencia .Value 
+                                    < DateTime.Today ? "bg-danger" : x.TarjetaOperacion!.FechaFinVigencia .Value 
+                                    <= DateTime.Today.AddDays(30) ? "bg-warning" : "bg-success",                                    
+                    })
+                    .ToListAsync();
+
+                return new ApiResponse<List<VehiculoListadoVM>>
+                {
+                    Success = true,
+                    Message = "Vehículos encontrados",
+                    Data = vehiculos,
+
+                    Pagination = new PaginationVM
+                    {
+                        Page = filter.Page,
+                        PageSize = filter.PageSize,
+                        Total = total
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _utilities.RegistrarLog(ex.Message,nameof(ListarVehiculos),"ERROR");
+
+                return new ApiResponse<List<VehiculoListadoVM>>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Data = []
+                };
+            }
+        }        
         public async Task<VehiculoDetalleVM?> ObtenerVehiculo(int id)
         {
             return await _context.Vehiculos

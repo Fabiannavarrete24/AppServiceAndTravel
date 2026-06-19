@@ -59,6 +59,9 @@ namespace AppServiceAndTravel.Controllers
         public IActionResult Setup()
         {
             return View();
+        }public IActionResult FormatosCorreos()
+        {
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

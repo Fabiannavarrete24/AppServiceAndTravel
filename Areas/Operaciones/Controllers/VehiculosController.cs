@@ -8,6 +8,7 @@ using AppServiceAndTravel.Areas.Operaciones.Services;
 using AppServiceAndTravel.Areas.Operaciones.ViewModels;
 using AppServiceAndTravel.Helpers;
 using AppServiceAndTravel.Models;
+using AppServiceAndTravel.Helpers.Filters;
 
 namespace AppServiceAndTravel.Controllers
 {
@@ -34,12 +35,11 @@ namespace AppServiceAndTravel.Controllers
             return Json(vehiculo);
         }
         [HttpGet]
-        public async Task<IActionResult> ListarVehiculos(string? busqueda, EstadoVehiculo? estado)
+        public async Task<IActionResult> ListarVehiculos([FromQuery] VehiculosFilterVM filter)
         {
-            var items = await _vehiculoService
-                .ListarVehiculos(busqueda, estado);
+            var result = await _vehiculoService.ListarVehiculos(filter);
 
-            return Ok(items);
+            return Ok(result);
         }
         [HttpGet]
         public async Task<IActionResult> ObtenerVehiculo(int id)
@@ -91,8 +91,12 @@ namespace AppServiceAndTravel.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerKPIs()
         {
-            return Ok(await _vehiculoService.ObtenerKpis()
-            );
+            var result = await _vehiculoService.ObtenerKpis();
+
+            if(result == null)
+            return NotFound();
+
+            return Ok(new{success = true,data = result});
         }
     }
 }

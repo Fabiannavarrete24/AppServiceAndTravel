@@ -1,0 +1,31 @@
+@startuml
+title Arquitectura - AppServiceAndTravel
+
+package "Web (UI)" {
+  [Controllers/Views]
+}
+
+package "Aplicación" {
+  [Services]
+  [Utilities]
+}
+
+package "Dominio" {
+  [Models / Entities]
+}
+
+package "Persistencia" {
+  [ApplicationDBContext]
+}
+
+package "Integraciones" {
+  [Microsoft Graph]
+  [SMTP]
+}
+
+[Controllers/Views] --> [Services]
+[Services] --> [ApplicationDBContext]
+[Services] --> [Microsoft Graph]
+[ApplicationDBContext] --> [Models / Entities]
+
+@enduml

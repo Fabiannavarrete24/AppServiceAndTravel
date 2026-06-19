@@ -1,0 +1,50 @@
+<script src="~/lib/tinymce/tinymce.min.js"></script>
+<button class="btn btn-success" id="btnGuardar">Guardar</button>
+<textarea id="editor"></textarea>
+
+@section Scripts{
+    <script>
+tinymce.init({
+    selector: '#editor',
+    license_key: 'gpl',
+    height: 700,
+
+    plugins: [
+        'lists',
+        'table',
+        'link',
+        'image',
+        'fullscreen',
+        'pagebreak',
+        'searchreplace',
+        'autosave',
+        'preview',
+        'wordcount'
+    ],
+
+    toolbar:
+        'undo redo | ' +
+        'styles | ' +
+        'bold italic underline | ' +
+        'bullist numlist | ' +
+        'link image | ' +
+        'table | ' +
+        'searchreplace | ' +
+        'pagebreak | ' +
+        'fullscreen | ' +
+        'code | restoredraft | preview',    
+    menubar: true,
+    valid_elements:
+        'p,strong/b,em/i,u,' +
+        'h1,h2,h3,h4,h5,h6,' +
+        'ul,ol,li,' +
+        'table,thead,tbody,tr,td,th,' +
+        'img[src|alt|width|height],' +
+        'a[href],br,hr'
+});
+$("#btnGuardar").on("click",function (){
+    var editor = tinymce.get('editor').getContent();
+    console.log("imprimiendo editor",editor);
+})
+</script>
+}

@@ -75,6 +75,15 @@
   --menu-active: var(--cp);
 }
 
+.spinner-border {
+    --bs-spinner-width: 3rem !important;
+    --bs-spinner-height: 3rem !important;
+    --bs-spinner-vertical-align: -0.25em !important;
+    --bs-spinner-border-width: 0.4em !important;
+    --bs-spinner-animation-speed: 1s !important;
+    --bs-spinner-animation-name: spinner-border !important;
+}
+
 html,
 body {
   width: 100%;
@@ -127,10 +136,20 @@ body {
   letter-spacing: 0.3px;
   margin-bottom: 0.45rem;
 }
-
+.btn-first{
+border-top-left-radius: 0.5rem !important; 
+border-bottom-left-radius: 0.5rem !important;
+}
+.btn-last{
+border-top-right-radius: 0.5rem !important; 
+border-bottom-right-radius: 0.5rem !important;
+}
 .btn {
   transition: all var(--transition-fast);
   font-weight: 500;
+}
+.btn:hover {
+  transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -141,7 +160,6 @@ body {
 .btn-primary:hover {
   background: color-mix(in srgb, var(--cp) 85%, black);
   border-color: color-mix(in srgb, var(--cp) 85%, black);
-  transform: translateY(-1px);
 }
 
 .btn-success {
